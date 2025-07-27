@@ -1,0 +1,17 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"idle": {
+			"loop": true,
+			"bones": {
+				"middle": {
+					"rotation": [
+						"((1-math.exp(-0.1*query.ground_speeds))*60)-(query.vertical_speed/math.abs(query.vertical_speeds)*(1-math.exp(-0.1*math.abs(query.vertical_speed)))*30)",
+						0,
+						0
+					]
+				}
+			}
+		}
+	}
+}

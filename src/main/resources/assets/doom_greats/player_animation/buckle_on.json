@@ -1,0 +1,99 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"buckle_on": {
+			"animation_length": 0.96,
+			"bones": {
+				"right_arm": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.12": {
+							"vector": [-24.78507, -38.84468, 81.36024],
+							"easing": "easeOutBack"
+						},
+						"0.24": {
+							"vector": [-160.22067, -78.19738, 153.41204],
+							"easing": "easeOutBack"
+						},
+						"0.48": {
+							"vector": [-24.78507, -38.84468, 81.36024],
+							"easing": "easeOutCirc"
+						},
+						"0.96": {
+							"vector": [0, 0, 0],
+							"easing": "easeInOutQuad"
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.12": {
+							"vector": [-1.5, 0.7, 0],
+							"easing": "easeOutBack"
+						},
+						"0.24": {
+							"vector": [-1.5, 0.7, 0],
+							"easing": "easeOutBack"
+						},
+						"0.48": {
+							"vector": [-1.5, 0.7, 0],
+							"easing": "easeOutCirc"
+						},
+						"0.96": {
+							"vector": [0, 0, 0],
+							"easing": "easeInOutQuad"
+						}
+					}
+				},
+				"left_arm": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.12": {
+							"vector": [-24.78507, 38.84468, -81.36024],
+							"easing": "easeOutBack"
+						},
+						"0.24": {
+							"vector": [-160.22067, 78.19738, -153.41204],
+							"easing": "easeOutBack"
+						},
+						"0.48": {
+							"vector": [-24.78507, 38.84468, -81.36024],
+							"easing": "easeOutCirc"
+						},
+						"0.96": {
+							"vector": [0, 0, 0],
+							"easing": "easeInOutQuad"
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.12": {
+							"vector": [1.5, 0.7, 0],
+							"easing": "easeOutBack"
+						},
+						"0.24": {
+							"vector": [1.5, 0.7, 0],
+							"easing": "easeOutBack"
+						},
+						"0.48": {
+							"vector": [1.5, 0.7, 0],
+							"easing": "easeOutCirc"
+						},
+						"0.96": {
+							"vector": [0, 0, 0],
+							"easing": "easeInOutQuad"
+						}
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

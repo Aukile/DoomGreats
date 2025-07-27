@@ -1,0 +1,6 @@
+{
+  "parent": "doomsgreats:displaysettings/dooms_geats_qb9.item",
+  "textures": {
+    "layer0": "doomsgreats:items/qb_9"
+  }
+}
