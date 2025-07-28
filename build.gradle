@@ -9,35 +9,35 @@ version = mod_version
 group = mod_group_id
 
 repositories {
-//    maven {
-//        // 阿里云镜像，方便国内开发
-//        url = uri("https://maven.aliyun.com/repository/public/")
-//        content {
-//            includeGroup 'org.apache.commons'
-//        }
-//    }
-//    maven {
-//        // location of the maven that hosts JEI files since January 2023
-//        // Patchouli
-//        name = "Jared's maven"
-//        url = "https://maven.blamejared.com/"
-//    }
-//    maven {
-//        name "KosmX's maven"
-//        url 'https://maven.kosmx.dev/'
-//    }
-//    maven {
-//        // location of a maven mirror for JEI files, as a fallback
-//        name = "Mod Maven"
-//        url = "https://modmaven.k-4u.nl"
-//    }
-//    maven {
-//        url "https://cursemaven.com"
-//        content {
-//            includeGroup "curse.maven"
-//        }
-//    }
-//    mavenLocal()
+    maven {
+        // 阿里云镜像，方便国内开发
+        url = uri("https://maven.aliyun.com/repository/public/")
+        content {
+            includeGroup 'org.apache.commons'
+        }
+    }
+    maven {
+        // location of the maven that hosts JEI files since January 2023
+        // Patchouli
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
+    }
+    maven {
+        name "KosmX's maven"
+        url 'https://maven.kosmx.dev/'
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "Mod Maven"
+        url = "https://modmaven.k-4u.nl"
+    }
+    maven {
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+    mavenLocal()
 }
 
 base {
@@ -124,16 +124,15 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 
 dependencies {
-//    implementation "dev.kosmx.player-anim:player-animation-lib-forge:${player_animation_lib}"
-//    compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
-//    compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
-//    runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
-//    implementation "curse.maven:geckolib-${geckolib_version}"
+    implementation "dev.kosmx.player-anim:player-animation-lib-forge:${player_animation_lib}"
+    compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
+    compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
+    runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+    implementation "curse.maven:geckolib-${geckolib_version}"
 
 
 //    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.6"))
 //    implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.3.6"))
-//    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     // 示例模组依赖关系，使用 ./libs 中的 mod jar 文件和扁平目录仓库
     // 这对应于 ./libs/coolmod-${mc_version}-${coolmod_version}.jar
