@@ -53,15 +53,17 @@ public class ClassRegister {
         return registers.get(type);
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> Supplier<T> register(Class<? extends T> type, final String name, final Supplier<? extends T> sup){
         DeferredRegister<T> r = (DeferredRegister<T>) getRegisterSource(type);
         Supplier<T> object = r.register(name, sup);
         if (registerObjects.containsKey(type)){
             Map<String, Supplier<?>> supplierMap = registerObjects.get(type);
             supplierMap.put(name, object);
-            registerObjects.put(type, supplierMap);
         }else {
-            registerObjects.put(type, Map.of(name, object));
+            Map<String, Supplier<?>> supplierMap = new HashMap<>();
+            supplierMap.put(name, object);
+            registerObjects.put(type, supplierMap);
         }
         return object;
     }
@@ -75,6 +77,14 @@ public class ClassRegister {
     public static Supplier<?> getRegisterObject(String name, Class<?> clazz){
         Map<String, Supplier<?>> map = registerObjects.get(clazz);
         return map.get(name);
+    }
+
+    public static Map<String, Supplier<?>> getRegisterObjects(Class<?> clazz){
+        return registerObjects.get(clazz);
+    }
+
+    public static boolean isRegistered(Class<?> clazz){
+        return registers.containsKey(clazz);
     }
 
     public static void init(IEventBus bus){

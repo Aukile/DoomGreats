@@ -4,6 +4,7 @@ import com.ankrya.doomgreats.item.renderer.BaseGeoItemRenderer;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.Tier;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
@@ -21,13 +22,13 @@ public abstract class BaseGeoSword extends SwordItem implements GeoItem {
     public RenderType renderType = null;
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
-    public BaseGeoSword(Properties properties) {
-        super(properties);
+    public BaseGeoSword(Tier tier, Properties properties) {
+        super(tier, properties);
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
 
-    public BaseGeoSword(Properties properties, String model, String texture, String animation) {
-        this(properties);
+    public BaseGeoSword(Tier tier, Properties properties, String model, String texture, String animation) {
+        this(tier, properties);
         this.model = model;
         this.texture = texture;
         this.animation = animation;
