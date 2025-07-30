@@ -13,6 +13,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -53,10 +54,7 @@ public class ClassRegister {
         return registers.get(type);
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T> Supplier<T> register(Class<? extends T> type, final String name, final Supplier<? extends T> sup){
-        DeferredRegister<T> r = (DeferredRegister<T>) getRegisterSource(type);
-        Supplier<T> object = r.register(name, sup);
+    public static <T> void updateRegisters(Class<? extends T> type, final String name, Supplier<?> object){
         if (registerObjects.containsKey(type)){
             Map<String, Supplier<?>> supplierMap = registerObjects.get(type);
             supplierMap.put(name, object);
@@ -65,6 +63,21 @@ public class ClassRegister {
             supplierMap.put(name, object);
             registerObjects.put(type, supplierMap);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Supplier<T> register(Class<? extends T> type, final String name, final Supplier<? extends T> sup){
+        DeferredRegister<T> r = (DeferredRegister<T>) getRegisterSource(type);
+        Supplier<T> object = r.register(name, sup);
+        updateRegisters(type, name, object);
+        return object;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> DeferredHolder<T, T> registerAsHolder(Class<? extends T> type, final String name, final Supplier<? extends T> sup){
+        DeferredRegister<T> r = (DeferredRegister<T>) getRegisterSource(type);
+        DeferredHolder<T, T> object = r.register(name, sup);
+        updateRegisters(type, name, object);
         return object;
     }
 
@@ -112,6 +125,6 @@ public class ClassRegister {
 
     private static void soundRegister(String... names){
         for (String name : names)
-            register(SoundEvent.class, name, () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(DoomGreats.MODID, name)));
+              register(SoundEvent.class, name, () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(DoomGreats.MODID, name)));
     }
 }

@@ -5,6 +5,7 @@ plugins {
     id 'net.neoforged.moddev' version '2.0.103'
 }
 
+
 version = mod_version
 group = mod_group_id
 
