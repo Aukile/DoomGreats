@@ -8,13 +8,13 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;
 
-public class BaseGeoArmorRenderer extends GeoArmorRenderer<BaseGeoArmor> {
+public class BaseGeoArmorRenderer<T extends BaseGeoArmor> extends GeoArmorRenderer<T> {
     public BaseGeoArmorRenderer() {
-        super(new BaseGeoArmorModel());
+        super(new BaseGeoArmorModel<>());
     }
 
     @Override
-    public @Nullable RenderType getRenderType(BaseGeoArmor animatable, ResourceLocation texture, @Nullable MultiBufferSource bufferSource, float partialTick) {
+    public @Nullable RenderType getRenderType(T animatable, ResourceLocation texture, @Nullable MultiBufferSource bufferSource, float partialTick) {
         if (animatable.getRenderType() == null) return super.getRenderType(animatable, texture, bufferSource, partialTick);
         return animatable.getRenderType();
     }

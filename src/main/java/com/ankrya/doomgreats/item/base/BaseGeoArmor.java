@@ -18,7 +18,7 @@ import java.util.function.Consumer;
 public class BaseGeoArmor extends ArmorItem implements GeoItem {
     public String model;
     public String texture;
-    public String animation;
+    public String animation = "idle";
     public RenderType renderType = null;
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
@@ -27,7 +27,7 @@ public class BaseGeoArmor extends ArmorItem implements GeoItem {
     }
 
     private PlayState predicate(AnimationState<BaseGeoArmor> state) {
-        state.getController().setAnimation(RawAnimation.begin().then("idle", Animation.LoopType.LOOP));
+        state.getController().setAnimation(RawAnimation.begin().then(getAnimation(), Animation.LoopType.LOOP));
         return PlayState.CONTINUE;
     }
 
