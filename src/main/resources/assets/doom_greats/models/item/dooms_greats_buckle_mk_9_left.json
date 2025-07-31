@@ -1,6 +1,0 @@
-{
-  "parent": "doomsgreats:displaysettings/dooms_geats_buckle_mk9_left.item",
-  "textures": {
-    "layer0": "doomsgreats:items/doomsgeatsbelt"
-  }
-}
