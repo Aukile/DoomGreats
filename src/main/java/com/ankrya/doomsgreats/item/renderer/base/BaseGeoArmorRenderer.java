@@ -1,7 +1,7 @@
-package com.ankrya.doomsgreats.item.renderer;
+package com.ankrya.doomsgreats.item.renderer.base;
 
 import com.ankrya.doomsgreats.item.base.BaseGeoArmor;
-import com.ankrya.doomsgreats.item.model.BaseGeoArmorModel;
+import com.ankrya.doomsgreats.item.model.base.BaseGeoArmorModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;

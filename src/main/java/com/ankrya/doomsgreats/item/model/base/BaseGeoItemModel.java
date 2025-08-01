@@ -1,4 +1,4 @@
-package com.ankrya.doomsgreats.item.model;
+package com.ankrya.doomsgreats.item.model.base;
 
 import com.ankrya.doomsgreats.DoomsGreats;
 import com.ankrya.doomsgreats.item.base.BaseGeoItem;

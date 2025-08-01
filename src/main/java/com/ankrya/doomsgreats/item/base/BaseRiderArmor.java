@@ -1,7 +1,10 @@
 package com.ankrya.doomsgreats.item.base;
 
+import com.ankrya.doomsgreats.item.data.ArmorData;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -11,19 +14,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
-public class BaseRiderArmor extends BaseGeoArmor{
+public abstract class BaseRiderArmor extends BaseRiderArmorBase {
     final EquipmentSlot slot;
-    public static final DataComponentType<ItemStack> BACKUP_ARMOR =
-            DataComponentType.<ItemStack>builder().persistent(ItemStack.CODEC)
-                    .networkSynchronized(ItemStack.STREAM_CODEC).build();
+    public static final DataComponentType<ArmorData> BACKUP_ARMOR =
+            DataComponentType.<ArmorData>builder().persistent(ArmorData.CODEC)
+                    .networkSynchronized(ArmorData.STREAM_CODEC).build();
 
     public BaseRiderArmor(Holder<ArmorMaterial> material, Properties properties, EquipmentSlot slot) {
         super(material, getType(slot), properties);
         this.slot = slot;
-    }
-
-    public static EquipmentSlot[] getSlots() {
-        return new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.FEET};
     }
 
     public static Type getType(EquipmentSlot slot) {
@@ -39,10 +38,14 @@ public class BaseRiderArmor extends BaseGeoArmor{
     @Override
     public void inventoryTick(@NotNull ItemStack stack, @NotNull Level level, @NotNull Entity entity, int slotId, boolean isSelected) {
         super.inventoryTick(stack, level, entity, slotId, isSelected);
-        if (entity instanceof LivingEntity livingEntity && !allArmorEquip(livingEntity)){
-            if (entity instanceof Player player)
-                player.getInventory().clearOrCountMatchingItems(itemStack -> itemStack.is(this), 1, player.getInventory());
-            else livingEntity.setItemSlot(slot, ItemStack.EMPTY);
+        if (entity instanceof LivingEntity livingEntity){
+            if (allArmorEquip(livingEntity)){
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 10, 15, false, false));
+            } else {
+                if (entity instanceof Player player)
+                    player.getInventory().clearOrCountMatchingItems(itemStack -> itemStack.is(this), 1, player.getInventory());
+                else livingEntity.setItemSlot(slot, ItemStack.EMPTY);
+            }
         }
     }
 
@@ -55,18 +58,22 @@ public class BaseRiderArmor extends BaseGeoArmor{
 
     // 存储备用盔甲
     public static void storeBackupArmor(ItemStack storageArmor, ItemStack backupArmor) {
-        storageArmor.set(BACKUP_ARMOR, backupArmor);
+        storageArmor.set(BACKUP_ARMOR, ArmorData.fromItemStack(backupArmor));
     }
 
     // 获取备用盔甲
     public static ItemStack getBackupArmor(ItemStack storageArmor) {
-        return storageArmor.getOrDefault(BACKUP_ARMOR, ItemStack.EMPTY);
+        ArmorData data = storageArmor.get(BACKUP_ARMOR);
+        return data != null ? data.toItemStack() : ItemStack.EMPTY;
     }
 
     public static void equip(LivingEntity entity, EquipmentSlot slot, ItemStack stack){
         ItemStack original = entity.getItemBySlot(slot);
-        storeBackupArmor(stack, original);
-        entity.setItemSlot(slot, stack);
+        if (!original.isEmpty()) storeBackupArmor(stack, original);
+        if (entity instanceof Player player){
+            player.getInventory().armor.set(slot.getIndex(), stack);
+            player.getInventory().setChanged();
+        } else entity.setItemSlot(slot, stack);
     }
 
     public static void unequip(LivingEntity entity, EquipmentSlot slot){

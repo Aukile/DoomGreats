@@ -6,7 +6,9 @@ import com.ankrya.doomsgreats.init.assist.RegisterAssist;
 import com.ankrya.doomsgreats.item.DesireDriver;
 import com.ankrya.doomsgreats.item.DoomGreatsArmor;
 import com.ankrya.doomsgreats.item.base.BaseRiderArmor;
+import com.ankrya.doomsgreats.item.base.BaseRiderArmorBase;
 import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -19,7 +21,6 @@ import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import org.jetbrains.annotations.ApiStatus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,31 +30,30 @@ public class ClassRegister {
     private static final String modid = DoomsGreats.MODID;
     public static Map<Class<?>,  DeferredRegister<?>> registers = new HashMap<>();
     public static Map<Class<?>, Map<String, Supplier<?>>> registerObjects = new HashMap<>();
-//    public static final DeferredRegister<Item> REGISTER = DeferredRegister.create(BuiltInRegistries.ITEM, modid);
-//    public static final Supplier<Item> LOGO = REGISTER.register("logo", () -> new Item(new Item.Properties()));
 
-    public static <T> void registerSource(Class<T> type, String registerName) {
-        registerSource(type, registerName, modid);
+    public static <T> DeferredRegister<T> registerSource(Class<T> type, String registerName) {
+        return registerSource(type, registerName, modid);
     }
 
     public static <T> void registerSource(Class<T> type, ResourceKey<Registry<T>> registerTo) {
         registerSource(type, registerTo, modid);
     }
 
-    public static <T> void registerSource(Class<T> type, String registerName, String modid) {
+    public static <T> DeferredRegister<T> registerSource(Class<T> type, String registerName, String modid) {
         ResourceKey<Registry<T>> key = ResourceKey.createRegistryKey(ResourceLocation.parse(registerName));
-        registerSource(type, key, modid);
+        return registerSource(type, key, modid);
     }
 
-    public static <T> void registerSource(Class<T> type, ResourceKey<Registry<T>> registerTo, String modid) {
+    public static <T> DeferredRegister<T> registerSource(Class<T> type, ResourceKey<Registry<T>> registerTo, String modid) {
         DeferredRegister<T> register = DeferredRegister.create(registerTo, modid);
         if (!registers.containsKey(type) && RegisterAssist.registerSourceSafe(type, registers)){
             registers.put(type, register);
         }
+        return register;
     }
 
-    public static void registerSource(Class<?> type){
-        registerSource(type, RegisterAssist.getRegisterName(type));
+    public static <T> DeferredRegister<T> registerSource(Class<T> type){
+        return registerSource(type, RegisterAssist.getRegisterName(type));
     }
 
     public static DeferredRegister<?> getRegisterSource(Class<?> type){
@@ -87,10 +87,18 @@ public class ClassRegister {
         return object;
     }
 
-    @ApiStatus.Internal
-    public static <T> Supplier<T> easyRegister(Class<? extends T> type, final String name, final Supplier<? extends T> sup){
-        registerSource(type);
-        return register(type, name, sup);
+    public static <T> DeferredRegister<? extends T> onceRegister(Class<? extends T> type, final String name, final Supplier<? extends T> sup){
+        DeferredRegister<? extends T> source = registerSource(type);
+        register(type, name, sup);
+        return source;
+    }
+
+    public static <T> void easyRegister(Class<T> clazz, IEventBus bus, Tectonic<T>[] tectonics){
+        DeferredRegister<T> source = registerSource(clazz);
+        for (Tectonic<T> tectonic : tectonics) {
+            register(clazz, tectonic.name(), tectonic::t);
+        }
+        source.register(bus);
     }
 
     @SuppressWarnings("unchecked")
@@ -108,13 +116,12 @@ public class ClassRegister {
     }
 
     public static void init(IEventBus bus){
-        useRegister();
         for (DeferredRegister<?> register : registers.values()){
             register.register(bus);
         }
     }
 
-    public static void useRegister(){
+    static {
 //        注册声音
         registerSource(SoundEvent.class);
         soundRegister("desire_driver", "doomsgeatsbuckleopen", "doomsgeatssetjudgment", "doomsgeatshenshinfull", "gun", "blade", "revolve_on");
@@ -124,16 +131,26 @@ public class ClassRegister {
         registerSource(entityType);
         register(entityType, "henshin_effect", () -> EntityType.Builder.of(SpecialEffect::new, MobCategory.MISC).sized(0.0F, 0.0F).setShouldReceiveVelocityUpdates(true).updateInterval(3).build("effects"));
 
+//        注册盔甲材质
+//        Class<ArmorMaterial> armorMaterial = ArmorMaterial.class;
+//        registerSource(armorMaterial);
+//        register(armorMaterial, "dooms_greats_material", GreatsArmorMaterial::doomsGreatsArmor);
+//        register(armorMaterial, "dgp_blank_material", GreatsArmorMaterial::dgpBlank);
+
 //        注册物品
         Class<Item> item = Item.class;
         registerSource(item);
         register(item, "desire_driver", () -> new DesireDriver(new Item.Properties()));
         register(item, "logo", () -> new Item(new Item.Properties()));
-        for (EquipmentSlot slot : BaseRiderArmor.getSlots())
+        for (EquipmentSlot slot : BaseRiderArmorBase.getSlots())
             register(item, "dooms_greats_" + slot.getName(), () -> new DoomGreatsArmor(new Item.Properties(), slot));
 
+        Class<?> dataComponentType = DataComponentType.class;
+        registerSource(dataComponentType);
+        register(dataComponentType, "dooms_greats_data_backup", () -> BaseRiderArmor.BACKUP_ARMOR);
+
 //        注册创造物品栏
-        easyRegister(CreativeModeTab.class, "dooms_greats_tab", () -> CreativeModeTab.builder().icon(() -> ClassRegister.getRegisterObject("logo", Item.class).get().getDefaultInstance())
+        onceRegister(CreativeModeTab.class, "dooms_greats_tab", () -> CreativeModeTab.builder().icon(() -> ClassRegister.getRegisterObject("logo", Item.class).get().getDefaultInstance())
                 .title(Component.translatable("item_group.dooms_greats.dooms_greats_tab")).displayItems((parameters, output) -> {
             output.accept(ClassRegister.getRegisterObject("desire_driver", Item.class).get());
         }).build());
@@ -143,4 +160,6 @@ public class ClassRegister {
         for (String name : names)
               register(SoundEvent.class, name, () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, name)));
     }
+
+    public record Tectonic<T>(String name, T t) {}
 }

@@ -1,6 +1,6 @@
 package com.ankrya.doomsgreats.item.base;
 
-import com.ankrya.doomsgreats.item.renderer.BaseGeoItemRenderer;
+import com.ankrya.doomsgreats.item.renderer.base.BaseGeoItemRenderer;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.item.Item;

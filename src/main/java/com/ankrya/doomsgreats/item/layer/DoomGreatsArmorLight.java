@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
+import software.bernie.geckolib.util.Color;
 
 public class DoomGreatsArmorLight extends GeoRenderLayer<DoomGreatsArmor> {
     private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "textures/items/dooms_greats_e.png");
@@ -22,6 +23,6 @@ public class DoomGreatsArmorLight extends GeoRenderLayer<DoomGreatsArmor> {
     @Override
     public void render(PoseStack poseStack, DoomGreatsArmor animatable, BakedGeoModel bakedModel, @Nullable RenderType renderType, MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
         RenderType glowRenderType = RenderType.eyes(LAYER);
-        getRenderer().reRender(getDefaultBakedModel(animatable), poseStack, bufferSource, animatable, glowRenderType, bufferSource.getBuffer(glowRenderType), partialTick, packedLight, OverlayTexture.NO_OVERLAY, 1);
+        getRenderer().reRender(getDefaultBakedModel(animatable), poseStack, bufferSource, animatable, glowRenderType, bufferSource.getBuffer(glowRenderType), partialTick, packedLight, OverlayTexture.NO_OVERLAY, Color.ofRGBA(255, 0, 0, 255).argbInt());
     }
 }

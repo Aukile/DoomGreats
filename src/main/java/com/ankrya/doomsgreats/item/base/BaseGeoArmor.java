@@ -1,6 +1,6 @@
 package com.ankrya.doomsgreats.item.base;
 
-import com.ankrya.doomsgreats.item.renderer.BaseGeoArmorRenderer;
+import com.ankrya.doomsgreats.item.renderer.base.BaseGeoArmorRenderer;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Holder;
@@ -19,7 +19,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.function.Consumer;
 
-public class BaseGeoArmor extends ArmorItem implements GeoItem {
+public abstract class BaseGeoArmor extends ArmorItem implements GeoItem {
     public String model;
     public String texture;
     public String animation = "idle";
@@ -28,6 +28,8 @@ public class BaseGeoArmor extends ArmorItem implements GeoItem {
 
     public BaseGeoArmor(Holder<ArmorMaterial> material, Type type, Properties properties) {
         super(material, type, properties);
+        model = defaultModel();
+        texture = defaultTexture();
     }
 
     private PlayState predicate(AnimationState<BaseGeoArmor> state) {
@@ -38,7 +40,7 @@ public class BaseGeoArmor extends ArmorItem implements GeoItem {
     @Override
     public void createGeoRenderer(Consumer<GeoRenderProvider> consumer) {
         consumer.accept(new GeoRenderProvider() {
-            private BaseGeoArmorRenderer<BaseGeoArmor> renderer;
+            private BaseGeoArmorRenderer<?> renderer;
 
             @Override
             public <T extends LivingEntity> @NotNull HumanoidModel<?> getGeoArmorRenderer(@Nullable T livingEntity, ItemStack itemStack, @Nullable EquipmentSlot equipmentSlot, @Nullable HumanoidModel<T> original) {
@@ -81,4 +83,8 @@ public class BaseGeoArmor extends ArmorItem implements GeoItem {
     public void setTexture(String texture) {
         this.texture = texture;
     }
+
+    public abstract String defaultModel();
+
+    public abstract String defaultTexture();
 }

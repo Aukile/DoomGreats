@@ -32,9 +32,13 @@ repositories {
         name = "Mod Maven"
         url = "https://modmaven.k-4u.nl"
     }
-    maven {
-        url "https://cursemaven.com"
-        content {
+    exclusiveContent {
+        forRepository {
+            maven {
+                url "https://cursemaven.com"
+            }
+        }
+        filter {
             includeGroup "curse.maven"
         }
     }

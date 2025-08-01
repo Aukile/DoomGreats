@@ -12,7 +12,6 @@ public class DoomsGreats {
     public static final String MODID = "dooms_greats";
     public static final Logger LOGGER = LogManager.getLogger(DoomsGreats.class);
     public DoomsGreats(IEventBus bus, ModContainer modContainer) {
-//        ClassRegister.REGISTER.register(bus);
         ClassRegister.init(bus);
     }
 }
