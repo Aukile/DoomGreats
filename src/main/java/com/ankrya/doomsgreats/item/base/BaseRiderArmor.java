@@ -3,6 +3,7 @@ package com.ankrya.doomsgreats.item.base;
 import com.ankrya.doomsgreats.item.data.ArmorData;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -13,6 +14,8 @@ import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Map;
 
 public abstract class BaseRiderArmor extends BaseRiderArmorBase {
     final EquipmentSlot slot;
@@ -40,14 +43,24 @@ public abstract class BaseRiderArmor extends BaseRiderArmorBase {
         super.inventoryTick(stack, level, entity, slotId, isSelected);
         if (entity instanceof LivingEntity livingEntity){
             if (allArmorEquip(livingEntity)){
-                livingEntity.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 10, 15, false, false));
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 10, 0, false, false));
+                for (Map.Entry<Holder<MobEffect>, Integer> entry : getEffects().entrySet()){
+                    if (entry.getKey() == MobEffects.NIGHT_VISION) livingEntity.addEffect(new MobEffectInstance(entry.getKey(), 240, entry.getValue(), false, false));
+                    else livingEntity.addEffect(new MobEffectInstance(entry.getKey(), 10, entry.getValue(), false, false));
+                }
             } else {
                 if (entity instanceof Player player)
                     player.getInventory().clearOrCountMatchingItems(itemStack -> itemStack.is(this), 1, player.getInventory());
                 else livingEntity.setItemSlot(slot, ItemStack.EMPTY);
+                for (Holder<MobEffect> effect : getEffects().keySet()){
+                    livingEntity.removeEffect(effect);
+                }
+                livingEntity.removeEffect(MobEffects.INVISIBILITY);
             }
         }
     }
+
+    public abstract Map<Holder<MobEffect>, Integer> getEffects();
 
     public static boolean allArmorEquip(LivingEntity entity) {
         return entity.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof BaseRiderArmor
