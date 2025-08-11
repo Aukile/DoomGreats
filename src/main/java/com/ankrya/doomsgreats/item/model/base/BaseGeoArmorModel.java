@@ -1,7 +1,7 @@
 package com.ankrya.doomsgreats.item.model.base;
 
 import com.ankrya.doomsgreats.DoomsGreats;
-import com.ankrya.doomsgreats.item.base.BaseGeoArmor;
+import com.ankrya.doomsgreats.item.base.armor.BaseGeoArmor;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 

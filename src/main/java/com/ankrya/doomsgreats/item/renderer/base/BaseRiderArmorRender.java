@@ -1,6 +1,6 @@
 package com.ankrya.doomsgreats.item.renderer.base;
 
-import com.ankrya.doomsgreats.item.base.BaseRiderArmorBase;
+import com.ankrya.doomsgreats.item.base.armor.BaseRiderArmorBase;
 import net.minecraft.world.entity.EquipmentSlot;
 
 public class BaseRiderArmorRender<T extends BaseRiderArmorBase> extends BaseGeoArmorRenderer<T>{

@@ -1,7 +1,8 @@
 package com.ankrya.doomsgreats.item;
 
 import com.ankrya.doomsgreats.init.ClassRegister;
-import com.ankrya.doomsgreats.item.base.BaseRiderArmor;
+import com.ankrya.doomsgreats.item.base.armor.BaseDriver;
+import com.ankrya.doomsgreats.item.base.armor.BaseRiderArmor;
 import com.ankrya.doomsgreats.item.material.GreatsArmorMaterial;
 import com.ankrya.doomsgreats.item.renderer.DoomGreatsArmorRenderer;
 import net.minecraft.client.model.HumanoidModel;
@@ -20,9 +21,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class DoomGreatsArmor extends BaseRiderArmor {
-    public DoomGreatsArmor(Properties properties, EquipmentSlot slot) {
+public class DoomsGreatsArmor extends BaseRiderArmor {
+    public DoomsGreatsArmor(Properties properties, EquipmentSlot slot) {
         super(GreatsArmorMaterial.DOOMS_GREATS_ARMOR, properties, slot);
+    }
+
+    public static ItemStack getNewArmor(EquipmentSlot slot) {
+        if (slot == EquipmentSlot.LEGS) return ItemStack.EMPTY;
+        return new ItemStack(ClassRegister.getRegisterObject("dooms_greats_" + slot.getName(), Item.class).get());
     }
 
     @Override
@@ -48,12 +54,6 @@ public class DoomGreatsArmor extends BaseRiderArmor {
         return "dooms_greats";
     }
 
-
-    public static ItemStack getNewArmor(EquipmentSlot slot) {
-        if (slot == EquipmentSlot.LEGS) return ItemStack.EMPTY;
-        return new ItemStack(ClassRegister.getRegisterObject("dooms_greats_" + slot.getName(), Item.class).get());
-    }
-
     @Override
     public Map<Holder<MobEffect>, Integer> getEffects() {
         Map<Holder<MobEffect>, Integer> effects = new HashMap<>();
@@ -68,5 +68,15 @@ public class DoomGreatsArmor extends BaseRiderArmor {
         effects.put(MobEffects.CONDUIT_POWER, 0);
         effects.put(MobEffects.SATURATION, 9);
         return effects;
+    }
+
+    @Override
+    public Class<? extends BaseDriver> getDriverClass() {
+        return DesireDriver.class;
+    }
+
+    @Override
+    public Class<? extends BaseRiderArmor> getArmorClass() {
+        return DoomsGreatsArmor.class;
     }
 }

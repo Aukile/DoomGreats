@@ -1,5 +1,8 @@
-package com.ankrya.doomsgreats.item.base;
+package com.ankrya.doomsgreats.item.base.armor;
 
+import com.ankrya.doomsgreats.api.event.RiderArmorEquipEvent;
+import com.ankrya.doomsgreats.api.event.RiderArmorRemoveEvent;
+import com.ankrya.doomsgreats.help.ItemHelp;
 import com.ankrya.doomsgreats.item.data.ArmorData;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
@@ -10,9 +13,13 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -23,17 +30,17 @@ public abstract class BaseRiderArmor extends BaseRiderArmorBase {
             DataComponentType.<ArmorData>builder().persistent(ArmorData.CODEC)
                     .networkSynchronized(ArmorData.STREAM_CODEC).build();
 
-    public BaseRiderArmor(Holder<ArmorMaterial> material, Properties properties, EquipmentSlot slot) {
+    public BaseRiderArmor(Holder<ArmorMaterial> material, Item.Properties properties, EquipmentSlot slot) {
         super(material, getType(slot), properties);
         this.slot = slot;
     }
 
-    public static Type getType(EquipmentSlot slot) {
+    public static ArmorItem.Type getType(EquipmentSlot slot) {
         return switch (slot){
-            case HEAD -> Type.HELMET;
-            case CHEST -> Type.CHESTPLATE;
-            case LEGS -> Type.LEGGINGS;
-            case FEET -> Type.BOOTS;
+            case HEAD -> ArmorItem.Type.HELMET;
+            case CHEST -> ArmorItem.Type.CHESTPLATE;
+            case LEGS -> ArmorItem.Type.LEGGINGS;
+            case FEET -> ArmorItem.Type.BOOTS;
             default -> throw new IllegalArgumentException("Invalid slot: " + slot);
         };
     }
@@ -41,6 +48,13 @@ public abstract class BaseRiderArmor extends BaseRiderArmorBase {
     @Override
     public void inventoryTick(@NotNull ItemStack stack, @NotNull Level level, @NotNull Entity entity, int slotId, boolean isSelected) {
         super.inventoryTick(stack, level, entity, slotId, isSelected);
+        if (entity instanceof Player player){
+            ItemStack carried = player.containerMenu.getCarried();
+            if (carried.is(stack.getItem())) {
+                player.containerMenu.setCarried(ItemStack.EMPTY);
+                return;
+            }
+        }
         if (entity instanceof LivingEntity livingEntity){
             if (allArmorEquip(livingEntity)){
                 livingEntity.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 10, 0, false, false));
@@ -49,9 +63,15 @@ public abstract class BaseRiderArmor extends BaseRiderArmorBase {
                     else livingEntity.addEffect(new MobEffectInstance(entry.getKey(), 10, entry.getValue(), false, false));
                 }
             } else {
-                if (entity instanceof Player player)
-                    player.getInventory().clearOrCountMatchingItems(itemStack -> itemStack.is(this), 1, player.getInventory());
-                else livingEntity.setItemSlot(slot, ItemStack.EMPTY);
+                if (entity instanceof Player player) {
+                    if (player.getItemBySlot(slot) == stack) unequip(player, slot);
+                    else {
+                        ItemStack backupArmor = BaseRiderArmor.getBackupArmor(stack);
+                        ItemHelp.playerRemoveItem(player, this, 1);
+                        if (player.getItemBySlot(slot).isEmpty()) ItemHelp.playerBySlot(player, slot, backupArmor);
+                        else ItemHandlerHelper.giveItemToPlayer(player, backupArmor);
+                    }
+                } else unequip(livingEntity, slot);
                 for (Holder<MobEffect> effect : getEffects().keySet()){
                     livingEntity.removeEffect(effect);
                 }
@@ -61,13 +81,6 @@ public abstract class BaseRiderArmor extends BaseRiderArmorBase {
     }
 
     public abstract Map<Holder<MobEffect>, Integer> getEffects();
-
-    public static boolean allArmorEquip(LivingEntity entity) {
-        return entity.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof BaseRiderArmor
-                && entity.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof BaseRiderArmor
-                && entity.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof BaseDriver
-                && entity.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof BaseRiderArmor;
-    }
 
     // 存储备用盔甲
     public static void storeBackupArmor(ItemStack storageArmor, ItemStack backupArmor) {
@@ -81,21 +94,28 @@ public abstract class BaseRiderArmor extends BaseRiderArmorBase {
     }
 
     public static void equip(LivingEntity entity, EquipmentSlot slot, ItemStack stack){
-        ItemStack original = entity.getItemBySlot(slot);
-        if (!original.isEmpty()) storeBackupArmor(stack, original);
-        if (entity instanceof Player player){
-            player.getInventory().armor.set(slot.getIndex(), stack);
-            player.getInventory().setChanged();
-        } else entity.setItemSlot(slot, stack);
+        if (NeoForge.EVENT_BUS.post(new RiderArmorEquipEvent(entity, slot, stack)).canRun()){
+            ItemStack original = entity.getItemBySlot(slot);
+            if (!original.isEmpty()) storeBackupArmor(stack, original);
+            if (entity instanceof Player player) {
+                ItemHelp.playerBySlot(player, slot, stack);
+            } else entity.setItemSlot(slot, stack);
+        }
     }
 
     public static void unequip(LivingEntity entity, EquipmentSlot slot){
-        ItemStack stack = entity.getItemBySlot(slot);
-        ItemStack backup = getBackupArmor(stack);
-        entity.setItemSlot(slot, backup);
+        if (NeoForge.EVENT_BUS.post(new RiderArmorRemoveEvent(entity, slot)).canRun()){
+            ItemStack stack = entity.getItemBySlot(slot);
+            ItemStack backup = getBackupArmor(stack);
+            entity.setItemSlot(slot, backup);
+        }
     }
 
-//    @Override
+    public EquipmentSlot getSlot() {
+        return slot;
+    }
+
+    //    @Override
 //    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
 //        ItemStack stack = player.getItemInHand(hand);
 //        ItemStack offhandItem = player.getOffhandItem();

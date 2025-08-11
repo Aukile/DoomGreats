@@ -18,22 +18,30 @@ public final class MessageLoader {
     @SubscribeEvent
     public static void load(final RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar registrar = event.registrar(DoomsGreats.MODID);
+        registrar.playBidirectional(SyncVariableMessage.TYPE, SyncVariableMessage.CODEC, new DirectionalPayloadHandler<>(SyncVariableMessage::handle, null));
         registrar.playBidirectional(MessageCreater.TYPE, MessageCreater.CODEC, new DirectionalPayloadHandler<>(MessageCreater::run,MessageCreater::run));
+        registrar.playBidirectional(EXMessageCreater.TYPE, EXMessageCreater.CODEC, new DirectionalPayloadHandler<>(EXMessageCreater::run,EXMessageCreater::run));
     }
 
-    public <MSG extends CustomPacketPayload> void sendToServer(MSG message) {
+    public static <MSG extends CustomPacketPayload> void sendToServer(MSG message) {
         PacketDistributor.sendToServer(message);
     }
 
-    public <MSG extends CustomPacketPayload> void sendToPlayer(MSG message, ServerPlayer player) {
+    public static <MSG extends CustomPacketPayload> void sendToPlayer(MSG message, ServerPlayer player) {
         PacketDistributor.sendToPlayer(player, message);
     }
 
-    public <MSG extends CustomPacketPayload> void sendToPlayersNearby(MSG message, ServerPlayer player) {
+    public static <MSG extends CustomPacketPayload> void sendToPlayersNearby(MSG message, ServerPlayer player) {
         PacketDistributor.sendToPlayersNear((ServerLevel) player.level(), player, player.getX(), player.getY(), player.getZ(), 64, message);
     }
 
-    public <MSG extends CustomPacketPayload> void sendToEntityAndSelf(MSG message, Entity entity) {
-        PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, message);
+    public static <MSG extends CustomPacketPayload> void sendToPlayersInDimension(MSG message, Entity entity) {
+        if (!entity.level().isClientSide)
+            PacketDistributor.sendToPlayersInDimension((ServerLevel) entity.level(), message);
+    }
+
+    public static <MSG extends CustomPacketPayload> void sendToEntityAndSelf(MSG message, Entity entity) {
+        if (!entity.level().isClientSide)
+            PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, message);
     }
 }

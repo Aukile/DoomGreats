@@ -1,7 +1,7 @@
 package com.ankrya.doomsgreats.item.layer;
 
 import com.ankrya.doomsgreats.DoomsGreats;
-import com.ankrya.doomsgreats.item.DoomGreatsArmor;
+import com.ankrya.doomsgreats.item.DoomsGreatsArmor;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -14,15 +14,16 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 import software.bernie.geckolib.util.Color;
 
-public class DoomGreatsArmorLight extends GeoRenderLayer<DoomGreatsArmor> {
-    private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "textures/items/dooms_greats_e.png");
-    public DoomGreatsArmorLight(GeoRenderer<DoomGreatsArmor> entityRendererIn) {
-        super(entityRendererIn);
+public class DoomGreatsArmorLight extends GeoRenderLayer<DoomsGreatsArmor> {
+    private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "textures/item/dooms_greats_glowmask.png");
+    public DoomGreatsArmorLight(GeoRenderer<DoomsGreatsArmor> renderer) {
+        super(renderer);
     }
 
     @Override
-    public void render(PoseStack poseStack, DoomGreatsArmor animatable, BakedGeoModel bakedModel, @Nullable RenderType renderType, MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
+    public void render(PoseStack poseStack, DoomsGreatsArmor animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
         RenderType glowRenderType = RenderType.eyes(LAYER);
-        getRenderer().reRender(getDefaultBakedModel(animatable), poseStack, bufferSource, animatable, glowRenderType, bufferSource.getBuffer(glowRenderType), partialTick, packedLight, OverlayTexture.NO_OVERLAY, Color.ofRGBA(255, 0, 0, 255).argbInt());
+        VertexConsumer vertexConsumer = bufferSource.getBuffer(glowRenderType);
+        getRenderer().reRender(getDefaultBakedModel(animatable), poseStack, bufferSource, animatable, glowRenderType, vertexConsumer, partialTick, packedLight, OverlayTexture.NO_OVERLAY, 0xFFFF0000);
     }
 }

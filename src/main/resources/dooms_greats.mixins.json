@@ -4,6 +4,8 @@
   "package": "com.ankrya.doomsgreats.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "EntityMixin",
+    "ItemStackMixin"
   ],
   "client": [
   ],

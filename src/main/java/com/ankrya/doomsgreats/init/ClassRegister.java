@@ -1,12 +1,15 @@
 package com.ankrya.doomsgreats.init;
 
 import com.ankrya.doomsgreats.DoomsGreats;
+import com.ankrya.doomsgreats.entity.DoomsEffect;
 import com.ankrya.doomsgreats.entity.SpecialEffect;
 import com.ankrya.doomsgreats.init.assist.RegisterAssist;
 import com.ankrya.doomsgreats.item.DesireDriver;
-import com.ankrya.doomsgreats.item.DoomGreatsArmor;
-import com.ankrya.doomsgreats.item.base.BaseRiderArmor;
-import com.ankrya.doomsgreats.item.base.BaseRiderArmorBase;
+import com.ankrya.doomsgreats.item.DoomsGreatsArmor;
+import com.ankrya.doomsgreats.item.GoldenGeatsBusterQB9;
+import com.ankrya.doomsgreats.item.LogoItem;
+import com.ankrya.doomsgreats.item.base.armor.BaseRiderArmor;
+import com.ankrya.doomsgreats.item.base.armor.BaseRiderArmorBase;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.Component;
@@ -18,15 +21,17 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SwordItem;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class ClassRegister {
+public final class ClassRegister {
     private static final String modid = DoomsGreats.MODID;
     public static Map<Class<?>,  DeferredRegister<?>> registers = new HashMap<>();
     public static Map<Class<?>, Map<String, Supplier<?>>> registerObjects = new HashMap<>();
@@ -52,6 +57,7 @@ public class ClassRegister {
         return register;
     }
 
+    @ApiStatus.Internal
     public static <T> DeferredRegister<T> registerSource(Class<T> type){
         return registerSource(type, RegisterAssist.getRegisterName(type));
     }
@@ -130,6 +136,7 @@ public class ClassRegister {
         Class<?> entityType = EntityType.class;
         registerSource(entityType);
         register(entityType, "henshin_effect", () -> EntityType.Builder.of(SpecialEffect::new, MobCategory.MISC).sized(0.0F, 0.0F).setShouldReceiveVelocityUpdates(true).updateInterval(3).build("effects"));
+        register(entityType, "dooms_effect", () -> EntityType.Builder.of(DoomsEffect::new, MobCategory.MISC).sized(0.0F, 0.0F).setShouldReceiveVelocityUpdates(true).updateInterval(3).build("dooms_effect"));
 
 //        注册盔甲材质
 //        Class<ArmorMaterial> armorMaterial = ArmorMaterial.class;
@@ -140,10 +147,11 @@ public class ClassRegister {
 //        注册物品
         Class<Item> item = Item.class;
         registerSource(item);
-        register(item, "desire_driver", () -> new DesireDriver(new Item.Properties()));
-        register(item, "logo", () -> new Item(new Item.Properties()));
+        register(item, "desire_driver", () -> new DesireDriver(new Item.Properties().stacksTo(1)));
+        register(item, "logo", () -> new LogoItem(new Item.Properties().stacksTo(1)));
         for (EquipmentSlot slot : BaseRiderArmorBase.getSlots())
-            register(item, "dooms_greats_" + slot.getName(), () -> new DoomGreatsArmor(new Item.Properties(), slot));
+            register(item, "dooms_greats_" + slot.getName(), () -> new DoomsGreatsArmor(new Item.Properties().stacksTo(1), slot));
+        register(item, "buster_qb_9_sword", GoldenGeatsBusterQB9::new);
 
         Class<?> dataComponentType = DataComponentType.class;
         registerSource(dataComponentType);

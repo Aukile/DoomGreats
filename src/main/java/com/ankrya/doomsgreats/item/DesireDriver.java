@@ -1,7 +1,7 @@
 package com.ankrya.doomsgreats.item;
 
 import com.ankrya.doomsgreats.init.ClassRegister;
-import com.ankrya.doomsgreats.item.base.BaseDriver;
+import com.ankrya.doomsgreats.item.base.armor.BaseDriver;
 import com.ankrya.doomsgreats.item.material.GreatsArmorMaterial;
 import com.ankrya.doomsgreats.item.renderer.DesireDriverRenderer;
 import net.minecraft.client.model.HumanoidModel;
@@ -18,6 +18,7 @@ import software.bernie.geckolib.animatable.client.GeoRenderProvider;
 import java.util.function.Consumer;
 
 public class DesireDriver extends BaseDriver {
+    public static final String BUCKLE = "buckle";
 
     public DesireDriver(Properties properties) {
         super(GreatsArmorMaterial.DGP_BLANK, Type.LEGGINGS, properties);
@@ -53,5 +54,10 @@ public class DesireDriver extends BaseDriver {
     @Override
     public String defaultTexture() {
         return "dooms_geats_belt";
+    }
+
+    @Override
+    public Class<? extends BaseDriver> getDriverClass() {
+        return DesireDriver.class;
     }
 }

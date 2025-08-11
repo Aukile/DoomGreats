@@ -1,6 +1,6 @@
 package com.ankrya.doomsgreats.item.data;
 
-import com.ankrya.doomsgreats.help.json.ItemHelp;
+import com.ankrya.doomsgreats.help.ItemHelp;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;

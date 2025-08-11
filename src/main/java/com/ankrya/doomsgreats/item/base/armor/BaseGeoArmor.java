@@ -1,4 +1,4 @@
-package com.ankrya.doomsgreats.item.base;
+package com.ankrya.doomsgreats.item.base.armor;
 
 import com.ankrya.doomsgreats.item.renderer.base.BaseGeoArmorRenderer;
 import net.minecraft.client.model.HumanoidModel;
@@ -70,6 +70,14 @@ public abstract class BaseGeoArmor extends ArmorItem implements GeoItem {
 
     public RenderType getRenderType() {
         return renderType;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public void setAnimation(String animation) {
+        this.animation = animation;
     }
 
     public void setRenderType(RenderType renderType) {

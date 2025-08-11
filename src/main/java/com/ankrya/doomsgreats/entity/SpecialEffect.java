@@ -1,54 +1,66 @@
 package com.ankrya.doomsgreats.entity;
 
 import com.ankrya.doomsgreats.init.ClassRegister;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
+import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class SpecialEffect extends Entity implements GeoEntity {
+import java.util.Optional;
+import java.util.UUID;
+
+public class SpecialEffect extends LivingEntity implements GeoEntity {
     public static final EntityDataAccessor<Integer> DEAD_TIME = SynchedEntityData.defineId(SpecialEffect.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Boolean> AUTO_CLEAR = SynchedEntityData.defineId(SpecialEffect.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(SpecialEffect.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(SpecialEffect.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<String> MODEL = SynchedEntityData.defineId(SpecialEffect.class, EntityDataSerializers.STRING);
-    public LivingEntity owner;
-    private AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    public static final EntityDataAccessor<Optional<UUID>> OWNER_UUID = SynchedEntityData.defineId(SpecialEffect.class, EntityDataSerializers.OPTIONAL_UUID);
+    public Player owner;
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     public SpecialEffect(EntityType<?> type, Level level) {
-        super(type, level);
+        super((EntityType<? extends LivingEntity>) type, level);
     }
 
-    public SpecialEffect(Level level, LivingEntity owner, String model, String texture, int dead) {
+    public SpecialEffect(Level level, Player owner, String model, String texture, int dead) {
         this(ClassRegister.getRegisterObject("henshin_effect", EntityType.class).get(), level);
         this.entityData.set(DEAD_TIME, dead);
         this.entityData.set(MODEL, model);
         this.entityData.set(TEXTURE, texture);
         this.owner = owner;
-    }
-
-    public SpecialEffect doomsEffect(Level level, LivingEntity owner){
-        return new SpecialEffect(level, owner, "dooms_geatshenxin", "dooms_greatshenxin", (int) (25.08 * 20));
+        this.setOwnerUUID(owner.getUUID());
+        this.startRiding(owner, true);
     }
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
         builder.define(DEAD_TIME, 20);
         builder.define(AUTO_CLEAR, true);
         builder.define(ANIMATION, "idle");
         builder.define(TEXTURE, "null");
         builder.define(MODEL, "null");
+        builder.define(OWNER_UUID, Optional.empty());
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
         if (tag.contains("deadTime"))
             this.entityData.set(DEAD_TIME, tag.getInt("deadTime"));
         if (tag.contains("autoClear"))
@@ -59,15 +71,21 @@ public class SpecialEffect extends Entity implements GeoEntity {
             this.entityData.set(TEXTURE, tag.getString("texture"));
         if (tag.contains("model"))
             this.entityData.set(MODEL, tag.getString("model"));
+        if (tag.contains("owner_uuid")) {
+            this.entityData.set(OWNER_UUID, Optional.of(tag.getUUID("owner_uuid")));
+            this.owner = null;
+        }
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
         tag.putInt("deadTime", this.entityData.get(DEAD_TIME));
         tag.putBoolean("autoClear", this.entityData.get(AUTO_CLEAR));
         tag.putString("animation", this.entityData.get(ANIMATION));
         tag.putString("texture", this.entityData.get(TEXTURE));
         tag.putString("model", this.entityData.get(MODEL));
+        tag.putUUID("owner_uuid", this.entityData.get(OWNER_UUID).get());
     }
 
     @Override
@@ -80,7 +98,9 @@ public class SpecialEffect extends Entity implements GeoEntity {
                 this.discard();
             }
         }
-        if (AutoClear() && (this.getOwner() == null || this.getVehicle() != this.getOwner()) )
+        LivingEntity owner = getOwner();
+        Entity vehicle = this.getVehicle();
+        if (AutoClear() && (owner == null || !owner.isAlive() || vehicle != owner) )
             this.discard();
     }
 
@@ -136,11 +156,50 @@ public class SpecialEffect extends Entity implements GeoEntity {
         this.entityData.set(AUTO_CLEAR,flag);
     }
 
+    public void setOwnerUUID(UUID uuid){
+        this.entityData.set(OWNER_UUID,Optional.of(uuid));
+    }
+
     public boolean AutoClear(){
         return this.entityData.get(AUTO_CLEAR);
     }
 
     public LivingEntity getOwner() {
-        return owner;
+        UUID uuid = this.entityData.get(OWNER_UUID).orElse(null);
+        if (this.owner != null)
+            return this.owner;
+        else if (uuid != null)
+            return this.level().getPlayerByUUID(uuid);
+        else return null;
+    }
+
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0);
+        builder = builder.add(Attributes.MAX_HEALTH, 2);
+        builder = builder.add(Attributes.ARMOR, 0);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 0);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 16);
+        builder = builder.add(Attributes.STEP_HEIGHT, 0.6);
+        return builder;
+    }
+
+    @Override
+    public @NotNull Iterable<ItemStack> getArmorSlots() {
+        return ImmutableList.of(ItemStack.EMPTY);
+    }
+
+    @Override
+    public @NotNull ItemStack getItemBySlot(@NotNull EquipmentSlot equipmentSlot) {
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public void setItemSlot(@NotNull EquipmentSlot equipmentSlot, @NotNull ItemStack itemStack) {
+    }
+
+    @Override
+    public @NotNull HumanoidArm getMainArm() {
+        return HumanoidArm.RIGHT;
     }
 }

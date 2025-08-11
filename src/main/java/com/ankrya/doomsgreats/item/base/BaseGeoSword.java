@@ -1,6 +1,7 @@
 package com.ankrya.doomsgreats.item.base;
 
 import com.ankrya.doomsgreats.item.renderer.base.BaseGeoItemRenderer;
+import com.ankrya.doomsgreats.item.renderer.base.BaseGeoSwordRenderer;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.item.SwordItem;
@@ -18,30 +19,25 @@ import java.util.function.Consumer;
 public abstract class BaseGeoSword extends SwordItem implements GeoItem {
     public String model;
     public String texture;
-    public String animation;
+    public String animation = "idle";
     public RenderType renderType = null;
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public BaseGeoSword(Tier tier, Properties properties) {
         super(tier, properties);
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
-    }
-
-    public BaseGeoSword(Tier tier, Properties properties, String model, String texture, String animation) {
-        this(tier, properties);
-        this.model = model;
-        this.texture = texture;
-        this.animation = animation;
+        this.model = defaultModel();
+        this.texture = defaultTexture();
     }
 
     @Override
     public void createGeoRenderer(Consumer<GeoRenderProvider> consumer) {
         consumer.accept(new GeoRenderProvider() {
-            private BaseGeoItemRenderer renderer;
+            private BaseGeoSwordRenderer renderer;
 
             @Override
             public @NotNull BlockEntityWithoutLevelRenderer getGeoItemRenderer() {
-                if (renderer == null) renderer = new BaseGeoItemRenderer();
+                if (renderer == null) renderer = new BaseGeoSwordRenderer();
                 return renderer;
             }
         });
@@ -49,7 +45,7 @@ public abstract class BaseGeoSword extends SwordItem implements GeoItem {
 
     private PlayState predicate(AnimationState<BaseGeoSword> state) {
 //        ItemStack stack = state.getData(DataTickets.ITEMSTACK);
-        state.getController().setAnimation(RawAnimation.begin().then("idle", Animation.LoopType.LOOP));
+        state.getController().setAnimation(RawAnimation.begin().then(getAnimation(), Animation.LoopType.LOOP));
         return PlayState.CONTINUE;
     }
 
@@ -75,6 +71,14 @@ public abstract class BaseGeoSword extends SwordItem implements GeoItem {
         return renderType;
     }
 
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public void setAnimation(String animation) {
+        this.animation = animation;
+    }
+
     public void setRenderType(RenderType renderType) {
         this.renderType = renderType;
     }
@@ -86,4 +90,8 @@ public abstract class BaseGeoSword extends SwordItem implements GeoItem {
     public void setTexture(String texture) {
         this.texture = texture;
     }
+
+    public abstract String defaultModel();
+
+    public abstract String defaultTexture();
 }

@@ -10,6 +10,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.InvocationTargetException;
+
 public final class MessageCreater implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<MessageCreater> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "message_creater"));
     public static final StreamCodec<RegistryFriendlyByteBuf, MessageCreater> CODEC = StreamCodec.of(MessageCreater::toBuf, MessageCreater::fromBuf);
@@ -19,16 +21,15 @@ public final class MessageCreater implements CustomPacketPayload {
         this.message = message;
     }
 
-    public static void toBuf(FriendlyByteBuf buf, MessageCreater creater) {
-        String path = creater.message.getClass().getName();
+    public static void toBuf(FriendlyByteBuf buf, MessageCreater create) {
+        String path = create.message.getClass().getName();
         byte[] bytes = path.getBytes();
         buf.writeInt(bytes.length);
-        for (int i = 0; i < bytes.length; i++) {
-            byte b = bytes[i];
+        for (byte b : bytes) {
             buf.writeByte(b);
         }
-        creater.message.toBytes(buf);
-//		Main.LOGGER.info("create Buf by " + creater.message);
+        create.message.toBytes(buf);
+//		Main.LOGGER.info("create Buf by " + create.message);
     }
 
     public static MessageCreater fromBuf(FriendlyByteBuf buf) {
@@ -49,10 +50,10 @@ public final class MessageCreater implements CustomPacketPayload {
     }
 
     // 执行message对象的方法
-    public static void run(final MessageCreater creater, final IPayloadContext ctx) {
+    public static void run(final MessageCreater create, final IPayloadContext ctx) {
         ctx.enqueueWork(() -> {
-//			Main.LOGGER.info("run task " + creater.message);
-            creater.message.run(ctx);
+//			Main.LOGGER.info("run task " + create.message);
+            create.message.run(ctx);
         });
     }
 

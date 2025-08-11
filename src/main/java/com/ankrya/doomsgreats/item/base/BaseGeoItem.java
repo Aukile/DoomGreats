@@ -17,20 +17,15 @@ import java.util.function.Consumer;
 public abstract class BaseGeoItem extends Item implements GeoItem {
     public String model;
     public String texture;
-    public String animation;
+    public String animation = "idle";
     public RenderType renderType = null;
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public BaseGeoItem(Properties properties) {
         super(properties);
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
-    }
-
-    public BaseGeoItem(Properties properties, String model, String texture, String animation) {
-        this(properties);
-        this.model = model;
-        this.texture = texture;
-        this.animation = animation;
+        this.model = defaultModel();
+        this.texture = defaultTexture();
     }
 
     @Override
@@ -48,7 +43,7 @@ public abstract class BaseGeoItem extends Item implements GeoItem {
 
     private PlayState predicate(AnimationState<BaseGeoItem> state) {
 //        ItemStack stack = state.getData(DataTickets.ITEMSTACK);
-        state.getController().setAnimation(RawAnimation.begin().then("idle", Animation.LoopType.LOOP));
+        state.getController().setAnimation(RawAnimation.begin().then(getAnimation(), Animation.LoopType.LOOP));
         return PlayState.CONTINUE;
     }
 
@@ -74,6 +69,14 @@ public abstract class BaseGeoItem extends Item implements GeoItem {
         return renderType;
     }
 
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public void setAnimation(String animation) {
+        this.animation = animation;
+    }
+
     public void setRenderType(RenderType renderType) {
         this.renderType = renderType;
     }
@@ -85,4 +88,8 @@ public abstract class BaseGeoItem extends Item implements GeoItem {
     public void setTexture(String texture) {
         this.texture = texture;
     }
+
+    public abstract String defaultModel();
+
+    public abstract String defaultTexture();
 }
