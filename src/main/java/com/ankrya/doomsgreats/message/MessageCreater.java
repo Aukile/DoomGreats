@@ -11,7 +11,10 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
-
+/**
+ * @author 八云紫Ender <br>
+ * {@link  IFMessage} 的创建器
+ */
 public final class MessageCreater implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<MessageCreater> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "message_creater"));
     public static final StreamCodec<RegistryFriendlyByteBuf, MessageCreater> CODEC = StreamCodec.of(MessageCreater::toBuf, MessageCreater::fromBuf);

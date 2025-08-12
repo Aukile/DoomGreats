@@ -1,7 +1,7 @@
-package com.ankrya.doomsgreats.message;
+package com.ankrya.doomsgreats.message.ex_message;
 
 import com.ankrya.doomsgreats.client.LoopSound;
-import com.ankrya.doomsgreats.interfaces.IEXMessage;
+import com.ankrya.doomsgreats.interfaces.INMessage;
 import com.ankrya.doomsgreats.interfaces.ISoundMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
@@ -14,7 +14,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
-public class PlayLoopSound implements IEXMessage {
+public class PlayLoopSound implements INMessage {
     public static final int MASTER = 0;
     public static final int MUSIC = 1;
     public static final int RECORDS = 2;
@@ -43,39 +43,22 @@ public class PlayLoopSound implements IEXMessage {
 
     @Override
     public void toBytes(@NotNull FriendlyByteBuf buf) {
-        IEXMessage.super.toBytes(buf);
-        IEXMessage.writeResourceLocation(buf, sound);
-        IEXMessage.writeBoolean(buf, loop);
-        IEXMessage.writeInt(buf, range);
-        IEXMessage.writeInt(buf, type);
-        IEXMessage.writeInt(buf, id);
+        INMessage.autoWriteAll(buf, sound, loop, range, type, id);
     }
 
     @Override
     public void run(IPayloadContext ctx) {
-        try (Level level = ctx.player().level()) {
-            Entity entity = level.getEntity(id);
-            LoopSound loopSound = new LoopSound(entity, sound, getSoundSource(type), loop, range);
-            if (loop && entity instanceof ISoundMap soundMap)
-                soundMap.doomGreats$addLoopSound(sound, loopSound);
-            playLoopSound(Minecraft.getInstance(), loopSound);
-        } catch (Exception ignored) {
-        }
+        Level level = ctx.player().level();
+        Entity entity = level.getEntity(id);
+        LoopSound loopSound = new LoopSound(entity, sound, getSoundSource(type), loop, range);
+        if (loop && entity instanceof ISoundMap soundMap)
+            soundMap.doomGreats$addLoopSound(sound, loopSound);
+        playLoopSound(Minecraft.getInstance(), loopSound);
     }
 
     @OnlyIn(Dist.CLIENT)
     public static void playLoopSound(Minecraft minecraft, LoopSound sound) {
         minecraft.getSoundManager().play(sound);
-    }
-
-    @Override
-    public boolean hasData() {
-        return true;
-    }
-
-    @Override
-    public int dataLong() {
-        return 5;
     }
 
     public static SoundSource getSoundSource(int type) {

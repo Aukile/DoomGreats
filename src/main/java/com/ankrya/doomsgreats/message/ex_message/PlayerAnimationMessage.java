@@ -1,8 +1,8 @@
-package com.ankrya.doomsgreats.message;
+package com.ankrya.doomsgreats.message.ex_message;
 
 import com.ankrya.doomsgreats.DoomsGreats;
 import com.ankrya.doomsgreats.compat.animation.PlayerAnimator;
-import com.ankrya.doomsgreats.interfaces.IEXMessage;
+import com.ankrya.doomsgreats.interfaces.INMessage;
 import dev.kosmx.playerAnim.api.firstPerson.FirstPersonConfiguration;
 import dev.kosmx.playerAnim.api.firstPerson.FirstPersonMode;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry;
@@ -17,8 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.UUID;
 
-public class PlayerAnimationMessage implements IEXMessage {
-
+public class PlayerAnimationMessage implements INMessage {
     final UUID uuid;
     final ResourceLocation layer;
     final String animation;
@@ -37,37 +36,20 @@ public class PlayerAnimationMessage implements IEXMessage {
 
     @Override
     public void toBytes(@NotNull FriendlyByteBuf buf) {
-        IEXMessage.super.toBytes(buf);
-        IEXMessage.writeUUID(buf, uuid);
-        IEXMessage.writeResourceLocation(buf, layer);
-        IEXMessage.writeString(buf, animation);
-        IEXMessage.writeBoolean(buf, showRightArm);
-        IEXMessage.writeBoolean(buf, showLeftArm);
-        IEXMessage.writeBoolean(buf, override);
+        INMessage.autoWriteAll(buf, uuid, layer, animation, showRightArm, showLeftArm, override);
     }
 
     @Override
     public void run(IPayloadContext ctx) {
-        try (Level level = ctx.player().level()) {
-            Player player = level.getPlayerByUUID(uuid);
-            if (player instanceof AbstractClientPlayer clientPlayer){
-                playerAnimation(clientPlayer, layer, animation, showRightArm, showLeftArm, override);
-            }
-        } catch (Exception ignored) {}
+        Level level = ctx.player().level();
+        Player player = level.getPlayerByUUID(uuid);
+        if (player instanceof AbstractClientPlayer clientPlayer) {
+            playerAnimation(clientPlayer, layer, animation, showRightArm, showLeftArm, override);
+        }
     }
 
     public static void playerAnimation(AbstractClientPlayer player, ResourceLocation dataId, String animation, boolean showRightArm, boolean showLeftArm, boolean override){
-        PlayerAnimator.playerAnimation(player, dataId, Objects.requireNonNull(PlayerAnimationRegistry.getAnimation(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, animation))).playAnimation()
+        PlayerAnimator.playAnimation(player, dataId, Objects.requireNonNull(PlayerAnimationRegistry.getAnimation(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, animation))).playAnimation()
                 .setFirstPersonMode(FirstPersonMode.THIRD_PERSON_MODEL).setFirstPersonConfiguration(new FirstPersonConfiguration().setShowRightArm(showRightArm).setShowLeftItem(showLeftArm)), override);
-    }
-
-    @Override
-    public boolean hasData() {
-        return true;
-    }
-
-    @Override
-    public int dataLong() {
-        return 6;
     }
 }

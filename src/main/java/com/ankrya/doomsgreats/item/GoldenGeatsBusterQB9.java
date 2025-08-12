@@ -4,9 +4,9 @@ import com.ankrya.doomsgreats.help.HTool;
 import com.ankrya.doomsgreats.help.ItemHelp;
 import com.ankrya.doomsgreats.item.base.BaseGeoSword;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -14,46 +14,21 @@ import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
+import net.neoforged.neoforge.common.SimpleTier;
 import org.jetbrains.annotations.NotNull;
 
 public class GoldenGeatsBusterQB9 extends BaseGeoSword {
-    public static final Tier TIER = new Tier() {
-        @Override
-        public int getUses() {
-            return 0;
-        }
-
-        @Override
-        public float getSpeed() {
-            return 6f;
-        }
-
-        @Override
-        public float getAttackDamageBonus() {
-            return 3.6f;
-        }
-
-        @Override
-        public @NotNull TagKey<Block> getIncorrectBlocksForDrops() {
-            return BlockTags.INCORRECT_FOR_GOLD_TOOL;
-        }
-
-        @Override
-        public int getEnchantmentValue() {
-            return 0;
-        }
-
-        @Override
-        public @NotNull Ingredient getRepairIngredient() {
-            return Ingredient.of();
-        }
-    };
+    public static final Tier TIER = new SimpleTier(BlockTags.INCORRECT_FOR_GOLD_TOOL, 2000, 6f, 3.6f, 0, Ingredient::of);
     public static final String QB9_MODE = "qb9_mode";
 
     public GoldenGeatsBusterQB9() {
         super(TIER, new Item.Properties().stacksTo(1)
                 .attributes(SwordItem.createAttributes(TIER, 8.4f, -2.4f)));
+    }
+
+    @Override
+    public boolean isDamageable(@NotNull ItemStack stack) {
+        return false;
     }
 
     @Override
@@ -74,6 +49,11 @@ public class GoldenGeatsBusterQB9 extends BaseGeoSword {
 
         }
         return use;
+    }
+
+    @Override
+    public boolean onEntitySwing(ItemStack stack, LivingEntity entity, InteractionHand hand) {
+        return super.onEntitySwing(stack, entity, hand);
     }
 
     @Override

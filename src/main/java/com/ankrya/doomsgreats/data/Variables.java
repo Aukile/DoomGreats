@@ -3,7 +3,7 @@ package com.ankrya.doomsgreats.data;
 import com.ankrya.doomsgreats.DoomsGreats;
 import com.ankrya.doomsgreats.interfaces.IVariable;
 import com.ankrya.doomsgreats.message.MessageLoader;
-import com.ankrya.doomsgreats.message.SyncVariableMessage;
+import com.ankrya.doomsgreats.message.common.SyncVariableMessage;
 import com.google.common.primitives.Primitives;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;

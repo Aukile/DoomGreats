@@ -6,9 +6,9 @@ import com.ankrya.doomsgreats.entity.DoomsEffect;
 import com.ankrya.doomsgreats.item.DoomsGreatsArmor;
 import com.ankrya.doomsgreats.item.base.armor.BaseRiderArmor;
 import com.ankrya.doomsgreats.item.base.armor.BaseRiderArmorBase;
-import com.ankrya.doomsgreats.message.EXMessageCreater;
+import com.ankrya.doomsgreats.message.NMessageCreater;
 import com.ankrya.doomsgreats.message.MessageLoader;
-import com.ankrya.doomsgreats.message.PlayLoopSound;
+import com.ankrya.doomsgreats.message.ex_message.PlayLoopSound;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.resources.ResourceLocation;
@@ -60,7 +60,7 @@ public class RegisterCommand {
     public static int test(LivingEntity entity){
         if (entity instanceof Player player) {
             PlayerAnimator.playerAnimation(player, "buckle_open", true);
-            MessageLoader.sendToPlayer(new EXMessageCreater(new PlayLoopSound(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "revolve_on"), false, 10, 7, entity.getId())), (ServerPlayer) player);
+            MessageLoader.sendToPlayer(new NMessageCreater(new PlayLoopSound(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "revolve_on"), false, 10, 7, entity.getId())), (ServerPlayer) player);
             DoomsEffect effect = new DoomsEffect(entity.level(), player);
             entity.level().addFreshEntity(effect);
         }

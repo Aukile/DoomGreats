@@ -66,6 +66,9 @@ public final class ClassRegister {
         return registers.get(type);
     }
 
+    /**
+     * 这是中间用的方法，不是更新的方法，请勿调用
+     */
     public static <T> void updateRegisters(Class<? extends T> type, final String name, Supplier<?> object){
         if (registerObjects.containsKey(type)){
             Map<String, Supplier<?>> supplierMap = registerObjects.get(type);
@@ -121,11 +124,23 @@ public final class ClassRegister {
         return registers.containsKey(clazz);
     }
 
+    /**
+     *神人注册机，如是说，虽然导致优先级方面有问题
+     *但是豪玩！
+     * 注册去static里面注册吧
+     * <p>
+     * @see ClassRegister#registerSource 注册注册源
+     * @see ClassRegister#register 注册对象
+     * <p>
+     * 使用例
+     * @see ClassRegister#getRegisterObject 获取注册对象，加一个.get()获取实例
+     */
     public static void init(IEventBus bus){
         for (DeferredRegister<?> register : registers.values()){
             register.register(bus);
         }
     }
+
 
     static {
 //        注册声音

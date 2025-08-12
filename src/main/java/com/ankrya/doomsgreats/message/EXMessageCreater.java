@@ -2,6 +2,7 @@ package com.ankrya.doomsgreats.message;
 
 import com.ankrya.doomsgreats.DoomsGreats;
 import com.ankrya.doomsgreats.interfaces.IEXMessage;
+import com.ankrya.doomsgreats.message.ex_message.AllPackt;
 import com.google.common.primitives.Primitives;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -14,6 +15,10 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 
+/**
+ * {@link IEXMessage} 的创建器 <br>
+ * 会自动解析出对应的网络包 <br>
+ */
 public class EXMessageCreater implements CustomPacketPayload{
     public static final Type<EXMessageCreater> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "message_ex_creater"));
     public static final StreamCodec<RegistryFriendlyByteBuf, EXMessageCreater> CODEC = StreamCodec.of(EXMessageCreater::toBuf, EXMessageCreater::fromBuf);
@@ -31,7 +36,6 @@ public class EXMessageCreater implements CustomPacketPayload{
             buf.writeByte(b);
         }
         create.message.toBytes(buf);
-//		Main.LOGGER.info("create Buf by " + create.message);
     }
 
     public static EXMessageCreater fromBuf(FriendlyByteBuf buf) {
@@ -46,14 +50,11 @@ public class EXMessageCreater implements CustomPacketPayload{
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
-//		Main.LOGGER.info("read Buf in " + message);
         return new EXMessageCreater(message);
     }
 
-    // 执行message对象的方法
     public static void run(final EXMessageCreater create, final IPayloadContext ctx) {
         ctx.enqueueWork(() -> {
-//			Main.LOGGER.info("run task " + create.message);
             create.message.run(ctx);
         });
     }

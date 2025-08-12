@@ -1,4 +1,4 @@
-package com.ankrya.doomsgreats.message;
+package com.ankrya.doomsgreats.message.common;
 
 import com.ankrya.doomsgreats.DoomsGreats;
 import com.ankrya.doomsgreats.data.Variables;
@@ -17,6 +17,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
+/*
+ * 数据同步的发包
+ * 因为需要使用自己的序列号和反序列化器
+ * 所以得写个正常的发包awa
+ */
 public class SyncVariableMessage implements CustomPacketPayload {
     public static final Type<SyncVariableMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "sync_variable_message"));
     public static final StreamCodec<RegistryFriendlyByteBuf, SyncVariableMessage> CODEC = StreamCodec.of(SyncVariableMessage::toBuf, SyncVariableMessage::fromBuf);

@@ -1,7 +1,10 @@
 package com.ankrya.doomsgreats.compat.animation;
 
 import com.ankrya.doomsgreats.DoomsGreats;
+import com.ankrya.doomsgreats.interfaces.INMessage;
 import com.ankrya.doomsgreats.message.*;
+import com.ankrya.doomsgreats.message.ex_message.PlayerAnimationMessage;
+import com.ankrya.doomsgreats.message.ex_message.PlayerAnimationStopMessage;
 import dev.kosmx.playerAnim.api.layered.IAnimation;
 import dev.kosmx.playerAnim.api.layered.ModifierLayer;
 import dev.kosmx.playerAnim.api.layered.modifier.AbstractFadeModifier;
@@ -66,10 +69,10 @@ public class PlayerAnimator {
     }
 
     public static void playerAnimation(Player player, ResourceLocation dataId, String animation, boolean showRightArm, boolean showLeftArm, boolean override){
-        PlayerAnimationMessage animationMessage = new PlayerAnimationMessage(player.getUUID(), dataId, animation, showRightArm, showLeftArm, override);
+        INMessage animationMessage = new PlayerAnimationMessage(player.getUUID(), dataId, animation, showRightArm, showLeftArm, override);
         if (player.level() instanceof ServerLevel serverLevel)
-            PacketDistributor.sendToPlayersInDimension(serverLevel, new EXMessageCreater(animationMessage));
-        else MessageLoader.sendToServer(new EXMessageCreater(new AllPackt(PlayerAnimationMessage.class, animationMessage)));
+            PacketDistributor.sendToPlayersInDimension(serverLevel, new NMessageCreater(animationMessage));
+        else MessageLoader.sendToServer(new NMessageCreater(animationMessage));
     }
 
     @SuppressWarnings("unchecked")
@@ -87,7 +90,7 @@ public class PlayerAnimator {
     }
 
     @SuppressWarnings("unchecked")
-    public static void playerAnimation(AbstractClientPlayer player, ResourceLocation dataId, IAnimation keyframeAnimation, boolean override){
+    public static void playAnimation(AbstractClientPlayer player, ResourceLocation dataId, IAnimation keyframeAnimation, boolean override){
         if (installed()){
             var associatedData = PlayerAnimationAccess.getPlayerAssociatedData(player);
             var modifierLayer = (ModifierLayer<IAnimation>) associatedData.get(dataId);
@@ -105,7 +108,7 @@ public class PlayerAnimator {
     public static void stopAnimation(Player player, ResourceLocation dataId, int fadeTime){
         PlayerAnimationStopMessage stopMessage = new PlayerAnimationStopMessage(player.getUUID(), dataId, fadeTime);
         if (player.level() instanceof ServerLevel serverLevel)
-            PacketDistributor.sendToPlayersInDimension(serverLevel, new EXMessageCreater(stopMessage));
+            PacketDistributor.sendToPlayersInDimension(serverLevel, new NMessageCreater(stopMessage));
     }
 
     @SuppressWarnings("unchecked")

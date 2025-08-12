@@ -75,19 +75,19 @@ public class PlayerEvent {
         }
     }
 
-    @SubscribeEvent
-    public static void onLeftClick(PlayerInteractEvent.LeftClickEmpty event){
-        Player entity = event.getEntity();
-        Level level = event.getLevel();
-        ItemStack driver = entity.getItemBySlot(EquipmentSlot.LEGS);
-        if (DoomsGreatsArmor.isAllEquip(entity)
-                && entity.getMainHandItem().getItem() instanceof SwordItem){
-            int time = ItemHelp.getNbt(driver).getInt(GREATS_HIT_SEGMENT);
-            hit(driver, entity, level, time);
-        }
-    }
+//    @SubscribeEvent
+//    public static void onLeftClick(PlayerInteractEvent.LeftClickEmpty event){
+//        Player entity = event.getEntity();
+//        Level level = event.getLevel();
+//        ItemStack driver = entity.getItemBySlot(EquipmentSlot.LEGS);
+//        if (DoomsGreatsArmor.isAllEquip(entity)
+//                && entity.getMainHandItem().getItem() instanceof SwordItem){
+//            int time = ItemHelp.getNbt(driver).getInt(GREATS_HIT_SEGMENT);
+//            hit(driver, entity, level, time);
+//        }
+//    }
 
-    private static void hit(ItemStack stack, Player entity, Level world, int time){
+    public static void hit(ItemStack stack, Player entity, Level world, int time){
         ItemHelp.setNbt(stack, nbt -> nbt.putInt(GREATS_HIT_SEGMENT, time > 2 ? 0 : time + 1));
         ItemHelp.setNbt(stack, nbt -> nbt.putInt(GREATS_HIT_COOLING, 20));
         PlayerAnimator.playerAnimation(entity, "attack" + (time + 1), true);

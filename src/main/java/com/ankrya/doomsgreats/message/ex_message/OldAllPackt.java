@@ -1,6 +1,7 @@
-package com.ankrya.doomsgreats.message;
+package com.ankrya.doomsgreats.message.ex_message;
 
 import com.ankrya.doomsgreats.interfaces.IEXMessage;
+import com.ankrya.doomsgreats.message.EXMessageCreater;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
@@ -8,24 +9,28 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
-public class AllPackt implements IEXMessage {
+/**
+ * {@link IEXMessage}的CTSTC网络包
+ * 所以叫OldAllPackt
+ */
+public class OldAllPackt implements IEXMessage {
     final String clazz;
     final IEXMessage message;
 
-    public AllPackt(String name, IEXMessage message, boolean hasData, int data) {
+    public OldAllPackt(String name, IEXMessage message, boolean hasData, int data) {
         this.clazz = name;
         this.message = message;
     }
 
-    public AllPackt(IEXMessage message){
+    public OldAllPackt(IEXMessage message){
         this(message.getClass().getName(), message, true, 2);
     }
 
-    public AllPackt(String name, IEXMessage message){
+    public OldAllPackt(String name, IEXMessage message){
         this(name, message, true, 2);
     }
 
-    public AllPackt(Class<?> clazz, IEXMessage message) {
+    public OldAllPackt(Class<?> clazz, IEXMessage message) {
         this(clazz.getName(), message, true, 2);
     }
 

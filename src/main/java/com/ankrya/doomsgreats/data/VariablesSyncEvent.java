@@ -1,7 +1,7 @@
 package com.ankrya.doomsgreats.data;
 
 import com.ankrya.doomsgreats.message.MessageLoader;
-import com.ankrya.doomsgreats.message.SyncVariableMessage;
+import com.ankrya.doomsgreats.message.common.SyncVariableMessage;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;

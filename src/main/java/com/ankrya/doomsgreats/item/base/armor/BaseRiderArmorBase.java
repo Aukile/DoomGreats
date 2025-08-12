@@ -13,6 +13,11 @@ import software.bernie.geckolib.animatable.client.GeoRenderProvider;
 
 import java.util.function.Consumer;
 
+/**
+ * 骑士盔甲的最底板 <br>
+ * 后面走向盔甲{@link BaseRiderArmor}和腰带{@link BaseDriver}两个分支了就 <br>
+ * 这里主要是识别变身状态的方法
+ */
 public abstract class BaseRiderArmorBase extends BaseGeoArmor {
     protected Class<? extends BaseDriver> driverClass = BaseDriver.class;
     protected Class<? extends BaseRiderArmor> armorClass = BaseRiderArmor.class;

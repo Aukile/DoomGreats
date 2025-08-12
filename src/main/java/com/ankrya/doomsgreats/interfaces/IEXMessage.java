@@ -9,6 +9,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.EnumSet;
 import java.util.UUID;
 
+/**
+ * {@link IFMessage}的升级款，使用{@link com.ankrya.doomsgreats.message.EXMessageCreater}创建 <br>
+ * 无需注册的自动网络包，缺点是读写次数过多，我没把全部的数据类型写进去，感觉够用了
+ */
 public interface IEXMessage {
     default void toBytes(@NotNull FriendlyByteBuf buf){
         buf.writeBoolean(hasData());
