@@ -10,32 +10,22 @@ import com.ankrya.doomsgreats.item.DesireDriver;
 import com.ankrya.doomsgreats.item.DoomsGreatsArmor;
 import com.ankrya.doomsgreats.item.base.armor.BaseDriver;
 import com.ankrya.doomsgreats.item.base.armor.BaseRiderArmor;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-
+/**
+ * 灾厄极狐的普攻~
+ */
 @EventBusSubscriber
 public class PlayerEvent {
     public static final String GREATS_HIT_COOLING = "greats_hit_cooling";
@@ -51,7 +41,7 @@ public class PlayerEvent {
     }
 
     @SubscribeEvent
-    public static void onArmorEquip(RiderArmorEquipEvent event) {
+    public static void onArmorEquip(RiderArmorEquipEvent.Pre event) {
         ItemStack driver = event.getEntity().getItemBySlot(EquipmentSlot.LEGS);
         if (event.canRun() && driver.getItem() instanceof DesireDriver && !ItemHelp.getNbt(driver).getBoolean(DesireDriver.BUCKLE)){
             ItemHelp.setNbt(driver, nbt -> nbt.putBoolean(DesireDriver.BUCKLE, true));
@@ -59,11 +49,25 @@ public class PlayerEvent {
     }
 
     @SubscribeEvent
-    public static void onArmorUnequip(RiderArmorRemoveEvent event) {
+    public static void afterArmorEquip(RiderArmorEquipEvent event){
+        LivingEntity entity = event.getEntity();
+        if (entity.getHealth() < entity.getMaxHealth() && DoomsGreatsArmor.isAllEquip(entity)){
+            entity.addEffect(new MobEffectInstance(MobEffects.HEAL, 1 , 9, false, false));
+        }
+    }
+
+    @SubscribeEvent
+    public static void onArmorUnequip(RiderArmorRemoveEvent.Pre event) {
         ItemStack driver = event.getEntity().getItemBySlot(EquipmentSlot.LEGS);
         if (event.canRun() && driver.getItem() instanceof DesireDriver && ItemHelp.getNbt(driver).getBoolean(DesireDriver.BUCKLE)){
             ItemHelp.setNbt(driver, nbt -> nbt.putBoolean(DesireDriver.BUCKLE, false));
         }
+    }
+
+    @SubscribeEvent
+    public static void afterArmorUnequip(RiderArmorRemoveEvent event){
+        LivingEntity entity = event.getEntity();
+        HTool.fixHealth(entity);
     }
 
     @SubscribeEvent
@@ -75,29 +79,21 @@ public class PlayerEvent {
         }
     }
 
-//    @SubscribeEvent
-//    public static void onLeftClick(PlayerInteractEvent.LeftClickEmpty event){
-//        Player entity = event.getEntity();
-//        Level level = event.getLevel();
-//        ItemStack driver = entity.getItemBySlot(EquipmentSlot.LEGS);
-//        if (DoomsGreatsArmor.isAllEquip(entity)
-//                && entity.getMainHandItem().getItem() instanceof SwordItem){
-//            int time = ItemHelp.getNbt(driver).getInt(GREATS_HIT_SEGMENT);
-//            hit(driver, entity, level, time);
-//        }
-//    }
-
+    /**
+     * 本来想放在{@link net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.LeftClickEmpty} 里面的 <br>
+     * 然后发现它攻击实体并不触发。。。 <br>
+     * <p>
+     * @see com.ankrya.doomsgreats.mixin.SwordItemMixin
+     */
     public static void hit(ItemStack stack, Player entity, Level world, int time){
         ItemHelp.setNbt(stack, nbt -> nbt.putInt(GREATS_HIT_SEGMENT, time > 2 ? 0 : time + 1));
         ItemHelp.setNbt(stack, nbt -> nbt.putInt(GREATS_HIT_COOLING, 20));
         PlayerAnimator.playerAnimation(entity, "attack" + (time + 1), true);
         if (time == 3){
             for (Entity target : HTool.rangeFind(entity, 8)) {
-                if (entity != target) {
-                    if (HTool.isFront(entity, target, 0)) {
-                        HTool.ExplosionTo(entity, target, world);
-                        target.setDeltaMovement(new Vec3((target.getLookAngle().x * -4), (target.getLookAngle().y * -1), (target.getLookAngle().z * -4)));
-                    }
+                if (entity != target && HTool.isFront(entity, target, 0)) {
+                    HTool.ExplosionTo(entity, target, world, 50);
+                    target.setDeltaMovement(new Vec3((entity.getLookAngle().x * 4), (entity.getLookAngle().y * -1), (entity.getLookAngle().z * 4)));
                 }
             }
         }

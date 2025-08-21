@@ -42,7 +42,7 @@ public interface INMessage {
         for (int type : types) writeFromType(buf, type, valueList.get(types.indexOf(type)));
     }
 
-    /*
+    /**
      * 下面都是自动解析的协助方法，请勿调用
      */
     static <T> void writeFromType(FriendlyByteBuf buf, int type, T value){

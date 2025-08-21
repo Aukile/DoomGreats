@@ -1,4 +1,4 @@
-package com.ankrya.doomsgreats.interfaces;
+package com.ankrya.doomsgreats.interfaces.mod_use;
 
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;

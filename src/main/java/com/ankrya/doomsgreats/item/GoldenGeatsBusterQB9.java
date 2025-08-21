@@ -6,6 +6,7 @@ import com.ankrya.doomsgreats.item.base.BaseGeoSword;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -39,16 +40,37 @@ public class GoldenGeatsBusterQB9 extends BaseGeoSword {
             int oldMode = ItemHelp.getNbt(stack).getInt(QB9_MODE);
             ItemHelp.setNbt(stack, nbt -> nbt.putInt(QB9_MODE, oldMode == 0 ? 1 : 0));
             if (oldMode == 1) {
-                this.setModel("buster_qb_9_sword");
+                this.setModel("dooms_geats_qb9");
                 HTool.playSound(player, "blade");
             }
             else {
-                this.setModel("buster_qb_9_gun");
+                this.setModel("dooms_geats_qb9_gun");
                 HTool.playSound(player, "gun");
             }
 
         }
         return use;
+    }
+
+    @Override
+    public void inventoryTick(@NotNull ItemStack stack, @NotNull Level level, @NotNull Entity entity, int slotId, boolean isSelected) {
+        if (!level.isClientSide && entity instanceof Player player) {
+            int count = 0;
+            ItemStack firstStack = ItemStack.EMPTY;
+
+            for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+                ItemStack inventoryStack = player.getInventory().getItem(i);
+                if (inventoryStack.getItem() == this) {
+                    count++;
+                    if (firstStack.isEmpty()) {
+                        firstStack = inventoryStack;
+                    }
+                    if (count > 1 && inventoryStack != firstStack) {
+                        player.getInventory().setItem(i, ItemStack.EMPTY);
+                    }
+                }
+            }
+        }
     }
 
     @Override

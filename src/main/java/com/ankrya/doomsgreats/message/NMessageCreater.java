@@ -29,7 +29,7 @@ public class NMessageCreater implements CustomPacketPayload{
     // 构造器缓存，因为有AllPackt的存在，太乱了，再说吧
 //    private static final Map<ClassKey, Constructor<?>> CONSTRUCTOR_CACHE = new ConcurrentHashMap<>();
 
-    public static final Type<NMessageCreater> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "message_ex_creater"));
+    public static final Type<NMessageCreater> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "message_new_creater"));
     public static final StreamCodec<RegistryFriendlyByteBuf, NMessageCreater> CODEC = StreamCodec.of(NMessageCreater::toBuf, NMessageCreater::fromBuf);
     final INMessage message;
 

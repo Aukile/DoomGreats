@@ -1,4 +1,4 @@
-package com.ankrya.doomsgreats.interfaces;
+package com.ankrya.doomsgreats.interfaces.mod_use;
 
 import com.ankrya.doomsgreats.client.LoopSound;
 import net.minecraft.resources.ResourceLocation;

@@ -1,7 +1,9 @@
 package com.ankrya.doomsgreats.message;
 
 import com.ankrya.doomsgreats.DoomsGreats;
+import com.ankrya.doomsgreats.compat.animation.PlayerAnimator;
 import com.ankrya.doomsgreats.message.common.AllPlayAnimation;
+import com.ankrya.doomsgreats.message.common.LoopSoundMessage;
 import com.ankrya.doomsgreats.message.common.PlayAnimation;
 import com.ankrya.doomsgreats.message.common.SyncVariableMessage;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -22,11 +24,14 @@ public final class MessageLoader {
     public static void load(final RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar registrar = event.registrar(DoomsGreats.MODID);
         registrar.playBidirectional(SyncVariableMessage.TYPE, SyncVariableMessage.CODEC, new DirectionalPayloadHandler<>(SyncVariableMessage::handle, null));
+        registrar.playBidirectional(LoopSoundMessage.TYPE, LoopSoundMessage.CODEC, new DirectionalPayloadHandler<>(LoopSoundMessage::handle, null));
         registrar.playBidirectional(MessageCreater.TYPE, MessageCreater.CODEC, new DirectionalPayloadHandler<>(MessageCreater::run,MessageCreater::run));
         registrar.playBidirectional(EXMessageCreater.TYPE, EXMessageCreater.CODEC, new DirectionalPayloadHandler<>(EXMessageCreater::run, EXMessageCreater::run));
         registrar.playBidirectional(NMessageCreater.TYPE, NMessageCreater.CODEC, new DirectionalPayloadHandler<>(NMessageCreater::run, NMessageCreater::run));
-        registrar.playBidirectional(PlayAnimation.TYPE, PlayAnimation.CODEC, new DirectionalPayloadHandler<>(PlayAnimation::run,PlayAnimation::run));
-        registrar.playBidirectional(AllPlayAnimation.TYPE, AllPlayAnimation.CODEC, new DirectionalPayloadHandler<>(AllPlayAnimation::run,AllPlayAnimation::run));
+        if (PlayerAnimator.installed()){
+            registrar.playBidirectional(PlayAnimation.TYPE, PlayAnimation.CODEC, new DirectionalPayloadHandler<>(PlayAnimation::run, PlayAnimation::run));
+            registrar.playBidirectional(AllPlayAnimation.TYPE, AllPlayAnimation.CODEC, new DirectionalPayloadHandler<>(AllPlayAnimation::run, AllPlayAnimation::run));
+        }
     }
 
     //下面的方法有点意义不明？ 额，当搬版本的集中处理器。。。大概

@@ -13,6 +13,9 @@ import net.neoforged.neoforge.common.extensions.IItemExtension;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(SwordItem.class)
 public abstract class SwordItemMixin implements IItemExtension {
@@ -29,5 +32,16 @@ public abstract class SwordItemMixin implements IItemExtension {
             }
         }
         return IItemExtension.super.onEntitySwing(stack, entity, hand);
+    }
+
+    @Inject(method = "hurtEnemy", at = @At("HEAD"), cancellable = true)
+    public void hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker, CallbackInfoReturnable<Boolean> cir) {
+        if (stack.getItem() instanceof SwordItem && attacker instanceof Player && DoomsGreatsArmor.isAllEquip(attacker)){
+            ItemStack driver = attacker.getItemBySlot(EquipmentSlot.LEGS);
+            int time = ItemHelp.getNbt(driver).getInt(PlayerEvent.GREATS_HIT_SEGMENT);
+            if (time == 3){
+                cir.setReturnValue(false);
+            }
+        }
     }
 }

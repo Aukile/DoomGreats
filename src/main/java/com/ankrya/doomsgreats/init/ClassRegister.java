@@ -125,15 +125,15 @@ public final class ClassRegister {
     }
 
     /**
-     *神人注册机，如是说，虽然导致优先级方面有问题
-     *但是豪玩！
-     * 注册去static里面注册吧
-     * <p>
-     * @see ClassRegister#registerSource 注册注册源
-     * @see ClassRegister#register 注册对象
-     * <p>
-     * 使用例
-     * @see ClassRegister#getRegisterObject 获取注册对象，加一个.get()获取实例
+     *神人注册机，如是说，虽然导致优先级方面有问题<br>
+     *但是豪玩！<br>
+     * 注册去static里面注册吧<br>
+     * <p><br>
+     * {@link  ClassRegister#registerSource} 注册注册源<br>
+     * {@link  ClassRegister#register} 注册对象<br>
+     * <p><br>
+     * 使用例<br>
+     * {@link  ClassRegister#getRegisterObject} 获取注册对象，加一个.get()获取实例<br>
      */
     public static void init(IEventBus bus){
         for (DeferredRegister<?> register : registers.values()){
@@ -151,7 +151,9 @@ public final class ClassRegister {
         Class<?> entityType = EntityType.class;
         registerSource(entityType);
         register(entityType, "henshin_effect", () -> EntityType.Builder.of(SpecialEffect::new, MobCategory.MISC).sized(0.0F, 0.0F).setShouldReceiveVelocityUpdates(true).updateInterval(3).build("effects"));
-        register(entityType, "dooms_effect", () -> EntityType.Builder.of(DoomsEffect::new, MobCategory.MISC).sized(0.0F, 0.0F).setShouldReceiveVelocityUpdates(true).updateInterval(3).build("dooms_effect"));
+        register(entityType, "dooms_effect", () -> EntityType.Builder.of(DoomsEffect::new, MobCategory.MISC)
+                .setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(6)
+                .ridingOffset(0f).sized(0.1f, 0.1f).build("dooms_effect"));
 
 //        注册盔甲材质
 //        Class<ArmorMaterial> armorMaterial = ArmorMaterial.class;
@@ -165,7 +167,7 @@ public final class ClassRegister {
         register(item, "desire_driver", () -> new DesireDriver(new Item.Properties().stacksTo(1)));
         register(item, "logo", () -> new LogoItem(new Item.Properties().stacksTo(1)));
         for (EquipmentSlot slot : BaseRiderArmorBase.getSlots())
-            register(item, "dooms_greats_" + slot.getName(), () -> new DoomsGreatsArmor(new Item.Properties().stacksTo(1), slot));
+            register(item, "dooms_greats_" + slot.getName(), () -> new DoomsGreatsArmor(new Item.Properties().stacksTo(1).attributes(DoomsGreatsArmor.addAttributes(slot)), slot));
         register(item, "buster_qb_9_sword", GoldenGeatsBusterQB9::new);
 
         Class<?> dataComponentType = DataComponentType.class;

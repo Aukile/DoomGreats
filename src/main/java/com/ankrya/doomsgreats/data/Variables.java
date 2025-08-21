@@ -1,7 +1,7 @@
 package com.ankrya.doomsgreats.data;
 
 import com.ankrya.doomsgreats.DoomsGreats;
-import com.ankrya.doomsgreats.interfaces.IVariable;
+import com.ankrya.doomsgreats.interfaces.mod_use.IVariable;
 import com.ankrya.doomsgreats.message.MessageLoader;
 import com.ankrya.doomsgreats.message.common.SyncVariableMessage;
 import com.google.common.primitives.Primitives;
@@ -113,6 +113,13 @@ public final class Variables implements INBTSerializable<ListTag> {
         dirty = false;
     }
 
+    /**
+     * 注册同步的数据
+     * @param clazz 类型
+     * @param name 名称
+     * @param defaultValue 默认值
+     * @param save 是否保存（玩家死亡是否保存/世界维度间是否同步）
+     */
     public <T> void registerVariable(Class<T> clazz, String name, T defaultValue, boolean save){
         Data<T> data = new Data<>(defaultValue, name, VariableSerializer.auto(defaultValue), save);
         variables.put(name, data);

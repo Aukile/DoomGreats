@@ -1,7 +1,7 @@
 package com.ankrya.doomsgreats.mixin;
 
 import com.ankrya.doomsgreats.client.LoopSound;
-import com.ankrya.doomsgreats.interfaces.ISoundMap;
+import com.ankrya.doomsgreats.interfaces.mod_use.ISoundMap;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;

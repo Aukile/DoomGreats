@@ -18,6 +18,15 @@ import net.minecraft.world.entity.player.Player;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.network.PacketDistributor;
 
+/**
+ * 玩家动画的东东<br>
+ * {@link PlayerAnimator#playerAnimation} 是播放的方法 <br>
+ * {@link PlayerAnimator#stopAnimation} 是停止的方法 <br>
+ * {@link PlayerAnimator#isAnimationPlaying} 是判断动画是否在播放中 <br>
+ * <p>
+ * {@link PlayerAnimator#ANIMATION} 一般播放动画的层级 <br>
+ * {@link PlayerAnimator#RIDE} 一般播放骑乘动画的层级</p>
+ */
 public class PlayerAnimator {
     public static final ResourceLocation ANIMATION = net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "animation");
     public static final ResourceLocation RIDE = ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "ride");

@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 
 public abstract class BaseRiderArmor extends BaseRiderArmorBase {
-    final EquipmentSlot slot;
+    public final EquipmentSlot slot;
     public static final DataComponentType<ArmorData> BACKUP_ARMOR =
             DataComponentType.<ArmorData>builder().persistent(ArmorData.CODEC)
                     .networkSynchronized(ArmorData.STREAM_CODEC).build();
@@ -68,7 +68,7 @@ public abstract class BaseRiderArmor extends BaseRiderArmorBase {
                     else {
                         ItemStack backupArmor = BaseRiderArmor.getBackupArmor(stack);
                         ItemHelp.playerRemoveItem(player, this, 1);
-                        if (player.getItemBySlot(slot).isEmpty()) ItemHelp.playerBySlot(player, slot, backupArmor);
+                        if (player.getItemBySlot(slot).isEmpty()) ItemHelp.equipBySlot(player, slot, backupArmor);
                         else ItemHandlerHelper.giveItemToPlayer(player, backupArmor);
                     }
                 } else unequip(livingEntity, slot);
@@ -93,21 +93,31 @@ public abstract class BaseRiderArmor extends BaseRiderArmorBase {
         return data != null ? data.toItemStack() : ItemStack.EMPTY;
     }
 
+    /**
+     * 装备对应槽位的骑士盔甲的方法<br>
+     * 会触发{@link RiderArmorEquipEvent}
+     */
     public static void equip(LivingEntity entity, EquipmentSlot slot, ItemStack stack){
-        if (NeoForge.EVENT_BUS.post(new RiderArmorEquipEvent(entity, slot, stack)).canRun()){
+        if (NeoForge.EVENT_BUS.post(new RiderArmorEquipEvent.Pre(entity, slot, stack)).canRun()){
             ItemStack original = entity.getItemBySlot(slot);
             if (!original.isEmpty()) storeBackupArmor(stack, original);
             if (entity instanceof Player player) {
-                ItemHelp.playerBySlot(player, slot, stack);
+                ItemHelp.equipBySlot(player, slot, stack);
             } else entity.setItemSlot(slot, stack);
+            NeoForge.EVENT_BUS.post(new RiderArmorEquipEvent.Post(entity, slot, stack));
         }
     }
 
+    /**
+     * 解除盔甲装备时的方法<br>
+     * 会触发{@link RiderArmorRemoveEvent}
+     */
     public static void unequip(LivingEntity entity, EquipmentSlot slot){
-        if (NeoForge.EVENT_BUS.post(new RiderArmorRemoveEvent(entity, slot)).canRun()){
+        if (NeoForge.EVENT_BUS.post(new RiderArmorRemoveEvent.Pre(entity, slot)).canRun()){
             ItemStack stack = entity.getItemBySlot(slot);
             ItemStack backup = getBackupArmor(stack);
             entity.setItemSlot(slot, backup);
+            NeoForge.EVENT_BUS.post(new RiderArmorRemoveEvent.Post(entity, slot));
         }
     }
 

@@ -5,11 +5,13 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.Event;
 
+/**
+ * 使用{@link com.ankrya.doomsgreats.item.base.armor.BaseRiderArmor#equip} 来穿甲时会触发
+ */
 public class RiderArmorEquipEvent extends Event {
     private final LivingEntity entity;
     private final EquipmentSlot slot;
     private final ItemStack stack;
-    boolean isCanceled = false;
 
     public RiderArmorEquipEvent(LivingEntity entity, EquipmentSlot slot, ItemStack stack) {
         this.entity = entity;
@@ -29,11 +31,32 @@ public class RiderArmorEquipEvent extends Event {
         return stack;
     }
 
-    public boolean canRun() {
-        return !isCanceled;
+    /**
+     * 穿装备之<b>前</b>，在这里可以取消<br>
+     * @see com.ankrya.doomsgreats.item.base.armor.BaseRiderArmor#equip
+     */
+    public static class Pre extends RiderArmorEquipEvent {
+        boolean isCanceled = false;
+        public Pre(LivingEntity entity, EquipmentSlot slot, ItemStack stack) {
+            super(entity, slot, stack);
+        }
+
+        public boolean canRun() {
+            return !isCanceled;
+        }
+
+        public void setCanceled(boolean cancel){
+            this.isCanceled = cancel;
+        }
     }
 
-    public void setCanceled(boolean cancel){
-        this.isCanceled = cancel;
+    /**
+     * 穿上装备之<b>后</b><br>
+     * @see com.ankrya.doomsgreats.item.base.armor.BaseRiderArmor#equip
+     */
+    public static class Post extends RiderArmorEquipEvent {
+        public Post(LivingEntity entity, EquipmentSlot slot, ItemStack stack) {
+            super(entity, slot, stack);
+        }
     }
 }

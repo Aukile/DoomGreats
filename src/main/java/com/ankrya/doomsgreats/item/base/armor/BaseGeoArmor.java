@@ -15,6 +15,7 @@ import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.client.GeoRenderProvider;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
+import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.function.Consumer;
@@ -33,7 +34,9 @@ public abstract class BaseGeoArmor extends ArmorItem implements GeoItem {
     }
 
     private PlayState predicate(AnimationState<BaseGeoArmor> state) {
-        state.getController().setAnimation(RawAnimation.begin().then(getAnimation(), Animation.LoopType.LOOP));
+        state.getController().setAnimation(RawAnimation.begin().then(getAnimation(), Animation.LoopType.PLAY_ONCE));
+        if(state.getController().getAnimationState() == AnimationController.State.STOPPED)
+            state.resetCurrentAnimation();
         return PlayState.CONTINUE;
     }
 

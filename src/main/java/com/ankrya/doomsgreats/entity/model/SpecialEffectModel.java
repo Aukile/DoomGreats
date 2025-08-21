@@ -13,7 +13,7 @@ public class SpecialEffectModel<T extends SpecialEffect> extends GeoModel<T> {
 
     @Override
     public ResourceLocation getTextureResource(SpecialEffect specialEffect) {
-        return ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "textures/entity/"+specialEffect.texture()+".png");
+        return ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "textures/entities/"+specialEffect.texture()+".png");
     }
 
     @Override

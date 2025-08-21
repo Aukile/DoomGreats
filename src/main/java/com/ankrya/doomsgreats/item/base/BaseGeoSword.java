@@ -45,7 +45,9 @@ public abstract class BaseGeoSword extends SwordItem implements GeoItem {
 
     private PlayState predicate(AnimationState<BaseGeoSword> state) {
 //        ItemStack stack = state.getData(DataTickets.ITEMSTACK);
-        state.getController().setAnimation(RawAnimation.begin().then(getAnimation(), Animation.LoopType.LOOP));
+        state.getController().setAnimation(RawAnimation.begin().then(getAnimation(), Animation.LoopType.PLAY_ONCE));
+        if(state.getController().getAnimationState() == AnimationController.State.STOPPED)
+            state.resetCurrentAnimation();
         return PlayState.CONTINUE;
     }
 

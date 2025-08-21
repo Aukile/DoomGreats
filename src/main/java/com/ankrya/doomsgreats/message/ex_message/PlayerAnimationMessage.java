@@ -41,9 +41,8 @@ public class PlayerAnimationMessage implements INMessage {
 
     @Override
     public void run(IPayloadContext ctx) {
-        Level level = ctx.player().level();
-        Player player = level.getPlayerByUUID(uuid);
-        if (player instanceof AbstractClientPlayer clientPlayer) {
+        Player player = ctx.player().level().getPlayerByUUID(uuid);
+        if (ctx.flow().isClientbound() && player instanceof AbstractClientPlayer clientPlayer) {
             playerAnimation(clientPlayer, layer, animation, showRightArm, showLeftArm, override);
         }
     }

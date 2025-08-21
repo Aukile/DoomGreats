@@ -1,6 +1,6 @@
 package com.ankrya.doomsgreats.data;
 
-import com.ankrya.doomsgreats.interfaces.IVariable;
+import com.ankrya.doomsgreats.interfaces.mod_use.IVariable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.*;
 import net.minecraft.network.FriendlyByteBuf;
@@ -11,6 +11,10 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.UUID;
 
+/**
+ * 数据解析器，是的，只支持10个类型 <br>
+ * 感觉够用了就是说
+ */
 public final class VariableSerializer {
     @SuppressWarnings("unchecked")
     public static <T> IVariable<T> auto(T value){

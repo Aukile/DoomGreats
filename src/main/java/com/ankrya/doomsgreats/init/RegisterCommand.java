@@ -8,6 +8,7 @@ import com.ankrya.doomsgreats.item.base.armor.BaseRiderArmor;
 import com.ankrya.doomsgreats.item.base.armor.BaseRiderArmorBase;
 import com.ankrya.doomsgreats.message.NMessageCreater;
 import com.ankrya.doomsgreats.message.MessageLoader;
+import com.ankrya.doomsgreats.message.common.LoopSoundMessage;
 import com.ankrya.doomsgreats.message.ex_message.PlayLoopSound;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -39,31 +40,35 @@ public class RegisterCommand {
                         .then(Commands.argument("player", EntityArgument.players())
                         .executes(arguments -> {
                             Collection<ServerPlayer> players = EntityArgument.getPlayers(arguments, "player");
-                            return test(players);
+                            Level world = arguments.getSource().getUnsidedLevel();
+                            return test(players, world);
                         })))
                 .executes(arguments -> {
-                    Level world = arguments.getSource().getUnsidedLevel();
-                    Entity entity = arguments.getSource().getEntity();
-                    if (entity == null && world instanceof ServerLevel _servLevel)
-                        entity = FakePlayerFactory.getMinecraft(_servLevel);
-                    return test((LivingEntity) entity);
-                }));
+                            Level world = arguments.getSource().getUnsidedLevel();
+                            Entity entity = arguments.getSource().getEntity();
+                            if (entity == null && world instanceof ServerLevel serverLevel)
+                                entity = FakePlayerFactory.getMinecraft(serverLevel);
+                            return test((LivingEntity) entity, world);
+                        })
+                );
     }
 
-    public static int test(Collection<ServerPlayer> players){
+    public static int test(Collection<ServerPlayer> players, Level world){
         for (ServerPlayer player : players){
-            test(player);
+            test(player, world);
         }
         return 0;
     }
 
-    public static int test(LivingEntity entity){
+    public static int test(LivingEntity entity, Level world){
         if (entity instanceof Player player) {
+            DoomsEffect effect = new DoomsEffect(world, player);
+            effect.setPos(entity.getX(), entity.getY(), entity.getZ());
+            world.addFreshEntity(effect);
             PlayerAnimator.playerAnimation(player, "buckle_open", true);
-            MessageLoader.sendToPlayer(new NMessageCreater(new PlayLoopSound(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "revolve_on"), false, 10, 7, entity.getId())), (ServerPlayer) player);
-            DoomsEffect effect = new DoomsEffect(entity.level(), player);
-            entity.level().addFreshEntity(effect);
+            MessageLoader.sendToPlayer(new LoopSoundMessage(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "revolve_on"), false, 10, 7, entity.getId()), (ServerPlayer) player);
         }
+
         boolean equip = BaseRiderArmorBase.isAllEquip(entity);
         for (EquipmentSlot slot : BaseRiderArmorBase.getSlots()){
             if (equip) BaseRiderArmor.unequip(entity, slot);
