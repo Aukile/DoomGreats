@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "dooms_greats:item/dooms_greats_head"
+  }
+}

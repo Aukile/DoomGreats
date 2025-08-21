@@ -1,0 +1,9 @@
+{
+  "parent": "dooms_greats:displaysettings/dooms_geats_qb9.item",
+  "textures": {
+    "layer0": "dooms_greats:item/qb_9"
+  },
+  "overrides": [
+    {"predicate": {"dooms_greats:qb9_mode": 1}, "model": "dooms_greats:displaysettings/dooms_geats_qb9_gun.item"}
+  ]
+}

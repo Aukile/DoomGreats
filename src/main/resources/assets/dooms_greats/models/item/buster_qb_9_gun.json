@@ -1,0 +1,6 @@
+{
+  "parent": "dooms_greats:displaysettings/dooms_geats_qb9_gun.item",
+  "textures": {
+    "layer0": "dooms_greats:item/qb_9"
+  }
+}
