@@ -1,7 +1,9 @@
 package com.ankrya.doomsgreats.item;
 
+import com.ankrya.doomsgreats.help.ItemHelp;
 import com.ankrya.doomsgreats.init.ClassRegister;
 import com.ankrya.doomsgreats.item.base.armor.BaseDriver;
+import com.ankrya.doomsgreats.item.base.armor.BaseGeoArmor;
 import com.ankrya.doomsgreats.item.material.GreatsArmorMaterial;
 import com.ankrya.doomsgreats.item.renderer.DesireDriverRenderer;
 import net.minecraft.client.model.HumanoidModel;
@@ -14,11 +16,13 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.client.GeoRenderProvider;
+import software.bernie.geckolib.animation.*;
 
 import java.util.function.Consumer;
 
 public class DesireDriver extends BaseDriver {
     public static final String BUCKLE = "buckle";
+    public static final String REVOLVE = "revolve_on";
 
     public DesireDriver(Properties properties) {
         super(GreatsArmorMaterial.DGP_BLANK, Type.LEGGINGS, properties);
@@ -44,6 +48,12 @@ public class DesireDriver extends BaseDriver {
                 return renderer;
             }
         });
+    }
+
+    @Override
+    public String getAnimation(ItemStack stack) {
+        String animation = ItemHelp.getNbt(stack).getString(ANIMATION);
+        return animation.isEmpty() ? super.getAnimation(stack) : animation;
     }
 
     @Override

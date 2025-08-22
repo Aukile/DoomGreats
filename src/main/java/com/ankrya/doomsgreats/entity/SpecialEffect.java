@@ -10,8 +10,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.event.EventHooks;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
@@ -42,7 +40,6 @@ public class SpecialEffect extends Entity implements GeoEntity {
         this.owner = owner;
         if (owner != null){
             this.setOwnerUUID(owner.getUUID());
-            this.startRiding(owner, true);
         }
     }
 
@@ -50,29 +47,21 @@ public class SpecialEffect extends Entity implements GeoEntity {
         this(ClassRegister.getRegisterObject("henshin_effect", EntityType.class).get(), level, owner, model, texture, dead);
     }
 
-    @Override
-    public void rideTick() {
-        this.setDeltaMovement(Vec3.ZERO);
-        if (!EventHooks.fireEntityTickPre(this).isCanceled()) {
-            this.tick();
-            EventHooks.fireEntityTickPost(this);
-        }
-        if (this.isPassenger()) {
-            this.positionSet(this);
-        }
-    }
-
-    public void positionSet(Entity entity)
-    {
+    public void positionSet(Entity entity) {
         this.positionSet(entity, Entity::setPos);
     }
     protected void positionSet(Entity entity, MoveFunction function) {
         if(this.getOwner() != null) {
             LivingEntity livingEntity = this.getOwner();
             double ny = livingEntity.getY() - 0.136;
+
+            entity.setYRot(livingEntity.getYRot());
+            entity.setXRot(livingEntity.getXRot());
+            entity.yRotO = entity.getYRot();
+            entity.xRotO = entity.getXRot();
+
             function.accept(entity, livingEntity.getX(), ny, livingEntity.getZ());
         }
-
     }
 
     @Override
@@ -116,6 +105,11 @@ public class SpecialEffect extends Entity implements GeoEntity {
     }
 
     @Override
+    public boolean shouldRenderAtSqrDistance(double distance) {
+        return distance <= 256D;
+    }
+
+    @Override
     public void baseTick() {
         super.baseTick();
         if(getDeadTime() != 999999){
@@ -126,9 +120,11 @@ public class SpecialEffect extends Entity implements GeoEntity {
             }
         }
         LivingEntity owner = getOwner();
-        Entity vehicle = this.getVehicle();
-        if (AutoClear() && (owner == null || !owner.isAlive() || vehicle != owner) )
+        if (AutoClear() && (owner == null || !owner.isAlive()) )
             this.discard();
+        else  {
+            this.positionSet(this);
+        }
     }
 
     private PlayState predicate(AnimationState<SpecialEffect> state) {

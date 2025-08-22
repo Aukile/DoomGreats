@@ -34,7 +34,8 @@ public abstract class BaseGeoArmor extends ArmorItem implements GeoItem {
     }
 
     private PlayState predicate(AnimationState<BaseGeoArmor> state) {
-        state.getController().setAnimation(RawAnimation.begin().then(getAnimation(), Animation.LoopType.PLAY_ONCE));
+        ItemStack itemStack = state.getData(DataTickets.ITEMSTACK);
+        state.getController().setAnimation(RawAnimation.begin().then(getAnimation(itemStack), Animation.LoopType.PLAY_ONCE));
         if(state.getController().getAnimationState() == AnimationController.State.STOPPED)
             state.resetCurrentAnimation();
         return PlayState.CONTINUE;
@@ -61,6 +62,14 @@ public abstract class BaseGeoArmor extends ArmorItem implements GeoItem {
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return cache;
+    }
+
+    /**
+     * 直接改item类里的变量，不就是所有的此物品全都变了<br>
+     * 所以覆写这个来从用nbt控制
+     */
+    public String getAnimation(ItemStack stack) {
+        return getAnimation();
     }
 
     public String getAnimation() {

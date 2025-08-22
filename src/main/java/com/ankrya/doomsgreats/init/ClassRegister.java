@@ -151,9 +151,7 @@ public final class ClassRegister {
         Class<?> entityType = EntityType.class;
         registerSource(entityType);
         register(entityType, "henshin_effect", () -> EntityType.Builder.of(SpecialEffect::new, MobCategory.MISC).sized(0.0F, 0.0F).setShouldReceiveVelocityUpdates(true).updateInterval(3).build("effects"));
-        register(entityType, "dooms_effect", () -> EntityType.Builder.of(DoomsEffect::new, MobCategory.MISC)
-                .setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(6)
-                .ridingOffset(0f).sized(0.1f, 0.1f).build("dooms_effect"));
+        register(entityType, "dooms_effect", () -> EntityType.Builder.of(DoomsEffect::new, MobCategory.MISC).sized(0.1F, 0.5F).setShouldReceiveVelocityUpdates(true).updateInterval(3).build("dooms_effect"));
 
 //        注册盔甲材质
 //        Class<ArmorMaterial> armorMaterial = ArmorMaterial.class;

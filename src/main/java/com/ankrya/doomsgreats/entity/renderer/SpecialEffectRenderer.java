@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -53,8 +54,10 @@ public class SpecialEffectRenderer<T extends SpecialEffect> extends GeoEntityRen
         this.dispatchedMat = poseStack.last().pose();
 
         poseStack.pushPose();
-        float lerpBodyRot = Mth.rotLerp(partialTick, animatable.yRotO, animatable.getYRot());
-        poseStack.mulPose(Axis.YP.rotationDegrees(180f - lerpBodyRot));
+        LivingEntity owner = animatable.getOwner();
+        boolean hasOwner = owner != null;
+        float lerpBodyRot = Mth.rotLerp(partialTick, hasOwner ? owner.yRotO : animatable.yRotO, hasOwner ? owner.getYRot() : animatable.getYRot());
+        poseStack.mulPose(Axis.YP.rotationDegrees(-lerpBodyRot));
 
         AnimationState<T> predicate = new AnimationState<>(animatable, 0, 0, partialTick, false);
 
