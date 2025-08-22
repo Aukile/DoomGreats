@@ -14,6 +14,6 @@ public class DesireDriverRenderer extends BaseRiderArmorRender<DesireDriver> {
         boolean animation = ItemHelp.getNbt(this.currentStack).getBoolean(DesireDriver.REVOLVE);
         boolean hasBuckle = ItemHelp.getNbt(this.currentStack).getBoolean(DesireDriver.BUCKLE);
         this.model.getBone("Buckle").ifPresent(buckle -> buckle.setHidden(!hasBuckle));
-        this.model.getBone("ysmGlowBoostFire").ifPresent(buckle -> buckle.setHidden(animation));
+        this.model.getBone("ysmGlowBoostFire").ifPresent(buckle -> buckle.setHidden(!animation));
     }
 }

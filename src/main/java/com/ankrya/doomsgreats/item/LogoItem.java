@@ -7,9 +7,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-/*
- * 图标物品真的是图标物品吗
- * 这里不是绝佳的测试处
+/**
+ * 图标物品真的是图标物品吗<br>
+ * 这里不是绝佳的测试处<br>
  * go go go
  */
 public class LogoItem extends Item {

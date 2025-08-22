@@ -1,91 +1,28 @@
 package com.ankrya.doomsgreats.item.base.armor;
 
-import com.ankrya.doomsgreats.item.renderer.base.BaseGeoArmorRenderer;
-import net.minecraft.client.model.HumanoidModel;
+import com.ankrya.doomsgreats.interfaces.IGeoItem;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Holder;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib.animatable.GeoItem;
-import software.bernie.geckolib.animatable.client.GeoRenderProvider;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.*;
-import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import java.util.function.Consumer;
+public abstract class BaseGeoArmor extends ArmorItem implements IGeoItem {
+    public static final String ANIMATION = "run_animation"; //nbt更改动画使用
+    public static final String ANIMATION_STOP = "animation_stop";
 
-public abstract class BaseGeoArmor extends ArmorItem implements GeoItem {
-    public String model;
-    public String texture;
     public String animation = "idle";
     public RenderType renderType = null;
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public BaseGeoArmor(Holder<ArmorMaterial> material, Type type, Properties properties) {
         super(material, type, properties);
-        model = defaultModel();
-        texture = defaultTexture();
-    }
-
-    private PlayState predicate(AnimationState<BaseGeoArmor> state) {
-        ItemStack itemStack = state.getData(DataTickets.ITEMSTACK);
-        state.getController().setAnimation(RawAnimation.begin().then(getAnimation(itemStack), Animation.LoopType.PLAY_ONCE));
-        if(state.getController().getAnimationState() == AnimationController.State.STOPPED)
-            state.resetCurrentAnimation();
-        return PlayState.CONTINUE;
-    }
-
-    @Override
-    public void createGeoRenderer(Consumer<GeoRenderProvider> consumer) {
-        consumer.accept(new GeoRenderProvider() {
-            private BaseGeoArmorRenderer<?> renderer;
-
-            @Override
-            public <T extends LivingEntity> @NotNull HumanoidModel<?> getGeoArmorRenderer(@Nullable T livingEntity, ItemStack itemStack, @Nullable EquipmentSlot equipmentSlot, @Nullable HumanoidModel<T> original) {
-                if (renderer == null) renderer = new BaseGeoArmorRenderer<>();
-                return renderer;
-            }
-        });
-    }
-
-    @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-        controllerRegistrar.add(new AnimationController<>(this, "controller", 0, this::predicate));
     }
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return cache;
-    }
-
-    /**
-     * 直接改item类里的变量，不就是所有的此物品全都变了<br>
-     * 所以覆写这个来从用nbt控制
-     */
-    public String getAnimation(ItemStack stack) {
-        return getAnimation();
-    }
-
-    public String getAnimation() {
-        return animation;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public RenderType getRenderType() {
-        return renderType;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
     }
 
     public void setAnimation(String animation) {
@@ -96,15 +33,13 @@ public abstract class BaseGeoArmor extends ArmorItem implements GeoItem {
         this.renderType = renderType;
     }
 
-    public String getTexture() {
-        return texture;
+    @Override
+    public RenderType getRenderType() {
+        return renderType;
     }
 
-    public void setTexture(String texture) {
-        this.texture = texture;
+    @Override
+    public String getAnimation() {
+        return animation;
     }
-
-    public abstract String defaultModel();
-
-    public abstract String defaultTexture();
 }

@@ -19,7 +19,6 @@ import java.util.function.Consumer;
  * 这里主要是识别变身状态的方法
  */
 public abstract class BaseRiderArmorBase extends BaseGeoArmor {
-    public static final String ANIMATION = "run_animation"; //nbt更改动画使用
     protected Class<? extends BaseDriver> driverClass = BaseDriver.class;
     protected Class<? extends BaseRiderArmor> armorClass = BaseRiderArmor.class;
     public BaseRiderArmorBase(Holder<ArmorMaterial> material, Type type, Properties properties) {

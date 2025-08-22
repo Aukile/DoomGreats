@@ -2,7 +2,7 @@
 	"format_version": "1.8.0",
 	"animations": {
 		"revolve_on": {
-			"animation_length": 4.48,
+			"animation_length": 1.76,
 			"bones": {
 				"right_arm": {
 					"rotation": {

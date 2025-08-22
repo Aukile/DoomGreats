@@ -23,6 +23,8 @@ import java.util.function.Consumer;
 public class DesireDriver extends BaseDriver {
     public static final String BUCKLE = "buckle";
     public static final String REVOLVE = "revolve_on";
+    public static final String IDLE0 = "first"; // 变身前闲置动画名
+    public static final String IDLE = "idle"; // 通常闲置动画名
 
     public DesireDriver(Properties properties) {
         super(GreatsArmorMaterial.DGP_BLANK, Type.LEGGINGS, properties);
@@ -51,18 +53,12 @@ public class DesireDriver extends BaseDriver {
     }
 
     @Override
-    public String getAnimation(ItemStack stack) {
-        String animation = ItemHelp.getNbt(stack).getString(ANIMATION);
-        return animation.isEmpty() ? super.getAnimation(stack) : animation;
-    }
-
-    @Override
-    public String defaultModel() {
+    public String getModel() {
         return "desire_driver";
     }
 
     @Override
-    public String defaultTexture() {
+    public String getTexture() {
         return "dooms_geats_belt";
     }
 

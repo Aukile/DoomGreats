@@ -22,6 +22,7 @@ public class GoldenGeatsBusterQB9 extends BaseGeoSword {
     public static final Tier TIER = new SimpleTier(BlockTags.INCORRECT_FOR_GOLD_TOOL, 2000, 6f, 3.6f, 0, Ingredient::of);
     public static final String QB9_MODE = "qb9_mode";
 
+    public String model = "dooms_geats_qb9";
     public GoldenGeatsBusterQB9() {
         super(TIER, new Item.Properties().stacksTo(1)
                 .attributes(SwordItem.createAttributes(TIER, 8.4f, -2.4f)));
@@ -78,13 +79,17 @@ public class GoldenGeatsBusterQB9 extends BaseGeoSword {
         return super.onEntitySwing(stack, entity, hand);
     }
 
-    @Override
-    public String defaultModel() {
-        return "dooms_geats_qb9";
+    public void setModel(String model) {
+        this.model = model;
     }
 
     @Override
-    public String defaultTexture() {
+    public String getModel() {
+        return model;
+    }
+
+    @Override
+    public String getTexture() {
         return "qb_9";
     }
 }

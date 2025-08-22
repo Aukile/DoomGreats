@@ -51,20 +51,20 @@ public class DoomsGreatsArmor extends BaseRiderArmor {
         });
     }
 
-    public static ItemAttributeModifiers addAttributes (EquipmentSlot slot){
-        ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
-        builder.add(Attributes.MAX_HEALTH, new AttributeModifier(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "dooms_geats_armor_health"), 40, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.bySlot(slot));
-        return builder.build();
-    }
-
-        @Override
-    public String defaultModel() {
+    @Override
+    public String getModel() {
         return "dooms_geats_armor";
     }
 
     @Override
-    public String defaultTexture() {
+    public String getTexture() {
         return "dooms_greats";
+    }
+
+    public static ItemAttributeModifiers addAttributes (EquipmentSlot slot){
+        ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
+        builder.add(Attributes.MAX_HEALTH, new AttributeModifier(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "dooms_geats_armor_health"), 40, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.bySlot(slot));
+        return builder.build();
     }
 
     @Override

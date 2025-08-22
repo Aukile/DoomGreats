@@ -2,16 +2,15 @@ package com.ankrya.doomsgreats.init;
 
 import com.ankrya.doomsgreats.DoomsGreats;
 import com.ankrya.doomsgreats.compat.animation.PlayerAnimator;
-import com.ankrya.doomsgreats.entity.DoomsEffect;
 import com.ankrya.doomsgreats.help.ItemHelp;
+import com.ankrya.doomsgreats.help.runnable.WaitToRun;
 import com.ankrya.doomsgreats.item.DesireDriver;
 import com.ankrya.doomsgreats.item.DoomsGreatsArmor;
+import com.ankrya.doomsgreats.interfaces.IGeoItem;
 import com.ankrya.doomsgreats.item.base.armor.BaseRiderArmor;
 import com.ankrya.doomsgreats.item.base.armor.BaseRiderArmorBase;
-import com.ankrya.doomsgreats.message.NMessageCreater;
 import com.ankrya.doomsgreats.message.MessageLoader;
 import com.ankrya.doomsgreats.message.common.LoopSoundMessage;
-import com.ankrya.doomsgreats.message.ex_message.PlayLoopSound;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.resources.ResourceLocation;
@@ -77,7 +76,11 @@ public class RegisterCommand {
             Item item = itemStack.getItem();
             if (item instanceof DesireDriver driver){
                 ItemHelp.setNbt(itemStack, nbt -> nbt.putBoolean(DesireDriver.REVOLVE, true));
-
+                IGeoItem.playAnimationAndReset(itemStack,"revolveon");
+                new WaitToRun(() -> {
+                    IGeoItem.playAnimationAndReset(itemStack,DesireDriver.IDLE);
+                    ItemHelp.setNbt(itemStack, nbt -> nbt.putBoolean(DesireDriver.REVOLVE, false));
+                }, (int)4.2*20);
                 driver.triggerAnim(entity, GeoItem.getOrAssignId(itemStack, (ServerLevel) world), "revolve_controller", DesireDriver.REVOLVE);
             }
         }
