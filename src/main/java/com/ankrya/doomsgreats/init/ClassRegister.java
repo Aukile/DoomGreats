@@ -4,10 +4,7 @@ import com.ankrya.doomsgreats.DoomsGreats;
 import com.ankrya.doomsgreats.entity.DoomsEffect;
 import com.ankrya.doomsgreats.entity.SpecialEffect;
 import com.ankrya.doomsgreats.init.assist.RegisterAssist;
-import com.ankrya.doomsgreats.item.DesireDriver;
-import com.ankrya.doomsgreats.item.DoomsGreatsArmor;
-import com.ankrya.doomsgreats.item.GoldenGeatsBusterQB9;
-import com.ankrya.doomsgreats.item.LogoItem;
+import com.ankrya.doomsgreats.item.*;
 import com.ankrya.doomsgreats.item.base.armor.BaseRiderArmor;
 import com.ankrya.doomsgreats.item.base.armor.BaseRiderArmorBase;
 import net.minecraft.core.Registry;
@@ -163,6 +160,9 @@ public final class ClassRegister {
         Class<Item> item = Item.class;
         registerSource(item);
         register(item, "desire_driver", () -> new DesireDriver(new Item.Properties().stacksTo(1)));
+        register(item, "dooms_mk_3", () -> new DoomsBuckleMk3(new Item.Properties().stacksTo(1)));
+        register(item, "dooms_mk_9_left", () -> new DoomsBuckleMk9Left(new Item.Properties().stacksTo(1)));
+        register(item, "dooms_mk_9_right", () -> new DoomsBuckleMk9Right(new Item.Properties().stacksTo(1)));
         register(item, "logo", () -> new LogoItem(new Item.Properties().stacksTo(1)));
         for (EquipmentSlot slot : BaseRiderArmorBase.getSlots())
             register(item, "dooms_greats_" + slot.getName(), () -> new DoomsGreatsArmor(new Item.Properties().stacksTo(1).attributes(DoomsGreatsArmor.addAttributes(slot)), slot));
@@ -176,6 +176,7 @@ public final class ClassRegister {
         onceRegister(CreativeModeTab.class, "dooms_greats_tab", () -> CreativeModeTab.builder().icon(() -> ClassRegister.getRegisterObject("logo", Item.class).get().getDefaultInstance())
                 .title(Component.translatable("item_group.dooms_greats.dooms_greats_tab")).displayItems((parameters, output) -> {
             output.accept(ClassRegister.getRegisterObject("desire_driver", Item.class).get());
+            output.accept(ClassRegister.getRegisterObject("dooms_mk_3", Item.class).get());
         }).build());
     }
 

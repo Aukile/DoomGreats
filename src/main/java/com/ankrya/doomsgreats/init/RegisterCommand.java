@@ -81,7 +81,7 @@ public class RegisterCommand {
                     IGeoItem.playAnimationAndReset(itemStack,DesireDriver.IDLE);
                     ItemHelp.setNbt(itemStack, nbt -> nbt.putBoolean(DesireDriver.REVOLVE, false));
                 }, (int)4.2*20);
-                driver.triggerAnim(entity, GeoItem.getOrAssignId(itemStack, (ServerLevel) world), "revolve_controller", DesireDriver.REVOLVE);
+//                driver.triggerAnim(entity, GeoItem.getOrAssignId(itemStack, (ServerLevel) world), "revolve_controller", DesireDriver.REVOLVE);
             }
         }
 
