@@ -5,6 +5,7 @@ import com.ankrya.doomsgreats.entity.DoomsEffect;
 import com.ankrya.doomsgreats.entity.SpecialEffect;
 import com.ankrya.doomsgreats.init.assist.RegisterAssist;
 import com.ankrya.doomsgreats.item.*;
+import com.ankrya.doomsgreats.item.base.EasyGeoItem;
 import com.ankrya.doomsgreats.item.base.armor.BaseRiderArmor;
 import com.ankrya.doomsgreats.item.base.armor.BaseRiderArmorBase;
 import net.minecraft.core.Registry;
@@ -18,7 +19,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.SwordItem;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -161,9 +161,8 @@ public final class ClassRegister {
         registerSource(item);
         register(item, "desire_driver", () -> new DesireDriver(new Item.Properties().stacksTo(1)));
         register(item, "dooms_mk_3", () -> new DoomsBuckleMk3(new Item.Properties().stacksTo(1)));
-        register(item, "dooms_mk_9_left", () -> new DoomsBuckleMk9Left(new Item.Properties().stacksTo(1)));
-        register(item, "dooms_mk_9_right", () -> new DoomsBuckleMk9Right(new Item.Properties().stacksTo(1)));
-        register(item, "logo", () -> new LogoItem(new Item.Properties().stacksTo(1)));
+        register(item, "dooms_mk_9_left", () -> new DoomsBuckleMk9(new Item.Properties().stacksTo(1), "dooms_geats_buckle_mk9_left", "dooms_geats_belt"));
+        register(item, "logo", () -> new DoomsBuckleMk9(new Item.Properties().stacksTo(1), "dooms_geats_buckle_mk9_right", "dooms_geats_belt"));
         for (EquipmentSlot slot : BaseRiderArmorBase.getSlots())
             register(item, "dooms_greats_" + slot.getName(), () -> new DoomsGreatsArmor(new Item.Properties().stacksTo(1).attributes(DoomsGreatsArmor.addAttributes(slot)), slot));
         register(item, "buster_qb_9_sword", GoldenGeatsBusterQB9::new);
