@@ -12,8 +12,6 @@ import java.util.UUID;
 
 /*
  * 是播放动画的CTSTC包
- * 同样是测试用的
- * 不删了
  */
 public class AllPlayAnimation implements CustomPacketPayload {
     public static final Type<AllPlayAnimation> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "all_play_animation_message"));

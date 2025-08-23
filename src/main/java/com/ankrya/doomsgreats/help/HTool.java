@@ -26,6 +26,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
 import java.util.List;
@@ -98,6 +99,8 @@ public final class HTool {
     public static List<LivingEntity> rangeFind(Entity entity, double radius) {
         return rangeFind(entity.level(), entity.position(), (int) radius);
     }
+
+
 
     //物品相关
 

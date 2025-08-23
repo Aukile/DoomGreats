@@ -1,6 +1,7 @@
 package com.ankrya.doomsgreats.init;
 
 import com.ankrya.doomsgreats.DoomsGreats;
+import com.ankrya.doomsgreats.client.SoundName;
 import com.ankrya.doomsgreats.entity.DoomsEffect;
 import com.ankrya.doomsgreats.entity.SpecialEffect;
 import com.ankrya.doomsgreats.init.assist.RegisterAssist;
@@ -142,7 +143,7 @@ public final class ClassRegister {
     static {
 //        注册声音
         registerSource(SoundEvent.class);
-        soundRegister("desire_driver", "doomsgeatsbuckleopen", "doomsgeatssetjudgment", "doomsgeatshenshinfull", "gun", "blade", "revolve_on");
+        soundRegister(SoundName.getAll());
 
 //        注册实体
         Class<?> entityType = EntityType.class;
@@ -162,6 +163,7 @@ public final class ClassRegister {
         register(item, "desire_driver", () -> new DesireDriver(new Item.Properties().stacksTo(1)));
         register(item, "dooms_mk_3", () -> new DoomsBuckleMk3(new Item.Properties().stacksTo(1)));
         register(item, "dooms_mk_9_left", () -> new DoomsBuckleMk9(new Item.Properties().stacksTo(1), "dooms_geats_buckle_mk9_left", "dooms_geats_belt"));
+        register(item, "dooms_mk_9_right", () -> new DoomsBuckleMk9(new Item.Properties().stacksTo(1), "dooms_geats_buckle_mk9_right", "dooms_geats_belt"));
         register(item, "logo", () -> new DoomsBuckleMk9(new Item.Properties().stacksTo(1), "dooms_geats_buckle_mk9_right", "dooms_geats_belt"));
         for (EquipmentSlot slot : BaseRiderArmorBase.getSlots())
             register(item, "dooms_greats_" + slot.getName(), () -> new DoomsGreatsArmor(new Item.Properties().stacksTo(1).attributes(DoomsGreatsArmor.addAttributes(slot)), slot));

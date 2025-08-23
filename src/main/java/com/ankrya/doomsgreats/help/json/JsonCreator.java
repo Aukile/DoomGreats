@@ -1,6 +1,7 @@
 package com.ankrya.doomsgreats.help.json;
 
 import com.ankrya.doomsgreats.DoomsGreats;
+import com.ankrya.doomsgreats.client.SoundName;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -16,13 +17,21 @@ public class JsonCreator {
     public static void main(String[] args) {
 
             //自主修改此处方法
-            JsonObject root = createSounds("desire_driver", "doomsgeatsbuckleopen", "doomsgeatssetjudgment", "doomsgeatshenshinfull", "gun", "blade", "revolve_on");
+            createSoundsFile();
+
+    }
+
+    /**
+     * 自动获取{@link SoundName}中全部的String静态变量<br>
+     * 创建 sounds.json
+     */
+    public static void createSoundsFile(){
+        JsonObject root = createSounds(SoundName.getAll());
         try {
             createStart("sounds", GatherType.SOUND, root);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     public enum GatherType {
@@ -41,12 +50,12 @@ public class JsonCreator {
      */
     public static void createStart(String name, GatherType type, JsonObject root) throws IOException {
         switch (type){
-            case ITEM -> path = Path.of("src/main/resources/assets/doom_greats/models/item");
-            case GEO_ITEM -> path = Path.of("src/main/resources/assets/doom_greats/models/item/geo");
-            case BLOCK -> path = Path.of("src/main/resources/assets/doom_greats/models/block");
-            case SOUND -> path = Path.of("src/main/resources/assets/doom_greats/sounds");
-            case PARTICLE -> path = Path.of("src/main/resources/assets/doom_greats/particles");
-            case TROPHIES -> path = Path.of("src/main/resources/data/doom_greats/trophies");
+            case ITEM -> path = Path.of("src/main/resources/assets/dooms_greats/models/item");
+            case GEO_ITEM -> path = Path.of("src/main/resources/assets/dooms_greats/models/item/geo");
+            case BLOCK -> path = Path.of("src/main/resources/assets/dooms_greats/models/block");
+            case SOUND -> path = Path.of("src/main/resources/assets/dooms_greats");
+            case PARTICLE -> path = Path.of("src/main/resources/assets/dooms_greats/particles");
+            case TROPHIES -> path = Path.of("src/main/resources/data/dooms_greats/trophies");
         }
         path = path.resolve(name + ".json");
         Files.createDirectories(path.getParent());
@@ -135,7 +144,7 @@ public class JsonCreator {
     }
 
     public static JsonObject createSounds(String... sounds){
-        return createSounds(false, sounds);
+        return createSounds(true, sounds);
     }
 
     public static JsonObject createParticle(String... textures) {

@@ -14,6 +14,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
+// TODO 测试中发现播放多次后播放会瞬间停掉
 public class PlayLoopSound implements INMessage {
     public static final int MASTER = 0;
     public static final int MUSIC = 1;

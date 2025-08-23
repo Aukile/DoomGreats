@@ -16,8 +16,6 @@ import java.util.UUID;
 
 /*
  * 播放动画
- * 其实是测试用的
- * 就不删了
  */
 public class PlayAnimation implements CustomPacketPayload {
     public static final Type<PlayAnimation> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "play_animation_message"));

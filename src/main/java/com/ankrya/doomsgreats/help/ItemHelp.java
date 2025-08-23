@@ -20,8 +20,10 @@ import net.minecraft.world.item.component.CustomData;
 
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public final class ItemHelp {
+    public static final String REMOVE = "dooms_remove";
     public static void setNbt(ItemStack itemStack, Consumer<CompoundTag> updater){
         CustomData.update(DataComponents.CUSTOM_DATA, itemStack, updater);
     }
@@ -43,7 +45,17 @@ public final class ItemHelp {
     }
 
     public static void playerRemoveItem(Player player, Item item, int count){
-        player.getInventory().clearOrCountMatchingItems(itemStack -> itemStack.is(item), count, player.getInventory());
+        playerRemoveItem(player, itemStack -> itemStack.is(item), count);
+    }
+
+    public static void playerRemoveItem(Player player, ItemStack stack, int count){
+        if (!getNbt(stack).getBoolean(REMOVE))
+            setNbt(stack, tag -> tag.putBoolean(REMOVE, true));
+        playerRemoveItem(player, itemStack -> itemStack == stack, count);
+    }
+
+    public static void playerRemoveItem(Player player, Predicate<ItemStack> condition, int count){
+        player.getInventory().clearOrCountMatchingItems(condition, count, player.getInventory());
     }
 
     public static boolean checkItem(ItemStack stack, String registerName){

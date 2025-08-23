@@ -24,9 +24,9 @@ public class DoomsBuckleMk3 extends BaseGeoItem {
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand usedHand) {
         InteractionResultHolder<ItemStack> used = super.use(level, player, usedHand);
-        if (usedHand == InteractionHand.MAIN_HAND){
+        if (usedHand == InteractionHand.MAIN_HAND && player.getItemBySlot(EquipmentSlot.OFFHAND).isEmpty()){
             PlayerAnimator.playerAnimation(player, AnimName.BUCKLE_OPEN, true);
-            HTool.playSound(player, SoundName.BUCKLE_OPEN);
+            HTool.playSound(player, SoundName.BUCKLE_OPEN_ALL);
             new WaitToRun(() -> {
                 player.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ClassRegister.getRegisterObject("dooms_mk_9_left", Item.class).get()));
                 player.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ClassRegister.getRegisterObject("dooms_mk_9_right", Item.class).get()));

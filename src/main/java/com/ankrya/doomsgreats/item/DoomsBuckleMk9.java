@@ -28,8 +28,10 @@ public class DoomsBuckleMk9 extends EasyGeoItem{
                 && ItemHelp.checkItem(driver, "desire_driver")
                 && !ItemHelp.getNbt(driver).getBoolean(DesireDriver.BUCKLE)){
             new WaitToRun(() -> {
+                ItemHelp.playerRemoveItem(player, mainHandItem, 1);
+                ItemHelp.playerRemoveItem(player, offHandItem, 1);
                 HTool.playSound(player, SoundName.BUCKLE_SET);
-
+                ItemHelp.getNbt(driver).putBoolean(DesireDriver.BUCKLE, true);
             }, 4);
         }
         return super.use(level, player, usedHand);
