@@ -13,6 +13,10 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.ankrya.doomsgreats.message.ex_message.PlayLoopSound.getSoundSource;
 
+/**
+ * 播放声音的网络包<br>
+ * (常用的还是做成正常规格的好一点？
+ */
 public class LoopSoundMessage implements CustomPacketPayload {
     public static final Type<LoopSoundMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "loop_sound_message"));
     public static final StreamCodec<RegistryFriendlyByteBuf, LoopSoundMessage> CODEC = StreamCodec.of(LoopSoundMessage::toBuf, LoopSoundMessage::fromBuf);

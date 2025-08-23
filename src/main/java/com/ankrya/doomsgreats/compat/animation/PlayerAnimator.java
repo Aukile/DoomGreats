@@ -3,6 +3,7 @@ package com.ankrya.doomsgreats.compat.animation;
 import com.ankrya.doomsgreats.DoomsGreats;
 import com.ankrya.doomsgreats.interfaces.INMessage;
 import com.ankrya.doomsgreats.message.*;
+import com.ankrya.doomsgreats.message.common.PlayAnimation;
 import com.ankrya.doomsgreats.message.ex_message.PlayerAnimationMessage;
 import com.ankrya.doomsgreats.message.ex_message.PlayerAnimationStopMessage;
 import dev.kosmx.playerAnim.api.layered.IAnimation;
@@ -12,6 +13,7 @@ import dev.kosmx.playerAnim.core.util.Ease;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationAccess;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationFactory;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
@@ -25,7 +27,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
  * {@link PlayerAnimator#isAnimationPlaying} 是判断动画是否在播放中 <br>
  * <p>
  * {@link PlayerAnimator#ANIMATION} 一般播放动画的层级 <br>
- * {@link PlayerAnimator#RIDE} 一般播放骑乘动画的层级</p>
+ * {@link PlayerAnimator#RIDE} 播放骑乘动画的层级
  */
 public class PlayerAnimator {
     public static final ResourceLocation ANIMATION = net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "animation");
@@ -78,10 +80,10 @@ public class PlayerAnimator {
     }
 
     public static void playerAnimation(Player player, ResourceLocation dataId, String animation, boolean showRightArm, boolean showLeftArm, boolean override){
-        INMessage animationMessage = new PlayerAnimationMessage(player.getUUID(), dataId, animation, showRightArm, showLeftArm, override);
+        CustomPacketPayload animationMessage = new PlayAnimation(player.getUUID(), dataId, animation, showRightArm, showLeftArm, override);
         if (player.level() instanceof ServerLevel serverLevel)
-            PacketDistributor.sendToPlayersInDimension(serverLevel, new NMessageCreater(animationMessage));
-        else MessageLoader.sendToServer(new NMessageCreater(animationMessage));
+            PacketDistributor.sendToPlayersInDimension(serverLevel, animationMessage);
+        else MessageLoader.sendToServer(animationMessage);
     }
 
     @SuppressWarnings("unchecked")
