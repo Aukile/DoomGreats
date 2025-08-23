@@ -10,27 +10,28 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * {@link IEXMessage}的CTSTC网络包
- * 所以叫OldAllPackt
+ * {@link IEXMessage}的CTSTC网络包<br>
+ * 应该不会用到<br>
+ * 留例
  */
-public class OldAllPackt implements IEXMessage {
+public class AllPacktForIEX implements IEXMessage {
     final String clazz;
     final IEXMessage message;
 
-    public OldAllPackt(String name, IEXMessage message, boolean hasData, int data) {
+    public AllPacktForIEX(String name, IEXMessage message, boolean hasData, int data) {
         this.clazz = name;
         this.message = message;
     }
 
-    public OldAllPackt(IEXMessage message){
+    public AllPacktForIEX(IEXMessage message){
         this(message.getClass().getName(), message, true, 2);
     }
 
-    public OldAllPackt(String name, IEXMessage message){
+    public AllPacktForIEX(String name, IEXMessage message){
         this(name, message, true, 2);
     }
 
-    public OldAllPackt(Class<?> clazz, IEXMessage message) {
+    public AllPacktForIEX(Class<?> clazz, IEXMessage message) {
         this(clazz.getName(), message, true, 2);
     }
 
