@@ -1,5 +1,6 @@
 package com.ankrya.doomsgreats.help;
 
+import com.ankrya.doomsgreats.init.ClassRegister;
 import com.ankrya.doomsgreats.interfaces.IFMessage;
 import com.ankrya.doomsgreats.message.MessageCreater;
 import com.ankrya.doomsgreats.message.MessageLoader;
@@ -43,5 +44,9 @@ public final class ItemHelp {
 
     public static void playerRemoveItem(Player player, Item item, int count){
         player.getInventory().clearOrCountMatchingItems(itemStack -> itemStack.is(item), count, player.getInventory());
+    }
+
+    public static boolean checkItem(ItemStack stack, String registerName){
+        return stack.is(ClassRegister.getRegisterObject(registerName, Item.class).get());
     }
 }

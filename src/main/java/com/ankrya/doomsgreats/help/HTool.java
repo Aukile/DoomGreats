@@ -14,12 +14,15 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -29,29 +32,44 @@ import java.util.List;
 import java.util.Optional;
 
 public final class HTool {
-    public static Minecraft mc = Minecraft.getInstance();
-    public static Optional<Player> getLocalPlayer(){
-        return Optional.ofNullable(mc.player);
-    }
+
+    // 世界相关
+
+    public static final Minecraft mc = Minecraft.getInstance();
 
     public static Level getLocalLevel(){
         return mc.level;
     }
 
+    public static void playMSound(Level level, double x, double y, double z, String name){
+        SoundEvent soundEvent = BuiltInRegistries.SOUND_EVENT.get(ResourceLocation.parse(name));
+        if (soundEvent != null){
+            if (!level.isClientSide()) {
+                level.playSound(null, BlockPos.containing(x, y, z), soundEvent, SoundSource.NEUTRAL, 1, 1);
+            } else {
+                level.playLocalSound(x, y, z, soundEvent, SoundSource.NEUTRAL, 1, 1, false);
+            }
+        }
+    }
+
+    public static List<LivingEntity> rangeFind(Level level, Vec3 center, int radius){
+        return level.getEntitiesOfClass(LivingEntity.class, new AABB(center, center)
+                        .inflate(radius / 2d), e -> true).stream()
+                .sorted(Comparator
+                        .comparingDouble(livingEntity ->
+                                livingEntity.distanceToSqr(center)))
+                .toList();
+    }
+
+    // 实体相关
+
+    public static Optional<Player> getLocalPlayer(){
+        return Optional.ofNullable(mc.player);
+    }
+
     public static void fixHealth(LivingEntity entity){
         if (entity.getMaxHealth() < entity.getHealth())
             entity.setHealth(entity.getMaxHealth());
-    }
-
-    public static void playMSound(Level world, double x, double y, double z, String name){
-        if (world instanceof Level level) {
-            if (!level.isClientSide()) {
-                level.playSound(null, BlockPos.containing(x, y, z), BuiltInRegistries.SOUND_EVENT.get(ResourceLocation.parse(name)), SoundSource.NEUTRAL, 1, 1);
-            } else {
-                level.playLocalSound(x, y, z, BuiltInRegistries.SOUND_EVENT.get(ResourceLocation.parse(name)), SoundSource.NEUTRAL, 1, 1, false);
-            }
-        }
-
     }
 
     public static void playExplosionSound(Entity entity){
@@ -78,13 +96,12 @@ public final class HTool {
     }
 
     public static List<LivingEntity> rangeFind(Entity entity, double radius) {
-        Level world = entity.level();
-        final Vec3 center = new Vec3((entity.getX()), (entity.getY()), (entity.getZ()));
-        return world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center)
-                        .inflate(radius / 2d), e -> true).stream()
-                .sorted(Comparator
-                        .comparingDouble(livingEntity ->
-                                livingEntity.distanceToSqr(center)))
-                .toList();
+        return rangeFind(entity.level(), entity.position(), (int) radius);
+    }
+
+    //物品相关
+
+    public static ItemStack getDriver(LivingEntity entity){
+        return entity.getItemBySlot(EquipmentSlot.LEGS);
     }
 }

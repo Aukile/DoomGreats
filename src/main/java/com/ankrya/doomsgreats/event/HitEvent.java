@@ -16,7 +16,7 @@ public class HitEvent {
     @SubscribeEvent
     public static void onHit(InputEvent.InteractionKeyMappingTriggered event) {
         HTool.getLocalPlayer().ifPresent(player -> {
-            ItemStack driver = player.getItemBySlot(EquipmentSlot.LEGS);
+            ItemStack driver = HTool.getDriver(player);
             if (driver.getItem() instanceof BaseDriver
                     && ItemHelp.getNbt(driver).getInt(PlayerEvent.GREATS_HIT_COOLING) > 0) {
                 event.setSwingHand(false);

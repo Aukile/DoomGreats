@@ -1,5 +1,6 @@
 package com.ankrya.doomsgreats.item;
 
+import com.ankrya.doomsgreats.client.SoundName;
 import com.ankrya.doomsgreats.help.HTool;
 import com.ankrya.doomsgreats.help.ItemHelp;
 import com.ankrya.doomsgreats.item.base.BaseGeoSword;
@@ -42,11 +43,11 @@ public class GoldenGeatsBusterQB9 extends BaseGeoSword {
             ItemHelp.setNbt(stack, nbt -> nbt.putInt(QB9_MODE, oldMode == 0 ? 1 : 0));
             if (oldMode == 1) {
                 this.setModel("dooms_geats_qb9");
-                HTool.playSound(player, "blade");
+                HTool.playSound(player, SoundName.BLADE);
             }
             else {
                 this.setModel("dooms_geats_qb9_gun");
-                HTool.playSound(player, "gun");
+                HTool.playSound(player, SoundName.GUN);
             }
 
         }
