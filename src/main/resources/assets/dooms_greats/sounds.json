@@ -1,0 +1,92 @@
+{
+  "gun": {
+    "category": "player",
+    "subtitle": "subtitles.gun",
+    "sounds": [
+      {
+        "name": "dooms_greats:gun",
+        "stream": false
+      }
+    ]
+  },
+  "blade": {
+    "category": "player",
+    "subtitle": "subtitles.blade",
+    "sounds": [
+      {
+        "name": "dooms_greats:blade",
+        "stream": false
+      }
+    ]
+  },
+  "revolve_on": {
+    "category": "player",
+    "subtitle": "subtitles.revolve_on",
+    "sounds": [
+      {
+        "name": "dooms_greats:revolve_on",
+        "stream": false
+      }
+    ]
+  },
+  "desire_driver": {
+    "category": "player",
+    "subtitle": "subtitles.desire_driver",
+    "sounds": [
+      {
+        "name": "dooms_greats:desire_driver",
+        "stream": false
+      }
+    ]
+  },
+  "doomsgeatsbuckleopen": {
+    "category": "player",
+    "subtitle": "subtitles.doomsgeatsbuckleopen",
+    "sounds": [
+      {
+        "name": "dooms_greats:doomsgeatsbuckleopen",
+        "stream": false
+      }
+    ]
+  },
+  "buckleopen": {
+    "category": "player",
+    "subtitle": "subtitles.buckleopen",
+    "sounds": [
+      {
+        "name": "dooms_greats:buckleopen",
+        "stream": false
+      }
+    ]
+  },
+  "buckleopen_wait": {
+    "category": "player",
+    "subtitle": "subtitles.buckleopen_wait",
+    "sounds": [
+      {
+        "name": "dooms_greats:buckleopen_wait",
+        "stream": false
+      }
+    ]
+  },
+  "doomsgeatshenshinfull": {
+    "category": "player",
+    "subtitle": "subtitles.doomsgeatshenshinfull",
+    "sounds": [
+      {
+        "name": "dooms_greats:doomsgeatshenshinfull",
+        "stream": false
+      }
+    ]
+  },
+  "doomsgeatssetjudgment": {
+    "category": "player",
+    "subtitle": "subtitles.doomsgeatssetjudgment",
+    "sounds": [
+      {
+        "name": "dooms_greats:doomsgeatssetjudgment",
+        "stream": false
+      }
+    ]
+  }
+}
