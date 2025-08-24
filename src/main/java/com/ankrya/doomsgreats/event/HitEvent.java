@@ -2,10 +2,9 @@ package com.ankrya.doomsgreats.event;
 
 import com.ankrya.doomsgreats.help.HTool;
 import com.ankrya.doomsgreats.help.ItemHelp;
-import com.ankrya.doomsgreats.item.base.armor.BaseDriver;
+import com.ankrya.doomsgreats.item.premise.base.armor.BaseDriver;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;

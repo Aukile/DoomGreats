@@ -1,7 +1,7 @@
 package com.ankrya.doomsgreats.message;
 
 import com.ankrya.doomsgreats.DoomsGreats;
-import com.ankrya.doomsgreats.interfaces.INMessage;
+import com.ankrya.doomsgreats.interfaces.message.INMessage;
 import com.ankrya.doomsgreats.message.ex_message.AllPackt;
 import com.google.common.primitives.Primitives;
 import net.minecraft.network.FriendlyByteBuf;

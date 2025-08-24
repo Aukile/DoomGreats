@@ -4,11 +4,11 @@ import com.ankrya.doomsgreats.DoomsGreats;
 import com.ankrya.doomsgreats.compat.animation.PlayerAnimator;
 import com.ankrya.doomsgreats.help.ItemHelp;
 import com.ankrya.doomsgreats.help.runnable.WaitToRun;
-import com.ankrya.doomsgreats.item.DesireDriver;
-import com.ankrya.doomsgreats.item.DoomsGreatsArmor;
+import com.ankrya.doomsgreats.item.items.armor.DesireDriver;
+import com.ankrya.doomsgreats.item.items.armor.DoomsGreatsArmor;
 import com.ankrya.doomsgreats.interfaces.IGeoItem;
-import com.ankrya.doomsgreats.item.base.armor.BaseRiderArmor;
-import com.ankrya.doomsgreats.item.base.armor.BaseRiderArmorBase;
+import com.ankrya.doomsgreats.item.premise.base.armor.BaseRiderArmor;
+import com.ankrya.doomsgreats.item.premise.base.armor.BaseRiderArmorBase;
 import com.ankrya.doomsgreats.message.MessageLoader;
 import com.ankrya.doomsgreats.message.common.LoopSoundMessage;
 import net.minecraft.commands.Commands;
@@ -28,7 +28,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.util.FakePlayerFactory;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
-import software.bernie.geckolib.animatable.GeoItem;
 
 import java.util.Collection;
 

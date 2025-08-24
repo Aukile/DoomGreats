@@ -2,11 +2,10 @@ package com.ankrya.doomsgreats.api.event;
 
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.Event;
 
 /**
- * 使用{@link com.ankrya.doomsgreats.item.base.armor.BaseRiderArmor#unequip} 解除变身时触发
+ * 使用{@link com.ankrya.doomsgreats.item.premise.base.armor.BaseRiderArmor#unequip} 解除变身时触发
  */
 public class RiderArmorRemoveEvent extends Event {
     private final LivingEntity entity;
@@ -28,7 +27,7 @@ public class RiderArmorRemoveEvent extends Event {
 
     /**
      * 脱装备之<b>前</b>,可取消
-     * @see com.ankrya.doomsgreats.item.base.armor.BaseRiderArmor#unequip
+     * @see com.ankrya.doomsgreats.item.premise.base.armor.BaseRiderArmor#unequip
      */
     public static class Pre extends RiderArmorRemoveEvent {
         boolean isCanceled = false;
@@ -47,7 +46,7 @@ public class RiderArmorRemoveEvent extends Event {
 
     /**
      * 脱装备之<b>后</b>
-     * @see com.ankrya.doomsgreats.item.base.armor.BaseRiderArmor#unequip
+     * @see com.ankrya.doomsgreats.item.premise.base.armor.BaseRiderArmor#unequip
      */
     public static class Post extends RiderArmorRemoveEvent {
         public Post(LivingEntity entity, EquipmentSlot slot) {

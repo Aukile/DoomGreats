@@ -1,6 +1,6 @@
 package com.ankrya.doomsgreats.message.ex_message;
 
-import com.ankrya.doomsgreats.interfaces.INMessage;
+import com.ankrya.doomsgreats.interfaces.message.INMessage;
 import com.ankrya.doomsgreats.interfaces.mod_use.ISoundMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;

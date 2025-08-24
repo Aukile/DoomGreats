@@ -6,8 +6,7 @@ import com.ankrya.doomsgreats.compat.animation.PlayerAnimator;
 import com.ankrya.doomsgreats.entity.renderer.DoomsEffectRenderer;
 import com.ankrya.doomsgreats.entity.renderer.SpecialEffectRenderer;
 import com.ankrya.doomsgreats.help.ItemHelp;
-import com.ankrya.doomsgreats.item.GoldenGeatsBusterQB9;
-import com.ankrya.doomsgreats.item.renderer.base.BaseGeoArmorRenderer;
+import com.ankrya.doomsgreats.item.items.weapon.GoldenGeatsBusterQB9;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceLocation;
@@ -19,7 +18,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
-import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 
 @EventBusSubscriber(value = Dist.CLIENT)
 public class RegisterClientEvent {

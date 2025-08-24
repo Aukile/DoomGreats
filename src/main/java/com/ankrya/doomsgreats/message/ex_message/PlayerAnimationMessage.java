@@ -2,7 +2,7 @@ package com.ankrya.doomsgreats.message.ex_message;
 
 import com.ankrya.doomsgreats.DoomsGreats;
 import com.ankrya.doomsgreats.compat.animation.PlayerAnimator;
-import com.ankrya.doomsgreats.interfaces.INMessage;
+import com.ankrya.doomsgreats.interfaces.message.INMessage;
 import dev.kosmx.playerAnim.api.firstPerson.FirstPersonConfiguration;
 import dev.kosmx.playerAnim.api.firstPerson.FirstPersonMode;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry;
@@ -10,7 +10,6 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 

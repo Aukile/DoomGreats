@@ -1,7 +1,7 @@
 package com.ankrya.doomsgreats.compat.animation;
 
 import com.ankrya.doomsgreats.DoomsGreats;
-import com.ankrya.doomsgreats.interfaces.INMessage;
+import com.ankrya.doomsgreats.interfaces.message.INMessage;
 import com.ankrya.doomsgreats.message.*;
 import com.ankrya.doomsgreats.message.ex_message.PlayerAnimationMessage;
 import com.ankrya.doomsgreats.message.ex_message.PlayerAnimationStopMessage;

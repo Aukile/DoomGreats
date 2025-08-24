@@ -1,6 +1,6 @@
 package com.ankrya.doomsgreats.event;
 
-import com.ankrya.doomsgreats.item.base.armor.BaseGeoArmor;
+import com.ankrya.doomsgreats.item.premise.base.armor.BaseGeoArmor;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

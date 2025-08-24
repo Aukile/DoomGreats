@@ -1,8 +1,8 @@
 package com.ankrya.doomsgreats.interfaces;
 
 import com.ankrya.doomsgreats.help.ItemHelp;
-import com.ankrya.doomsgreats.item.renderer.base.BaseGeoArmorRenderer;
-import com.ankrya.doomsgreats.item.renderer.base.BaseGeoItemRenderer;
+import com.ankrya.doomsgreats.item.premise.renderer.base.BaseGeoArmorRenderer;
+import com.ankrya.doomsgreats.item.premise.renderer.base.BaseGeoItemRenderer;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.RenderType;

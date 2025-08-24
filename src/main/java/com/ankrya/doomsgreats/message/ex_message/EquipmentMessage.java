@@ -1,8 +1,8 @@
 package com.ankrya.doomsgreats.message.ex_message;
 
 import com.ankrya.doomsgreats.help.ItemHelp;
-import com.ankrya.doomsgreats.interfaces.IFMessage;
-import com.ankrya.doomsgreats.item.base.armor.BaseRiderArmor;
+import com.ankrya.doomsgreats.interfaces.message.IFMessage;
+import com.ankrya.doomsgreats.item.premise.base.armor.BaseRiderArmor;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.handling.IPayloadContext;

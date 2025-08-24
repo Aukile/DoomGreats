@@ -1,6 +1,6 @@
 package com.ankrya.doomsgreats.message.ex_message;
 
-import com.ankrya.doomsgreats.interfaces.INMessage;
+import com.ankrya.doomsgreats.interfaces.message.INMessage;
 import com.ankrya.doomsgreats.message.NMessageCreater;
 import net.minecraft.network.FriendlyByteBuf;
 import net.neoforged.neoforge.network.handling.IPayloadContext;

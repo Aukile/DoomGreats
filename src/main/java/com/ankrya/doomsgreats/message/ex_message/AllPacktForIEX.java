@@ -1,6 +1,6 @@
 package com.ankrya.doomsgreats.message.ex_message;
 
-import com.ankrya.doomsgreats.interfaces.IEXMessage;
+import com.ankrya.doomsgreats.interfaces.message.IEXMessage;
 import com.ankrya.doomsgreats.message.EXMessageCreater;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;

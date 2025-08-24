@@ -1,7 +1,7 @@
 package com.ankrya.doomsgreats.message;
 
 import com.ankrya.doomsgreats.DoomsGreats;
-import com.ankrya.doomsgreats.interfaces.IFMessage;
+import com.ankrya.doomsgreats.interfaces.message.IFMessage;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -10,7 +10,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.InvocationTargetException;
 /**
  * @author 八云紫Ender <br>
  * {@link  IFMessage} 的创建器
