@@ -1,7 +1,7 @@
 package com.ankrya.doomsgreats.help.json;
 
 import com.ankrya.doomsgreats.DoomsGreats;
-import com.ankrya.doomsgreats.client.SoundName;
+import com.ankrya.doomsgreats.client.sound.SoundName;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -29,7 +29,7 @@ public class JsonCreator {
         JsonObject root = createSounds(SoundName.getAll());
         try {
             createStart("sounds", GatherType.SOUND, root);
-        } catch (IOException e) {
+        } catch (Throwable e) {
             throw new RuntimeException(e);
         }
     }

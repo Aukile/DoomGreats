@@ -58,12 +58,10 @@ public class PlayAnimation implements CustomPacketPayload {
 
     public static void run(final PlayAnimation message, final IPayloadContext ctx) {
         ctx.enqueueWork(() -> {
-            try (Level level = ctx.player().level()) {
-                Player player = level.getPlayerByUUID(message.uuid);
-                if (player instanceof AbstractClientPlayer clientPlayer) {
-                    PlayerAnimationMessage.playerAnimation(clientPlayer, message.layer, message.animation, message.showRightArm, message.showLeftArm, message.override);
-                }
-            } catch (Exception ignored) {
+            Level level = ctx.player().level();
+            Player player = level.getPlayerByUUID(message.uuid);
+            if (player instanceof AbstractClientPlayer clientPlayer) {
+                PlayerAnimationMessage.playerAnimation(clientPlayer, message.layer, message.animation, message.showRightArm, message.showLeftArm, message.override);
             }
         });
     }

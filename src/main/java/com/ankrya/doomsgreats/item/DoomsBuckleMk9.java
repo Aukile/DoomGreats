@@ -1,9 +1,12 @@
 package com.ankrya.doomsgreats.item;
 
-import com.ankrya.doomsgreats.client.SoundName;
+import com.ankrya.doomsgreats.client.sound.SoundName;
+import com.ankrya.doomsgreats.compat.animation.AnimName;
+import com.ankrya.doomsgreats.compat.animation.PlayerAnimator;
 import com.ankrya.doomsgreats.help.HTool;
 import com.ankrya.doomsgreats.help.ItemHelp;
 import com.ankrya.doomsgreats.help.runnable.WaitToRun;
+import com.ankrya.doomsgreats.interfaces.IGeoItem;
 import com.ankrya.doomsgreats.item.base.EasyGeoItem;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -27,11 +30,16 @@ public class DoomsBuckleMk9 extends EasyGeoItem{
                 && ItemHelp.checkItem(offHandItem, "dooms_mk_9_right")
                 && ItemHelp.checkItem(driver, "desire_driver")
                 && !ItemHelp.getNbt(driver).getBoolean(DesireDriver.BUCKLE)){
+            PlayerAnimator.playerAnimation(player, AnimName.BUCKLE_ON, true);
             new WaitToRun(() -> {
                 ItemHelp.playerRemoveItem(player, mainHandItem, 1);
                 ItemHelp.playerRemoveItem(player, offHandItem, 1);
+                HTool.stopSound(player, SoundName.BUCKLE_OPEN);
+                HTool.cancelDelaySound(player, SoundName.BUCKLE_OPEN_WAIT);
+
                 HTool.playSound(player, SoundName.BUCKLE_SET);
-                ItemHelp.getNbt(driver).putBoolean(DesireDriver.BUCKLE, true);
+                IGeoItem.playAnimationAndReset(driver, DesireDriver.IDLE0);
+                ItemHelp.setNbt(driver, nbt -> nbt.putBoolean(DesireDriver.BUCKLE, true));
             }, 4);
         }
         return super.use(level, player, usedHand);

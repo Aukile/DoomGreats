@@ -95,7 +95,6 @@ public class SpecialEffect extends Entity implements GeoEntity {
 
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
-//        super.addAdditionalSaveData(tag);
         tag.putInt("deadTime", this.entityData.get(DEAD_TIME));
         tag.putBoolean("autoClear", this.entityData.get(AUTO_CLEAR));
         tag.putString("animation", this.entityData.get(ANIMATION));

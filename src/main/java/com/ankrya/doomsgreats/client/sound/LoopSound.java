@@ -1,4 +1,4 @@
-package com.ankrya.doomsgreats.client;
+package com.ankrya.doomsgreats.client.sound;
 
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;

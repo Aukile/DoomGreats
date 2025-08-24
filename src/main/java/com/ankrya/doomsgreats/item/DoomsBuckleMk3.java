@@ -1,9 +1,10 @@
 package com.ankrya.doomsgreats.item;
 
-import com.ankrya.doomsgreats.client.SoundName;
+import com.ankrya.doomsgreats.client.sound.SoundName;
 import com.ankrya.doomsgreats.compat.animation.AnimName;
 import com.ankrya.doomsgreats.compat.animation.PlayerAnimator;
 import com.ankrya.doomsgreats.help.HTool;
+import com.ankrya.doomsgreats.help.ItemHelp;
 import com.ankrya.doomsgreats.help.runnable.WaitToRun;
 import com.ankrya.doomsgreats.init.ClassRegister;
 import com.ankrya.doomsgreats.item.base.BaseGeoItem;
@@ -23,16 +24,18 @@ public class DoomsBuckleMk3 extends BaseGeoItem {
 
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand usedHand) {
-        InteractionResultHolder<ItemStack> used = super.use(level, player, usedHand);
         if (usedHand == InteractionHand.MAIN_HAND && player.getItemBySlot(EquipmentSlot.OFFHAND).isEmpty()){
+            Item doomsMk9Left = ClassRegister.getRegisterObject("dooms_mk_9_left", Item.class).get();
+            ItemStack mk9Stack = new ItemStack(doomsMk9Left);
             PlayerAnimator.playerAnimation(player, AnimName.BUCKLE_OPEN, true);
-            HTool.playSound(player, SoundName.BUCKLE_OPEN_ALL);
+            HTool.playSound(player, SoundName.BUCKLE_OPEN);
+            HTool.playDelaySound(player, SoundName.BUCKLE_OPEN_WAIT, true, 8);
             new WaitToRun(() -> {
-                player.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ClassRegister.getRegisterObject("dooms_mk_9_left", Item.class).get()));
+                player.setItemSlot(EquipmentSlot.MAINHAND, mk9Stack);
                 player.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ClassRegister.getRegisterObject("dooms_mk_9_right", Item.class).get()));
             }, 8);
         }
-        return used;
+        return super.use(level, player, usedHand);
     }
 
     @Override

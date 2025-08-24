@@ -1,6 +1,6 @@
 package com.ankrya.doomsgreats.item;
 
-import com.ankrya.doomsgreats.client.SoundName;
+import com.ankrya.doomsgreats.client.sound.SoundName;
 import com.ankrya.doomsgreats.help.HTool;
 import com.ankrya.doomsgreats.help.ItemHelp;
 import com.ankrya.doomsgreats.item.base.BaseGeoSword;

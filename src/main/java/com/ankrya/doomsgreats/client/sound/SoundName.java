@@ -1,4 +1,4 @@
-package com.ankrya.doomsgreats.client;
+package com.ankrya.doomsgreats.client.sound;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -12,8 +12,8 @@ public final class SoundName {
     public static final String REVOLVE_ON = "revolve_on";
     public static final String DESIRE_DRIVER = "desire_driver";
     public static final String BUCKLE_OPEN_ALL = "doomsgeatsbuckleopen";
-    public static final String BUCKLE_OPEN = "buckleopen";
-    public static final String BUCKLE_WAIT = "buckleopen_wait";
+    public static final String BUCKLE_OPEN = "buckle_open";
+    public static final String BUCKLE_OPEN_WAIT = "buckle_open_wait";
     public static final String HENSHIN = "doomsgeatshenshinfull";
     public static final String BUCKLE_SET = "doomsgeatssetjudgment";
 

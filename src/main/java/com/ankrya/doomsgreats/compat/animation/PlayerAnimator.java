@@ -3,7 +3,6 @@ package com.ankrya.doomsgreats.compat.animation;
 import com.ankrya.doomsgreats.DoomsGreats;
 import com.ankrya.doomsgreats.interfaces.INMessage;
 import com.ankrya.doomsgreats.message.*;
-import com.ankrya.doomsgreats.message.common.PlayAnimation;
 import com.ankrya.doomsgreats.message.ex_message.PlayerAnimationMessage;
 import com.ankrya.doomsgreats.message.ex_message.PlayerAnimationStopMessage;
 import dev.kosmx.playerAnim.api.layered.IAnimation;
@@ -13,7 +12,6 @@ import dev.kosmx.playerAnim.core.util.Ease;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationAccess;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationFactory;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
@@ -80,10 +78,10 @@ public class PlayerAnimator {
     }
 
     public static void playerAnimation(Player player, ResourceLocation dataId, String animation, boolean showRightArm, boolean showLeftArm, boolean override){
-        CustomPacketPayload animationMessage = new PlayAnimation(player.getUUID(), dataId, animation, showRightArm, showLeftArm, override);
+        INMessage animationMessage = new PlayerAnimationMessage(player.getUUID(), dataId, animation, showRightArm, showLeftArm, override);
         if (player.level() instanceof ServerLevel serverLevel)
-            PacketDistributor.sendToPlayersInDimension(serverLevel, animationMessage);
-        else MessageLoader.sendToServer(animationMessage);
+            PacketDistributor.sendToPlayersInDimension(serverLevel, new NMessageCreater(animationMessage));
+        else MessageLoader.sendToServer(new NMessageCreater(animationMessage));
     }
 
     @SuppressWarnings("unchecked")

@@ -29,13 +29,12 @@ public class ItemStackMixin {
         NeoForge.EVENT_BUS.post(new ArmorBrokenEvent(entity, itemStack));
     }
 
-    @Inject(method = "inventoryTick", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "inventoryTick", at = @At("HEAD"))
     public void inventoryTick(Level level, Entity entity, int inventorySlot, boolean isCurrentItem, CallbackInfo ci) {
         if (entity instanceof Player player){
             ItemStack itemStack = (ItemStack) (Object) this;
             boolean remove = ItemHelp.getNbt(itemStack).getBoolean(ItemHelp.REMOVE);
             if (remove) ItemHelp.playerRemoveItem(player, itemStack, 64);
-            ci.cancel();
         }
     }
 }

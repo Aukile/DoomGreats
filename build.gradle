@@ -144,6 +144,8 @@ dependencies {
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
     runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
     implementation "curse.maven:geckolib-${geckolib_version}"
+    implementation "curse.maven:photon-${photon_version}"
+    implementation "curse.maven:ldlib-${ldlib_version}"
 
 
 //    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.6"))

@@ -33,7 +33,7 @@ public class StopLoopSound implements INMessage {
     public void run(IPayloadContext ctx) {
         Level level = ctx.player().level();
         Entity entity = level.getEntity(id);
-        if (entity instanceof ISoundMap soundMap)
+        if (entity instanceof ISoundMap soundMap && soundMap.doomGreats$containsLoopSound(location))
             soundMap.doomGreats$removeLoopSound(location);
         stopSound(Minecraft.getInstance(), this);
     }

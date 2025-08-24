@@ -49,22 +49,22 @@
       }
     ]
   },
-  "buckleopen": {
+  "buckle_open": {
     "category": "player",
-    "subtitle": "subtitles.buckleopen",
+    "subtitle": "subtitles.buckle_open",
     "sounds": [
       {
-        "name": "dooms_greats:buckleopen",
+        "name": "dooms_greats:buckle_open",
         "stream": false
       }
     ]
   },
-  "buckleopen_wait": {
+  "buckle_open_wait": {
     "category": "player",
-    "subtitle": "subtitles.buckleopen_wait",
+    "subtitle": "subtitles.buckle_open_wait",
     "sounds": [
       {
-        "name": "dooms_greats:buckleopen_wait",
+        "name": "dooms_greats:buckle_open_wait",
         "stream": false
       }
     ]

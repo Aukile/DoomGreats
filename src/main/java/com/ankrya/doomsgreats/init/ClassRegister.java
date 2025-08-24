@@ -1,17 +1,24 @@
 package com.ankrya.doomsgreats.init;
 
 import com.ankrya.doomsgreats.DoomsGreats;
-import com.ankrya.doomsgreats.client.SoundName;
+import com.ankrya.doomsgreats.client.particle.base.advanced.AdvancedParticleData;
+import com.ankrya.doomsgreats.client.particle.base.advanced.RibbonParticleData;
+import com.ankrya.doomsgreats.client.sound.SoundName;
 import com.ankrya.doomsgreats.entity.DoomsEffect;
 import com.ankrya.doomsgreats.entity.SpecialEffect;
 import com.ankrya.doomsgreats.init.assist.RegisterAssist;
 import com.ankrya.doomsgreats.item.*;
-import com.ankrya.doomsgreats.item.base.EasyGeoItem;
 import com.ankrya.doomsgreats.item.base.armor.BaseRiderArmor;
 import com.ankrya.doomsgreats.item.base.armor.BaseRiderArmorBase;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -24,6 +31,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -144,6 +152,19 @@ public final class ClassRegister {
 //        注册声音
         registerSource(SoundEvent.class);
         soundRegister(SoundName.getAll());
+
+        Class<?> particleTypeClass = ParticleType.class;
+        registerSource(particleTypeClass);
+        register(particleTypeClass, "katana_slash", () -> new SimpleParticleType(false));
+        register(particleTypeClass, "advanced_particle", () -> new ParticleType<AdvancedParticleData>(false) {
+            @Override public @NotNull MapCodec<AdvancedParticleData> codec() { return AdvancedParticleData.codec(this); }
+            @Override public @NotNull StreamCodec<? super RegistryFriendlyByteBuf, AdvancedParticleData> streamCodec() { return AdvancedParticleData.DESERIALIZER; }
+        });
+        register(particleTypeClass, "ribbon_particle", () -> new ParticleType<RibbonParticleData>(false) {
+            @Override public @NotNull MapCodec<RibbonParticleData> codec() { return RibbonParticleData.codecRibbon(this); }
+            @Override public @NotNull StreamCodec<? super RegistryFriendlyByteBuf, RibbonParticleData> streamCodec() { return RibbonParticleData.DESERIALIZER; }
+        });
+
 
 //        注册实体
         Class<?> entityType = EntityType.class;

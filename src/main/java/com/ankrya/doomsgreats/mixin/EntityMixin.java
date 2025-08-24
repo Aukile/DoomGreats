@@ -1,6 +1,6 @@
 package com.ankrya.doomsgreats.mixin;
 
-import com.ankrya.doomsgreats.client.LoopSound;
+import com.ankrya.doomsgreats.client.sound.LoopSound;
 import com.ankrya.doomsgreats.interfaces.mod_use.ISoundMap;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -18,6 +18,11 @@ public class EntityMixin implements ISoundMap {
     @Override
     public Map<ResourceLocation, LoopSound> doomGreats$getLoopSounds() {
         return doomGreats$loopSounds;
+    }
+
+    @Override
+    public boolean doomGreats$containsLoopSound(ResourceLocation id) {
+        return doomGreats$loopSounds.containsKey(id);
     }
 
     @Override

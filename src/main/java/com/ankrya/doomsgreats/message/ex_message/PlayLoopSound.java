@@ -1,6 +1,6 @@
 package com.ankrya.doomsgreats.message.ex_message;
 
-import com.ankrya.doomsgreats.client.LoopSound;
+import com.ankrya.doomsgreats.client.sound.LoopSound;
 import com.ankrya.doomsgreats.interfaces.INMessage;
 import com.ankrya.doomsgreats.interfaces.mod_use.ISoundMap;
 import net.minecraft.client.Minecraft;

@@ -1,5 +1,6 @@
 package com.ankrya.doomsgreats.mixin;
 
+import com.ankrya.doomsgreats.client.particle.ParticleUtil;
 import com.ankrya.doomsgreats.event.PlayerEvent;
 import com.ankrya.doomsgreats.help.HTool;
 import com.ankrya.doomsgreats.help.ItemHelp;
@@ -30,7 +31,7 @@ public abstract class SwordItemMixin implements IItemExtension {
             PlayerEvent.hit(driver, player, entity.level(), time);
             if (time == 3){
                 return false;
-            }
+            } else ParticleUtil.spawnSlashParticles(player, entity.level());
         }
         return IItemExtension.super.onEntitySwing(stack, entity, hand);
     }

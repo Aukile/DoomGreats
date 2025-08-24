@@ -1,7 +1,7 @@
 package com.ankrya.doomsgreats.message.common;
 
 import com.ankrya.doomsgreats.DoomsGreats;
-import com.ankrya.doomsgreats.client.LoopSound;
+import com.ankrya.doomsgreats.client.sound.LoopSound;
 import com.ankrya.doomsgreats.message.ex_message.PlayLoopSound;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -34,6 +34,7 @@ public class LoopSoundMessage implements CustomPacketPayload {
         this.type = type;
         this.id = id;
     }
+
     private static void toBuf(RegistryFriendlyByteBuf buf, LoopSoundMessage loopSoundMessage) {
         buf.writeResourceLocation(loopSoundMessage.sound);
         buf.writeBoolean(loopSoundMessage.loop);
@@ -60,5 +61,9 @@ public class LoopSoundMessage implements CustomPacketPayload {
         ctx.enqueueWork(() -> {
             PlayLoopSound.playLoopSound(Minecraft.getInstance(), new LoopSound(ctx.player().level().getEntity(id), sound, getSoundSource(type), loop, range));
         });
+    }
+
+    public ResourceLocation getSound() {
+        return sound;
     }
 }
