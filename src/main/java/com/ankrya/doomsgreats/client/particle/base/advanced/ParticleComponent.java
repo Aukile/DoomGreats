@@ -47,6 +47,14 @@ public abstract class ParticleComponent {
         }
     }
 
+    /**
+     * 面向运动方向组件<br>
+     * 使粒子始终面向其运动方向。<br>
+     * 根据粒子的运动向量计算旋转角度，让粒子的朝向与其运动方向保持一致。<br>
+     * 支持两种旋转方式：<br>
+     * - EulerAngles（欧拉角）<br>
+     * - OrientVector（向量定向）
+     */
     public static class FaceMotion extends ParticleComponent {
         public FaceMotion() {
         }
@@ -75,6 +83,18 @@ public abstract class ParticleComponent {
         }
     }
 
+    /**
+     * 轨道运动组件<br>
+     * 通过四元数计算实现平滑的3D旋转效果。<br>
+     * 让粒子围绕指定点做轨道运动。<br>
+     * 支持：<br>
+     * - 自定义轨道中心点<br>
+     * - 可变半径<br>
+     * - 可调节的旋转轴<br>
+     * - 面向摄像机选项<br>
+     * - 初始旋转角度设置<br>
+     * - 垂直偏移控制
+     */
     public static class Orbit extends ParticleComponent {
         private final Vec3[] location;
         private final AnimData phase;
@@ -154,6 +174,16 @@ public abstract class ParticleComponent {
         }
     }
 
+    /**
+     * 粒子追踪组件<br>
+     * 创建一个吸引点，将粒子吸引到指定位置。<br>
+     * 还可以设置吸引距离阈值，当粒子接近目标点到一定程度时自动销毁。<br>
+     * 有三种行为模式：<br>
+     * {@link EnumAttractorBehavior#LINEAR}: 线性移动到目标点<br>
+     * {@link EnumAttractorBehavior#EXPONENTIAL}: 指数方式移动到目标点<br>
+     * {@link EnumAttractorBehavior#SIMULATED}: 物理模拟方式，通过施加力来移动粒子
+     *
+     */
     public static class Attractor extends ParticleComponent {
         private final Vec3[] location;
         private final float strength;
@@ -201,8 +231,11 @@ public abstract class ParticleComponent {
         }
 
         public static enum EnumAttractorBehavior {
+            /**线性移动到目标点*/
             LINEAR,
+            /**指数方式移动到目标点*/
             EXPONENTIAL,
+            /**物理模拟方式，通过施加力来移动粒子*/
             SIMULATED;
 
             private EnumAttractorBehavior() {
@@ -210,6 +243,10 @@ public abstract class ParticleComponent {
         }
     }
 
+    /**
+     * 固定位置组件<br>
+     * 将粒子固定在指定位置，无论粒子如何更新，都会强制保持在设置的位置上。
+     */
     public static class PinLocation extends ParticleComponent {
         private final Vec3[] location;
 
@@ -237,6 +274,19 @@ public abstract class ParticleComponent {
         }
     }
 
+    /**
+     * 属性控制组件<br>
+     * 动态控制粒子的各种属性。<br>
+     * 支持两种控制模式：绝对值和增量值.<br>
+     * 支持的属性包括：<br>
+     * 位置属性：pos_x, pos_y, pos_z<br>
+     * 运动属性：motion_x, motion_y, motion_z<br>
+     * 颜色属性：red, green, blue, alpha<br>
+     * 缩放属性：scale<br>
+     * 旋转属性：yaw, pitch, roll, particle_angle<br>
+     * 空气阻力：air_drag
+     * @see EnumParticleProperty
+     */
     public static class PropertyControl extends ParticleComponent {
         private final AnimData animData;
         private final EnumParticleProperty property;
@@ -386,21 +436,37 @@ public abstract class ParticleComponent {
         }
 
         public static enum EnumParticleProperty {
+            /**位置属性x*/
             POS_X,
+            /**位置属性y*/
             POS_Y,
+            /**位置属性z*/
             POS_Z,
+            /**速度属性x*/
             MOTION_X,
+            /**速度属性y*/
             MOTION_Y,
+            /**速度属性z*/
             MOTION_Z,
+            /**颜色属性r*/
             RED,
+            /**颜色属性g*/
             GREEN,
+            /**颜色属性b*/
             BLUE,
+            /**透明度属性a*/
             ALPHA,
+            /**缩放属性*/
             SCALE,
+            /**旋转属性yaw*/
             YAW,
+            /**旋转属性pitch*/
             PITCH,
+            /**旋转属性roll*/
             ROLL,
+            /**粒子旋转属性*/
             PARTICLE_ANGLE,
+            /**空气阻力属性*/
             AIR_DRAG;
 
             private EnumParticleProperty() {
@@ -408,6 +474,15 @@ public abstract class ParticleComponent {
         }
     }
 
+    /**
+     * <strong>动画数据项目</strong><br>
+     * 振荡器<br>
+     * 创建振荡效果，按余弦函数在两个值之间振荡变化。<br>
+     * 可控制：<br>
+     * - 起始值和结束值<br>
+     * - 振荡频率<br>
+     * - 相位偏移<br>
+     */
     public static class Oscillator extends AnimData {
         float value1;
         float value2;
@@ -427,6 +502,18 @@ public abstract class ParticleComponent {
         }
     }
 
+    /**
+     * <strong>动画数据项目</strong><br>
+     * 关键帧轨道<br>
+     * 基于关键帧的插值动画系统。<br>
+     * 支持：<br>
+     * - 线性插值<br>
+     * - 关键帧时间控制<br>
+     * - 预设方法：<br>
+     * >{@link KeyTrack#startAndEnd}: 起始和结束值<br>
+     * >{@link KeyTrack#oscillate}: 振荡效果<br>
+     * >{@link KeyTrack#uniform}: 均匀变化
+     */
     public static class KeyTrack extends AnimData {
         float[] values;
         float[] times;
