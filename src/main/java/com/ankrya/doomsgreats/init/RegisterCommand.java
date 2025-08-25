@@ -2,7 +2,7 @@ package com.ankrya.doomsgreats.init;
 
 import com.ankrya.doomsgreats.DoomsGreats;
 import com.ankrya.doomsgreats.compat.animation.PlayerAnimator;
-import com.ankrya.doomsgreats.help.ItemHelp;
+import com.ankrya.doomsgreats.help.GJ;
 import com.ankrya.doomsgreats.help.runnable.WaitToRun;
 import com.ankrya.doomsgreats.item.items.armor.DesireDriver;
 import com.ankrya.doomsgreats.item.items.armor.DoomsGreatsArmor;
@@ -67,6 +67,7 @@ public class RegisterCommand {
 //            effect.setPos(entity.getX(), entity.getY(), entity.getZ());
 //            world.addFreshEntity(effect);
             PlayerAnimator.playerAnimation(player, DesireDriver.REVOLVE, true);
+
             MessageLoader.sendToPlayer(new LoopSoundMessage(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, DesireDriver.REVOLVE), false, 10, 7, entity.getId()), (ServerPlayer) player);
         }
 
@@ -74,11 +75,11 @@ public class RegisterCommand {
             ItemStack itemStack = entity.getItemBySlot(EquipmentSlot.LEGS);
             Item item = itemStack.getItem();
             if (item instanceof DesireDriver driver){
-                ItemHelp.setNbt(itemStack, nbt -> nbt.putBoolean(DesireDriver.REVOLVE, true));
+                GJ.ToItem.setNbt(itemStack, nbt -> nbt.putBoolean(DesireDriver.REVOLVE, true));
                 IGeoItem.playAnimationAndReset(itemStack,"revolveon");
                 new WaitToRun(() -> {
                     IGeoItem.playAnimationAndReset(itemStack,DesireDriver.IDLE);
-                    ItemHelp.setNbt(itemStack, nbt -> nbt.putBoolean(DesireDriver.REVOLVE, false));
+                    GJ.ToItem.setNbt(itemStack, nbt -> nbt.putBoolean(DesireDriver.REVOLVE, false));
                 }, (int)4.2*20);
 //                driver.triggerAnim(entity, GeoItem.getOrAssignId(itemStack, (ServerLevel) world), "revolve_controller", DesireDriver.REVOLVE);
             }
@@ -91,6 +92,7 @@ public class RegisterCommand {
                 if (entity instanceof Player player) {
                     ItemStack stack = new ItemStack(ClassRegister.getRegisterObject("buster_qb_9_sword", Item.class).get());
                     ItemHandlerHelper.giveItemToPlayer(player, stack);
+                    GJ.ToItem.setNbt(player.getItemBySlot(EquipmentSlot.CHEST), nbt -> nbt.putBoolean(DoomsGreatsArmor.CLOAK_EFFECT, true));
                 }
                 BaseRiderArmor.equip(entity, slot, DoomsGreatsArmor.getNewArmor(slot));
             }

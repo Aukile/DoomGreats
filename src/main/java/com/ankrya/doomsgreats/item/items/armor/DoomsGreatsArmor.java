@@ -1,6 +1,7 @@
 package com.ankrya.doomsgreats.item.items.armor;
 
 import com.ankrya.doomsgreats.DoomsGreats;
+import com.ankrya.doomsgreats.help.GJ;
 import com.ankrya.doomsgreats.init.ClassRegister;
 import com.ankrya.doomsgreats.item.premise.base.armor.BaseDriver;
 import com.ankrya.doomsgreats.item.premise.base.armor.BaseRiderArmor;
@@ -28,6 +29,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class DoomsGreatsArmor extends BaseRiderArmor {
+    public static final String CLOAK_EFFECT = "cloak_effect";
     public DoomsGreatsArmor(Properties properties, EquipmentSlot slot) {
         super(GreatsArmorMaterial.DOOMS_GREATS_ARMOR, properties, slot);
     }
@@ -48,6 +50,10 @@ public class DoomsGreatsArmor extends BaseRiderArmor {
                 return renderer;
             }
         });
+    }
+
+    public static void cloakEffect(ItemStack stack, boolean active){
+        GJ.ToItem.setNbt(stack, nbt -> nbt.putBoolean(CLOAK_EFFECT, active));
     }
 
     @Override

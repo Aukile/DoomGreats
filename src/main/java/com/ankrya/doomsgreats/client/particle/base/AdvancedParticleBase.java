@@ -4,7 +4,7 @@ import com.ankrya.doomsgreats.client.particle.base.advanced.AdvancedParticleData
 import com.ankrya.doomsgreats.client.particle.base.advanced.ParticleComponent;
 import com.ankrya.doomsgreats.client.particle.base.advanced.ParticleRotation;
 import com.ankrya.doomsgreats.client.particle.rendertype.CustomParticleRenderType;
-import com.ankrya.doomsgreats.help.HTool;
+import com.ankrya.doomsgreats.help.GJ;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.Camera;
@@ -220,7 +220,7 @@ public class AdvancedParticleBase extends TextureSheetParticle {
 
             for(int i = 0; i < 4; ++i) {
                 Vector3f vector3f = avector3f[i];
-                HTool.ToMath.transform(vector3f, quaternionf);
+                GJ.ToMath.transform(vector3f, quaternionf);
                 vector3f.mul(f4);
                 vector3f.add(f, f1, f2);
             }

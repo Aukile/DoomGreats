@@ -10,7 +10,7 @@ import com.ankrya.doomsgreats.client.particle.provider.KatanaSlashParticleProvid
 import com.ankrya.doomsgreats.compat.animation.PlayerAnimator;
 import com.ankrya.doomsgreats.entity.renderer.DoomsEffectRenderer;
 import com.ankrya.doomsgreats.entity.renderer.SpecialEffectRenderer;
-import com.ankrya.doomsgreats.help.ItemHelp;
+import com.ankrya.doomsgreats.help.GJ;
 import com.ankrya.doomsgreats.item.items.weapon.GoldenGeatsBusterQB9;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.particles.ParticleType;
@@ -32,7 +32,7 @@ public class RegisterClientEvent {
         PlayerAnimator.init();
 
         event.enqueueWork(()->{
-            ItemProperties.register(ClassRegister.getRegisterObject("buster_qb_9_sword", Item.class).get(),ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID,"qb9_mode"),(itemStack, clientWorld, entity, itemEntityId)-> ItemHelp.getNbt(itemStack).getInt(GoldenGeatsBusterQB9.QB9_MODE));
+            ItemProperties.register(ClassRegister.getRegisterObject("buster_qb_9_sword", Item.class).get(),ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID,"qb9_mode"),(itemStack, clientWorld, entity, itemEntityId)-> GJ.ToItem.getNbt(itemStack).getInt(GoldenGeatsBusterQB9.QB9_MODE));
         });
     }
 

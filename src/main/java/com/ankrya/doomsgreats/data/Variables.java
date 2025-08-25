@@ -9,6 +9,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
@@ -114,7 +115,8 @@ public final class Variables implements INBTSerializable<ListTag> {
     }
 
     /**
-     * 注册同步的数据
+     * 注册同步的数据<br>
+     * 能支持的数据类型看{@link VariableSerializer}
      * @param clazz 类型
      * @param name 名称
      * @param defaultValue 默认值
@@ -126,13 +128,23 @@ public final class Variables implements INBTSerializable<ListTag> {
         variablesDefault.put(name, data);
     }
 
-    public <T> void setVariable(Entity entity, String name, T value){
+    /**设置玩家的数据*/
+    public  <T> void setToVariable(String name, T value, Entity entity){
         if (variables.containsKey(name)){
             Data<T> data = this.get(name);
             data.value = value;
             dirty = true;
         } else throw new RuntimeException("Variable does not exist");
         syncVariables(entity);
+    }
+
+    public  <T> void setToVariable(String name, T value, Level level){
+        if (variables.containsKey(name)){
+            Data<T> data = this.get(name);
+            data.value = value;
+            dirty = true;
+        } else throw new RuntimeException("Variable does not exist");
+        syncVariables(level);
     }
 
     @SuppressWarnings("unchecked")
@@ -142,28 +154,39 @@ public final class Variables implements INBTSerializable<ListTag> {
         return (T) variables.get(name).value;
     }
 
+    /**同步实体的同步数据*/
     public void syncVariables(Entity entity){
         if (entity instanceof ServerPlayer player)
-            MessageLoader.sendToPlayer(new SyncVariableMessage(entity.getId(), this), player);
+            MessageLoader.sendToPlayersInDimension(new SyncVariableMessage(entity.getId(), this), player);
         else MessageLoader.sendToEntityAndSelf(new SyncVariableMessage(entity.getId(), this), entity);
     }
 
-    public static <T> void setVariables(Entity entity, String name, T value){
+    /**同步世界的同步数据*/
+    public void syncVariables(Level level){
+        if (level instanceof ServerLevel serverLevel)
+            MessageLoader.sendToPlayersInDimension(new SyncVariableMessage(-1, this), serverLevel);
+    }
+
+    /**设置实体的同步数据*/
+    public static <T> void setVariable(Entity entity, String name, T value){
         Variables data = entity.getData(Variables.VARIABLES);
-        data.setVariable(entity, name, value);
+        data.setToVariable(name, value, entity);
     }
 
-    public static <T> void setVariables(Level level,Entity entity, String name, T value){
+    /**设置世界的同步数据*/
+    public static <T> void setVariable(Level level, String name, T value){
         Variables data = level.getData(Variables.VARIABLES);
-        data.setVariable(entity, name, value);
+        data.setToVariable(name, value, level);
     }
 
-    public static <T> T getVariables(Entity entity, String name){
+    /**获取实体的同步数据*/
+    public static <T> T getVariable(Entity entity, String name){
         Variables data = entity.getData(Variables.VARIABLES);
         return data.getVariable(name);
     }
 
-    public static <T> T getVariables(Level level, String name){
+    /**获取世界的同步数据*/
+    public static <T> T getVariable(Level level, String name){
         Variables data = level.getData(Variables.VARIABLES);
         return data.getVariable(name);
     }

@@ -2,7 +2,7 @@ package com.ankrya.doomsgreats.item.premise.base.armor;
 
 import com.ankrya.doomsgreats.api.event.RiderArmorEquipEvent;
 import com.ankrya.doomsgreats.api.event.RiderArmorRemoveEvent;
-import com.ankrya.doomsgreats.help.ItemHelp;
+import com.ankrya.doomsgreats.help.GJ;
 import com.ankrya.doomsgreats.item.premise.data.ArmorData;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
@@ -67,8 +67,8 @@ public abstract class BaseRiderArmor extends BaseRiderArmorBase {
                     if (player.getItemBySlot(slot) == stack) unequip(player, slot);
                     else {
                         ItemStack backupArmor = BaseRiderArmor.getBackupArmor(stack);
-                        ItemHelp.playerRemoveItem(player, this, 1);
-                        if (player.getItemBySlot(slot).isEmpty()) ItemHelp.equipBySlot(player, slot, backupArmor);
+                        GJ.ToItem.playerRemoveItem(player, this, 1);
+                        if (player.getItemBySlot(slot).isEmpty()) GJ.ToItem.equipBySlot(player, slot, backupArmor);
                         else ItemHandlerHelper.giveItemToPlayer(player, backupArmor);
                     }
                 } else unequip(livingEntity, slot);
@@ -102,7 +102,7 @@ public abstract class BaseRiderArmor extends BaseRiderArmorBase {
             ItemStack original = entity.getItemBySlot(slot);
             if (!original.isEmpty()) storeBackupArmor(stack, original);
             if (entity instanceof Player player) {
-                ItemHelp.equipBySlot(player, slot, stack);
+                GJ.ToItem.equipBySlot(player, slot, stack);
             } else entity.setItemSlot(slot, stack);
             NeoForge.EVENT_BUS.post(new RiderArmorEquipEvent.Post(entity, slot, stack));
         }

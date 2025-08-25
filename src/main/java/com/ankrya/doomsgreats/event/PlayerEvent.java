@@ -4,8 +4,7 @@ import com.ankrya.doomsgreats.api.event.ArmorBrokenEvent;
 import com.ankrya.doomsgreats.api.event.RiderArmorEquipEvent;
 import com.ankrya.doomsgreats.api.event.RiderArmorRemoveEvent;
 import com.ankrya.doomsgreats.compat.animation.PlayerAnimator;
-import com.ankrya.doomsgreats.help.HTool;
-import com.ankrya.doomsgreats.help.ItemHelp;
+import com.ankrya.doomsgreats.help.GJ;
 import com.ankrya.doomsgreats.item.items.armor.DesireDriver;
 import com.ankrya.doomsgreats.item.items.armor.DoomsGreatsArmor;
 import com.ankrya.doomsgreats.item.premise.base.armor.BaseDriver;
@@ -31,18 +30,18 @@ public class PlayerEvent {
     public static final String GREATS_HIT_SEGMENT = "greats_hit_segment";
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Pre event) {
-        ItemStack driver = HTool.ToItem.getDriver(event.getEntity());
-        int hit = ItemHelp.getNbt(driver).getInt(GREATS_HIT_COOLING);
+        ItemStack driver = GJ.ToItem.getDriver(event.getEntity());
+        int hit = GJ.ToItem.getNbt(driver).getInt(GREATS_HIT_COOLING);
         if (driver.getItem() instanceof BaseDriver && hit > 0){
-            ItemHelp.setNbt(driver, nbt -> nbt.putInt(GREATS_HIT_COOLING, hit - 1));
+            GJ.ToItem.setNbt(driver, nbt -> nbt.putInt(GREATS_HIT_COOLING, hit - 1));
         }
     }
 
     @SubscribeEvent
     public static void onArmorEquip(RiderArmorEquipEvent.Pre event) {
-        ItemStack driver = HTool.ToItem.getDriver(event.getEntity());
-        if (event.canRun() && driver.getItem() instanceof DesireDriver && !ItemHelp.getNbt(driver).getBoolean(DesireDriver.BUCKLE)){
-            ItemHelp.setNbt(driver, nbt -> nbt.putBoolean(DesireDriver.BUCKLE, true));
+        ItemStack driver = GJ.ToItem.getDriver(event.getEntity());
+        if (event.canRun() && driver.getItem() instanceof DesireDriver && !GJ.ToItem.getNbt(driver).getBoolean(DesireDriver.BUCKLE)){
+            GJ.ToItem.setNbt(driver, nbt -> nbt.putBoolean(DesireDriver.BUCKLE, true));
         }
     }
 
@@ -56,16 +55,16 @@ public class PlayerEvent {
 
     @SubscribeEvent
     public static void onArmorUnequip(RiderArmorRemoveEvent.Pre event) {
-        ItemStack driver = HTool.ToItem.getDriver(event.getEntity());
-        if (event.canRun() && driver.getItem() instanceof DesireDriver && ItemHelp.getNbt(driver).getBoolean(DesireDriver.BUCKLE)){
-            ItemHelp.setNbt(driver, nbt -> nbt.putBoolean(DesireDriver.BUCKLE, false));
+        ItemStack driver = GJ.ToItem.getDriver(event.getEntity());
+        if (event.canRun() && driver.getItem() instanceof DesireDriver && GJ.ToItem.getNbt(driver).getBoolean(DesireDriver.BUCKLE)){
+            GJ.ToItem.setNbt(driver, nbt -> nbt.putBoolean(DesireDriver.BUCKLE, false));
         }
     }
 
     @SubscribeEvent
     public static void afterArmorUnequip(RiderArmorRemoveEvent event){
         LivingEntity entity = event.getEntity();
-        HTool.ToEntity.fixHealth(entity);
+        GJ.ToEntity.fixHealth(entity);
     }
 
     @SubscribeEvent
@@ -84,13 +83,13 @@ public class PlayerEvent {
      * @see com.ankrya.doomsgreats.mixin.SwordItemMixin
      */
     public static void hit(ItemStack stack, Player entity, Level world, int time){
-        ItemHelp.setNbt(stack, nbt -> nbt.putInt(GREATS_HIT_SEGMENT, time > 2 ? 0 : time + 1));
-        ItemHelp.setNbt(stack, nbt -> nbt.putInt(GREATS_HIT_COOLING, 20));
+        GJ.ToItem.setNbt(stack, nbt -> nbt.putInt(GREATS_HIT_SEGMENT, time > 2 ? 0 : time + 1));
+        GJ.ToItem.setNbt(stack, nbt -> nbt.putInt(GREATS_HIT_COOLING, 20));
         PlayerAnimator.playerAnimation(entity, "attack" + (time + 1), true);
         if (time == 3){
-            for (Entity target : HTool.rangeFind(entity, 8)) {
-                if (entity != target && HTool.isFront(entity, target, 0)) {
-                    HTool.ToParticle.ExplosionTo(entity, target, world, 50);
+            for (Entity target : GJ.rangeFind(entity, 8)) {
+                if (entity != target && GJ.isFront(entity, target, 0)) {
+                    GJ.ToParticle.ExplosionTo(entity, target, world, 50);
                     target.setDeltaMovement(new Vec3((entity.getLookAngle().x * 4), (entity.getLookAngle().y * -1), (entity.getLookAngle().z * 4)));
                 }
             }

@@ -5,6 +5,16 @@ import com.ankrya.doomsgreats.client.particle.base.ParticleRibbon;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.world.phys.Vec3;
 
+/**
+ *
+ * 拖尾粒子<br>
+ * 控件列表：<br>
+ * - {@link AttachToParticle}附加到粒子组件<br>
+ * - {@link Trail}轨迹追踪组件<br>
+ * - {@link PanTexture}纹理平移组件<br>
+ * - {@link BeamPinning}光束固定组件<br>
+ * - {@link PropertyOverLength}长度属性控制组件
+ */
 public class RibbonComponent extends ParticleComponent {
     int length;
     ParticleType<? extends RibbonParticleData> ribbon;
@@ -20,6 +30,16 @@ public class RibbonComponent extends ParticleComponent {
     boolean emissive;
     ParticleComponent[] components;
 
+    /**
+     * @param length 长度
+     * @param yaw y轴旋转
+     * @param pitch x轴旋转
+     * @param roll z轴旋转
+     * @param scale 缩放
+     * @param faceCamera 是否面向摄像机
+     * @param emissive 是否发光
+     * @param components 组件
+     */
     public RibbonComponent(ParticleType<? extends RibbonParticleData> particle, int length, double yaw, double pitch, double roll, double scale, double r, double g, double b, double a, boolean faceCamera, boolean emissive, ParticleComponent[] components) {
         this.length = length;
         this.yaw = yaw;
@@ -48,6 +68,11 @@ public class RibbonComponent extends ParticleComponent {
 
     }
 
+    /**
+     * <strong>附加到粒子组件</strong><br>
+     * 将此粒子与{@link AdvancedParticleBase}关联起来。<br>
+     * 在初始化时将原粒子的ribbon属性设置为新创建的带状粒子，实现粒子间的链接关系。
+     */
     private static class AttachToParticle extends ParticleComponent {
         AdvancedParticleBase attachedParticle;
 
@@ -61,6 +86,13 @@ public class RibbonComponent extends ParticleComponent {
         }
     }
 
+    /**
+     * <strong>轨迹追踪组件</strong><br>
+     * 实现带状粒子的轨迹追踪效果。<br>
+     * ps：原理：<br>
+     * 在每次更新后，将带状粒子的所有位置点向前移动一位，最新的位置点设置为粒子当前的位置。<br>
+     * 这样就形成了一个连续的轨迹带效果。<br>
+     */
     public static class Trail extends ParticleComponent {
         public Trail() {
         }
@@ -79,6 +111,11 @@ public class RibbonComponent extends ParticleComponent {
         }
     }
 
+    /**
+     * <strong>纹理平移组件</strong><br>
+     * 实现纹理沿着带状粒子平移的效果。<br>
+     * 通过计算粒子的生命周期进度，动态调整纹理坐标偏移量，创造出纹理流动的视觉效果。<br>
+     */
     public static class PanTexture extends ParticleComponent {
         float startOffset = 0.0F;
         float speed = 1.0F;
@@ -98,6 +135,12 @@ public class RibbonComponent extends ParticleComponent {
         }
     }
 
+    /**
+     * <strong>光束固定组件</strong><br>
+     * 将带状粒子固定在两个点之间，形成稳定的光束效果。<br>
+     * 无论粒子如何更新，都会将带状粒子的各个点均匀分布在起始点和结束点之间，创造出直线光束效果。<br>
+     * ps：应该是，常用于制作激光、连接线等特效。
+     */
     public static class BeamPinning extends ParticleComponent {
         private final Vec3[] startLocation;
         private final Vec3[] endLocation;
@@ -126,6 +169,16 @@ public class RibbonComponent extends ParticleComponent {
         }
     }
 
+    /**
+     * <strong>长度属性控制组件</strong><br>
+     * 控制带状粒子沿长度方向的属性变化。<br>
+     * 通过AnimData定义的变化曲线，可以实现带状粒子从起点到终点的颜色渐变、透明度变化或粗细变化等效果。<br>
+     * 支持的颜色和透明度属性包括：<br>
+     * - red, green, blue: rgb颜色分量<br>
+     * - alpha: 透明度<br>
+     * - scale: 缩放<br>
+     * @see EnumRibbonProperty
+     */
     public static class PropertyOverLength extends ParticleComponent {
         private final ParticleComponent.AnimData animData;
         private final EnumRibbonProperty property;
@@ -144,10 +197,15 @@ public class RibbonComponent extends ParticleComponent {
         }
 
         public static enum EnumRibbonProperty {
+            /**颜色分量：红色*/
             RED,
+            /**颜色分量：绿色*/
             GREEN,
+            /**颜色分量：蓝色*/
             BLUE,
+            /**透明度*/
             ALPHA,
+            /**缩放*/
             SCALE;
 
             private EnumRibbonProperty() {

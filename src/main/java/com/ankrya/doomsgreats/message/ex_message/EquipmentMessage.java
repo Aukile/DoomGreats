@@ -1,6 +1,6 @@
 package com.ankrya.doomsgreats.message.ex_message;
 
-import com.ankrya.doomsgreats.help.ItemHelp;
+import com.ankrya.doomsgreats.help.GJ;
 import com.ankrya.doomsgreats.interfaces.message.IFMessage;
 import com.ankrya.doomsgreats.item.premise.base.armor.BaseRiderArmor;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -13,7 +13,7 @@ public class EquipmentMessage implements IFMessage {
         Player player = ctx.player();
 
         for (EquipmentSlot slot : BaseRiderArmor.getSlots()){
-            ItemHelp.equipBySlot(player, slot, player.getItemBySlot(slot));
+            GJ.ToItem.equipBySlot(player, slot, player.getItemBySlot(slot));
         }
     }
 }

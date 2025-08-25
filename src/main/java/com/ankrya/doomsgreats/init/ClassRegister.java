@@ -20,9 +20,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -35,12 +33,16 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
+/**
+ *神人注册机，如是说，虽然导致优先级方面有问题，但是豪玩！<br>
+ * 注册去static里面注册吧<br>
+ * @see ClassRegister#init
+ */
 public class ClassRegister {
     private static final String modid = DoomsGreats.MODID;
     public static Map<Class<?>,  DeferredRegister<?>> registers = new HashMap<>();
@@ -135,15 +137,15 @@ public class ClassRegister {
     }
 
     /**
-     *神人注册机，如是说，虽然导致优先级方面有问题<br>
-     *但是豪玩！<br>
-     * 注册去static里面注册吧<br>
+     * <strong>特别注意</strong><br>
+     * 有的有参型的是不能用{@link ClassRegister#registerSource(Class)}注册的<br>
+     * 例如: {@link MapCodec}<br>
+     * （好像也就这一个这样，不过可以用{@link ClassRegister#registerSource(Class, ResourceKey)}注册就没事了）
      * <p><br>
      * {@link  ClassRegister#registerSource} 注册注册源<br>
      * {@link  ClassRegister#register} 注册对象<br>
-     * <p><br>
-     * 使用例<br>
-     * {@link  ClassRegister#getRegisterObject} 获取注册对象，加一个.get()获取实例<br>
+     * <br>
+     * {@link  ClassRegister#getRegisterObject} 获取注册对象，加一个.get()获取实例
      */
     public static void init(IEventBus bus){
         for (DeferredRegister<?> register : registers.values()){

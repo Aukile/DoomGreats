@@ -11,8 +11,8 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author 八云紫Ender <br>
  * {@link  IFMessage} 的创建器
+ * @author 八云紫Ender <br>
  */
 public final class MessageCreater implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<MessageCreater> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "message_creater"));

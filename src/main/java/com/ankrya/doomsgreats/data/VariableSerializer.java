@@ -8,12 +8,13 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.UUID;
 
 /**
- * 数据解析器，是的，只支持10个类型 <br>
- * 感觉够用了就是说
+ * 数据解析器，是的，只支持11个类型 <br>
+ * 感觉够用了就是说,反正想加再在这加就是
  */
 public final class VariableSerializer {
     @SuppressWarnings("unchecked")
@@ -39,6 +40,8 @@ public final class VariableSerializer {
             return (IVariable<T>) ITEM_STACK;
         if (type == ResourceLocation.class)
             return (IVariable<T>) RESOURCE_LOCATION;
+        if (type == Vec3.class)
+            return (IVariable<T>) VECTOR_3D;
         else throw new IllegalArgumentException("Can't find DataSource for " + type);
     }
 
@@ -55,6 +58,7 @@ public final class VariableSerializer {
             case 7 -> UUID;
             case 8 -> ITEM_STACK;
             case 9 -> RESOURCE_LOCATION;
+            case 10 -> VECTOR_3D;
             default -> throw new IllegalArgumentException("Can't find DataSource for " + typeId);
         };
     }
@@ -340,6 +344,38 @@ public final class VariableSerializer {
         @Override
         public ResourceLocation read(Tag tag) {
             return ResourceLocation.tryParse(tag.getAsString());
+        }
+    };
+
+    public static final IVariable<Vec3> VECTOR_3D = new IVariable<>() {
+        @Override
+        public int typeId() {
+            return 10;
+        }
+
+        @Override
+        public void write(FriendlyByteBuf buf, Vec3 value) {
+            buf.writeVec3(value);
+        }
+
+        @Override
+        public Vec3 read(FriendlyByteBuf buf) {
+            return buf.readVec3();
+        }
+
+        @Override
+        public Tag write(Vec3 value) {
+            CompoundTag compound = new CompoundTag();
+            compound.putDouble("x", value.x);
+            compound.putDouble("y", value.y);
+            compound.putDouble("z", value.z);
+            return  compound;
+        }
+
+        @Override
+        public Vec3 read(Tag nbt) {
+            CompoundTag compound = (CompoundTag) nbt;
+            return new Vec3(compound.getDouble("x"), compound.getDouble("y"), compound.getDouble("z"));
         }
     };
 }

@@ -3,10 +3,8 @@ package com.ankrya.doomsgreats.item;
 import com.ankrya.doomsgreats.client.particle.base.SpreadBase;
 import com.ankrya.doomsgreats.client.particle.base.advanced.AdvancedParticleData;
 import com.ankrya.doomsgreats.client.particle.base.advanced.RibbonParticleData;
-import com.ankrya.doomsgreats.help.HTool;
+import com.ankrya.doomsgreats.help.GJ;
 import com.ankrya.doomsgreats.help.runnable.WaitToRun;
-import com.ankrya.doomsgreats.init.ClassRegister;
-import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -33,15 +31,14 @@ public class LogoItem extends Item {
 
         ItemStack stack = use.getObject();
         if (level instanceof ServerLevel serverLevel){
-            HTool.ToParticle.particle(serverLevel, (SimpleParticleType) SpreadBase.CaseSpreadProvider.getCaseSpread(), player.position().add(0, 3, 0), new Vec3(0, 0, 0), 0.5, 1);
+            GJ.ToParticle.particle(serverLevel, (SimpleParticleType) SpreadBase.CaseSpreadProvider.getCaseSpread(), player.position().add(0, 3, 0), new Vec3(0, 0, 0), 0.5, 1);
         }
         new WaitToRun(()-> {
-            HTool.AdvancedParticleHelper.addRobbin(level
+            GJ.AdvancedParticleHelper.addCaseRobbin(level
                     , AdvancedParticleData.getParticleType(), RibbonParticleData.getRibbonParticleType()
                     , player.position().add(0, 3, 0), 2, 4, 15, 15
                     , 40, 0.12f, 1, -3);
         }, 10);
         return use;
-
     }
 }

@@ -1,6 +1,6 @@
 package com.ankrya.doomsgreats.client.particle.base;
 
-import com.ankrya.doomsgreats.help.HTool;
+import com.ankrya.doomsgreats.help.GJ;
 import com.ankrya.doomsgreats.init.ClassRegister;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -88,12 +88,12 @@ public class SpreadBase extends TextureSheetParticle {
         }
 
         Vector3f $$10 = new Vector3f(-1.0F, -1.0F, 0.0F);
-        HTool.ToMath.transform($$10, $$8);
+        GJ.ToMath.transform($$10, $$8);
         Vector3f[] $$11 = new Vector3f[]{new Vector3f(-1.0F, -1.0F, 0.0F), new Vector3f(-1.0F, 1.0F, 0.0F), new Vector3f(1.0F, 1.0F, 0.0F), new Vector3f(1.0F, -1.0F, 0.0F)};
 
         for(int $$13 = 0; $$13 < 4; ++$$13) {
             Vector3f $$14 = $$11[$$13];
-            HTool.ToMath.transform($$14, $$8);
+            GJ.ToMath.transform($$14, $$8);
             $$14.mul(xSize,ySize,xSize);
             $$14.add($$4, $$5, $$6);
         }

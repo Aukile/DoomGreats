@@ -8,18 +8,23 @@ import com.ankrya.doomsgreats.client.particle.base.advanced.ParticleComponent;
 import com.ankrya.doomsgreats.client.particle.base.advanced.RibbonComponent;
 import com.ankrya.doomsgreats.client.particle.base.advanced.RibbonParticleData;
 import com.ankrya.doomsgreats.client.sound.DelayPlaySound;
+import com.ankrya.doomsgreats.init.ClassRegister;
 import com.ankrya.doomsgreats.message.NMessageCreater;
 import com.ankrya.doomsgreats.message.MessageLoader;
 import com.ankrya.doomsgreats.message.common.LoopSoundMessage;
 import com.ankrya.doomsgreats.message.ex_message.PlayLoopSound;
 import com.ankrya.doomsgreats.message.ex_message.StopLoopSound;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -31,7 +36,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -42,17 +49,18 @@ import org.joml.Vector4f;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /**
- * 工具箱<br>
+ * <strong>超大号工具箱</strong><br>
+ * 拖家带口说是<br>
  * 怕以后多了找不到我做了分类<br>
  * 不好分类的放外面了
  */
-public final class HTool {
+public final class GJ {
 
-    /**
-     * 本地相关
-     */
+    /**本地相关*/
     public static abstract class Local {
         public static void setPersonFront(CameraType cameraType) {
             if (Minecraft.getInstance().options.getCameraType() != cameraType) {
@@ -61,9 +69,7 @@ public final class HTool {
         }
     }
 
-    /**
-     * 世界相关
-     */
+    /**世界相关*/
     public static abstract class World {
         public static void playMSound(Level level, double x, double y, double z, String name) {
             SoundEvent soundEvent = BuiltInRegistries.SOUND_EVENT.get(ResourceLocation.parse(name));
@@ -94,9 +100,7 @@ public final class HTool {
         return World.rangeFind(entity.level(), entity.position(), (int) radius);
     }
 
-    /**
-     * 玩家相关
-     */
+    /**玩家相关*/
     public static abstract class ToPlayer {
         public static void playSound(Player player, String name) {
             playSound(player, name, false);
@@ -121,7 +125,7 @@ public final class HTool {
         public static void cancelDelaySound(Player player, String name) {
             ResourceLocation soundId = ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, name);
             DelayPlaySound.cancel(player, soundId);
-            HTool.ToPlayer.stopSound(player, name);
+            GJ.ToPlayer.stopSound(player, name);
         }
 
         public static void stopSound(Player player, String name) {
@@ -139,9 +143,7 @@ public final class HTool {
         }
     }
 
-    /**
-     * 实体相关
-     */
+    /**实体相关*/
     public static abstract class ToEntity {
         public static void fixHealth(LivingEntity entity) {
             if (entity.getMaxHealth() < entity.getHealth())
@@ -154,18 +156,53 @@ public final class HTool {
     }
 
 
-    /**
-     * 物品相关
-     */
+    /**物品相关*/
     public static abstract class ToItem {
+        public static final String REMOVE = "dooms_remove";
         public static ItemStack getDriver(LivingEntity entity) {
             return entity.getItemBySlot(EquipmentSlot.LEGS);
         }
+
+        public static void setNbt(ItemStack itemStack, Consumer<CompoundTag> updater){
+            CustomData.update(DataComponents.CUSTOM_DATA, itemStack, updater);
+        }
+
+        public static CompoundTag getNbt(ItemStack itemStack){
+            return itemStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+        }
+
+        public static void equipBySlot(Entity entity, EquipmentSlot slot, ItemStack stack){
+            if (entity instanceof Player player) {
+                player.getInventory().armor.set(slot.getIndex(), stack);
+                player.getInventory().setChanged();
+                List<Pair<EquipmentSlot, ItemStack>> slots = List.of(Pair.of(slot, stack));
+                if (player instanceof ServerPlayer serverPlayer)
+                    serverPlayer.connection.send(new ClientboundSetEquipmentPacket(player.getId(), slots));
+            } else if (entity instanceof LivingEntity livingEntity) {
+                livingEntity.setItemSlot(slot, stack);
+            }
+        }
+
+        public static void playerRemoveItem(Player player, Item item, int count){
+            playerRemoveItem(player, itemStack -> itemStack.is(item), count);
+        }
+
+        public static void playerRemoveItem(Player player, ItemStack stack, int count){
+            if (!getNbt(stack).getBoolean(REMOVE))
+                setNbt(stack, tag -> tag.putBoolean(REMOVE, true));
+            playerRemoveItem(player, itemStack -> itemStack == stack, count);
+        }
+
+        public static void playerRemoveItem(Player player, Predicate<ItemStack> condition, int count){
+            player.getInventory().clearOrCountMatchingItems(condition, count, player.getInventory());
+        }
+
+        public static boolean checkItem(ItemStack stack, String registerName){
+            return stack.is(ClassRegister.getRegisterObject(registerName, Item.class).get());
+        }
     }
 
-    /**
-     * 数学相关
-     */
+    /**数学相关*/
     public static abstract class ToMath {
         public static void transform(Vector3f vector3f, Quaternionf quaternionf) {
             Quaternionf quaternion = new Quaternionf(quaternionf);
@@ -176,21 +213,19 @@ public final class HTool {
             vector3f.set(quaternion.x(), quaternion.y(), quaternion.z());
         }
 
-        public static void transform(Vector4f vector4f, Matrix4f p_123608_) {
+        public static void transform(Vector4f vector4f, Matrix4f matrix4f) {
             float f = vector4f.x;
             float f1 = vector4f.y;
             float f2 = vector4f.z;
             float f3 = vector4f.w;
-            vector4f.x = p_123608_.m00() * f + p_123608_.m01() * f1 + p_123608_.m02() * f2 + p_123608_.m03() * f3;
-            vector4f.y = p_123608_.m10() * f + p_123608_.m11() * f1 + p_123608_.m12() * f2 + p_123608_.m13() * f3;
-            vector4f.z = p_123608_.m20() * f + p_123608_.m21() * f1 + p_123608_.m22() * f2 + p_123608_.m23() * f3;
-            vector4f.w = p_123608_.m30() * f + p_123608_.m31() * f1 + p_123608_.m32() * f2 + p_123608_.m33() * f3;
+            vector4f.x = matrix4f.m00() * f + matrix4f.m01() * f1 + matrix4f.m02() * f2 + matrix4f.m03() * f3;
+            vector4f.y = matrix4f.m10() * f + matrix4f.m11() * f1 + matrix4f.m12() * f2 + matrix4f.m13() * f3;
+            vector4f.z = matrix4f.m20() * f + matrix4f.m21() * f1 + matrix4f.m22() * f2 + matrix4f.m23() * f3;
+            vector4f.w = matrix4f.m30() * f + matrix4f.m31() * f1 + matrix4f.m32() * f2 + matrix4f.m33() * f3;
         }
     }
 
-    /**
-     * 粒子相关
-     */
+    /**粒子相关*/
     public static abstract class ToParticle {
         public static <T extends ParticleOptions> void particle(ServerLevel serverLevel, T pType, Vec3 pos, Vec3 move, double pSpeed, int pParticleCount) {
             serverLevel.sendParticles(pType, pos.x, pos.y, pos.z, pParticleCount, move.x, move.y, move.z, pSpeed);
@@ -205,12 +240,13 @@ public final class HTool {
     }
 
     /**
-     * {@link AdvancedParticleBase}粒子使用例<br>
-     *
-     * @author Aistray
+     * 超能粒子相关/案例<br>
+     * (乱叫喵~)<br>
+     * {@link AdvancedParticleBase}粒子使用例
      */
     public static abstract class AdvancedParticleHelper {
 
+        /**全类型*/
         public static void addRobbin(Level world, ParticleType<AdvancedParticleData> particle, double x, double y, double z, double motionX, double motionY, double motionZ, boolean faceCamera, double yaw, double pitch, double roll, double faceCameraAngle, double scale, double r, double g, double b, double a, double drag, double duration, boolean emissive, boolean canCollide, ParticleComponent... components) {
             AdvancedParticleBase.spawnParticle(world, particle, x, y, z, motionX, motionY, motionZ, faceCamera, yaw, pitch, roll, faceCameraAngle, scale, r, g, b, a, drag, duration, emissive, canCollide, components);
         }
@@ -269,7 +305,7 @@ public final class HTool {
          * 演示使用
          */
         @Deprecated
-        public static void addRobbin(Level level, ParticleType<AdvancedParticleData> particle, ParticleType<? extends
+        public static void addCaseRobbin(Level level, ParticleType<AdvancedParticleData> particle, ParticleType<? extends
                                              RibbonParticleData> ribbon, Vec3 location, float finalTime, float rMax, float rotStartX, float rotEndX,
                                      int ribbonLength, float ribbonScale, float firstRot, double yAdd) {
             AdvancedParticleBase.spawnParticle(level, particle, location.x, location.y, location.z, 0, 0, 0, true, 0.0, 0.0, 0.0, 0.0, 1, (double) 245 / 255, (double) 205 / 255, 1, 1, 1, 45, true, true,
@@ -329,7 +365,6 @@ public final class HTool {
 
         /**
          * 创建一个旋转的粒子
-         *
          * @param location   粒子位置
          * @param startTime  粒子开始时间
          * @param finalTime  粒子结束时间

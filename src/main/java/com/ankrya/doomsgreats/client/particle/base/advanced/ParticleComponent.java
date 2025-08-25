@@ -1,7 +1,7 @@
 package com.ankrya.doomsgreats.client.particle.base.advanced;
 
 import com.ankrya.doomsgreats.client.particle.base.AdvancedParticleBase;
-import com.ankrya.doomsgreats.help.HTool;
+import com.ankrya.doomsgreats.help.GJ;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -12,6 +12,17 @@ import org.joml.Vector3f;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 粒子组件<br>
+ * 控件列表：<br>
+ * - {@link FaceMotion}面向运动方向组件<br>
+ * - {@link Orbit}曲线运动组件<br>
+ * - {@link Attractor}粒子追踪组件<br>
+ * - {@link PinLocation}固定位置组件<br>
+ * - {@link PropertyControl}属性控制组件<br>
+ * - {@link Oscillator}振荡器 (动画组件)<br>
+ * - {@link KeyTrack}关键帧轨道 (动画组件)
+ */
 public abstract class ParticleComponent {
     public ParticleComponent() {
     }
@@ -84,7 +95,7 @@ public abstract class ParticleComponent {
     }
 
     /**
-     * <strong>轨道运动组件</strong><br>
+     * <strong>曲线运动组件</strong><br>
      * 通过四元数计算实现平滑的3D旋转效果。<br>
      * 让粒子围绕指定点做轨道运动。<br>
      * 支持：<br>
@@ -164,7 +175,7 @@ public abstract class ParticleComponent {
 
             start.cross(up);
             start.normalize();
-            HTool.ToMath.transform(start, quat);
+            GJ.ToMath.transform(start, quat);
             start.mul(r);
             if (this.location.length > 0 && this.location[0] != null) {
                 start.add((float)this.location[0].x, (float)this.location[0].y, (float)this.location[0].z);

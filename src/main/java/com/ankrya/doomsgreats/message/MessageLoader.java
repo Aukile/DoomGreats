@@ -7,6 +7,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -25,6 +26,7 @@ public final class MessageLoader {
         registrar.playBidirectional(MessageCreater.TYPE, MessageCreater.CODEC, new DirectionalPayloadHandler<>(MessageCreater::run,MessageCreater::run));
         registrar.playBidirectional(EXMessageCreater.TYPE, EXMessageCreater.CODEC, new DirectionalPayloadHandler<>(EXMessageCreater::run, EXMessageCreater::run));
         registrar.playBidirectional(NMessageCreater.TYPE, NMessageCreater.CODEC, new DirectionalPayloadHandler<>(NMessageCreater::run, NMessageCreater::run));
+
     }
 
     //下面的方法有点意义不明？ 额，当搬版本的集中处理器。。。大概
@@ -40,6 +42,11 @@ public final class MessageLoader {
     public static <MSG extends CustomPacketPayload> void sendToPlayersNearby(MSG message, ServerPlayer player) {
         sendToPlayer(message, player);
         PacketDistributor.sendToPlayersNear((ServerLevel) player.level(), player, player.getX(), player.getY(), player.getZ(), 64, message);
+    }
+
+    public static <MSG extends CustomPacketPayload> void sendToPlayersInDimension(MSG message, Level level) {
+        if (level instanceof ServerLevel serverLevel)
+            PacketDistributor.sendToPlayersInDimension(serverLevel, message);
     }
 
     public static <MSG extends CustomPacketPayload> void sendToPlayersInDimension(MSG message, Entity entity) {

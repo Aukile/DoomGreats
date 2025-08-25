@@ -1,6 +1,6 @@
 package com.ankrya.doomsgreats.item.premise.data;
 
-import com.ankrya.doomsgreats.help.ItemHelp;
+import com.ankrya.doomsgreats.help.GJ;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -74,8 +74,8 @@ public record ArmorData(
         }
 
         ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
-        ItemHelp.getNbt(stack);
-        CompoundTag nbt = ItemHelp.getNbt(stack);
+        GJ.ToItem.getNbt(stack);
+        CompoundTag nbt = GJ.ToItem.getNbt(stack);
 
         // 保留重要的自定义数据
         if (stack.isDamaged()) {
@@ -107,7 +107,7 @@ public record ArmorData(
 
         // 应用NBT标签（如果存在）
         if (!tag.isEmpty()) {
-            ItemHelp.setNbt(stack, c -> c.merge(tag.copy()));
+            GJ.ToItem.setNbt(stack, c -> c.merge(tag.copy()));
 
             // 特殊处理：恢复耐久度
             if (tag.contains("Damage", Tag.TAG_INT)) {

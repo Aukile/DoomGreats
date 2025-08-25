@@ -11,7 +11,18 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 @EventBusSubscriber
 public final class VariablesSyncEvent {
     @SubscribeEvent
-    public static void onPlayerLoggedInsyncVariables(PlayerEvent.PlayerLoggedInEvent event) {
+    public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            player.getData(Variables.VARIABLES).syncVariables(event.getEntity());
+
+            Variables world_data = get(event.getEntity().level());
+            MessageLoader.sendToPlayer(new SyncVariableMessage(-1, world_data), player);
+//            event.getEntity().getServer().getPlayerList().op(player.getGameProfile()); 一行待删除的注释
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerRespawned(PlayerEvent.PlayerRespawnEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             player.getData(Variables.VARIABLES).syncVariables(event.getEntity());
 
@@ -21,17 +32,7 @@ public final class VariablesSyncEvent {
     }
 
     @SubscribeEvent
-    public static void onPlayerRespawnedsyncVariables(PlayerEvent.PlayerRespawnEvent event) {
-        if (event.getEntity() instanceof ServerPlayer player) {
-            player.getData(Variables.VARIABLES).syncVariables(event.getEntity());
-
-            Variables world_data = get(event.getEntity().level());
-            MessageLoader.sendToPlayer(new SyncVariableMessage(-1, world_data), player);
-        }
-    }
-
-    @SubscribeEvent
-    public static void onPlayerChangedDimensionsyncVariables(PlayerEvent.PlayerChangedDimensionEvent event) {
+    public static void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             player.getData(Variables.VARIABLES).syncVariables(event.getEntity());
 

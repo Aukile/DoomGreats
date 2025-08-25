@@ -1,7 +1,7 @@
 package com.ankrya.doomsgreats.mixin;
 
 import com.ankrya.doomsgreats.api.event.ArmorBrokenEvent;
-import com.ankrya.doomsgreats.help.ItemHelp;
+import com.ankrya.doomsgreats.help.GJ;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -31,8 +31,8 @@ public class ItemStackMixin {
     public void inventoryTick(Level level, Entity entity, int inventorySlot, boolean isCurrentItem, CallbackInfo ci) {
         if (entity instanceof Player player){
             ItemStack itemStack = (ItemStack) (Object) this;
-            boolean remove = ItemHelp.getNbt(itemStack).getBoolean(ItemHelp.REMOVE);
-            if (remove) ItemHelp.playerRemoveItem(player, itemStack, 64);
+            boolean remove = GJ.ToItem.getNbt(itemStack).getBoolean(GJ.ToItem.REMOVE);
+            if (remove) GJ.ToItem.playerRemoveItem(player, itemStack, 64);
         }
     }
 }

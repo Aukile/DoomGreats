@@ -3,8 +3,7 @@ package com.ankrya.doomsgreats.item.items.props;
 import com.ankrya.doomsgreats.client.sound.SoundName;
 import com.ankrya.doomsgreats.compat.animation.AnimName;
 import com.ankrya.doomsgreats.compat.animation.PlayerAnimator;
-import com.ankrya.doomsgreats.help.HTool;
-import com.ankrya.doomsgreats.help.ItemHelp;
+import com.ankrya.doomsgreats.help.GJ;
 import com.ankrya.doomsgreats.help.runnable.WaitToRun;
 import com.ankrya.doomsgreats.interfaces.IGeoItem;
 import com.ankrya.doomsgreats.item.items.armor.DesireDriver;
@@ -24,23 +23,23 @@ public class DoomsBuckleMk9 extends EasyGeoItem{
 
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand usedHand) {
-        ItemStack driver = HTool.ToItem.getDriver(player);
+        ItemStack driver = GJ.ToItem.getDriver(player);
         ItemStack mainHandItem = player.getItemBySlot(EquipmentSlot.MAINHAND);
         ItemStack offHandItem = player.getItemBySlot(EquipmentSlot.OFFHAND);
-        if (ItemHelp.checkItem(mainHandItem, "dooms_mk_9_left")
-                && ItemHelp.checkItem(offHandItem, "dooms_mk_9_right")
-                && ItemHelp.checkItem(driver, "desire_driver")
-                && !ItemHelp.getNbt(driver).getBoolean(DesireDriver.BUCKLE)){
+        if (GJ.ToItem.checkItem(mainHandItem, "dooms_mk_9_left")
+                && GJ.ToItem.checkItem(offHandItem, "dooms_mk_9_right")
+                && GJ.ToItem.checkItem(driver, "desire_driver")
+                && !GJ.ToItem.getNbt(driver).getBoolean(DesireDriver.BUCKLE)){
             PlayerAnimator.playerAnimation(player, AnimName.BUCKLE_ON, true);
             new WaitToRun(() -> {
-                ItemHelp.playerRemoveItem(player, mainHandItem, 1);
-                ItemHelp.playerRemoveItem(player, offHandItem, 1);
-                HTool.ToPlayer.stopSound(player, SoundName.BUCKLE_OPEN);
-                HTool.ToPlayer.cancelDelaySound(player, SoundName.BUCKLE_OPEN_WAIT);
+                GJ.ToItem.playerRemoveItem(player, mainHandItem, 1);
+                GJ.ToItem.playerRemoveItem(player, offHandItem, 1);
+                GJ.ToPlayer.stopSound(player, SoundName.BUCKLE_OPEN);
+                GJ.ToPlayer.cancelDelaySound(player, SoundName.BUCKLE_OPEN_WAIT);
 
-                HTool.ToPlayer.playSound(player, SoundName.BUCKLE_SET);
+                GJ.ToPlayer.playSound(player, SoundName.BUCKLE_SET);
                 IGeoItem.playAnimationAndReset(driver, DesireDriver.IDLE0);
-                ItemHelp.setNbt(driver, nbt -> nbt.putBoolean(DesireDriver.BUCKLE, true));
+                GJ.ToItem.setNbt(driver, nbt -> nbt.putBoolean(DesireDriver.BUCKLE, true));
             }, 4);
         }
         return super.use(level, player, usedHand);

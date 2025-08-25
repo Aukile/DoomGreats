@@ -3,7 +3,7 @@ package com.ankrya.doomsgreats.item.items.props;
 import com.ankrya.doomsgreats.client.sound.SoundName;
 import com.ankrya.doomsgreats.compat.animation.AnimName;
 import com.ankrya.doomsgreats.compat.animation.PlayerAnimator;
-import com.ankrya.doomsgreats.help.HTool;
+import com.ankrya.doomsgreats.help.GJ;
 import com.ankrya.doomsgreats.help.runnable.WaitToRun;
 import com.ankrya.doomsgreats.init.ClassRegister;
 import com.ankrya.doomsgreats.item.premise.base.BaseGeoItem;
@@ -27,8 +27,8 @@ public class DoomsBuckleMk3 extends BaseGeoItem {
             Item doomsMk9Left = ClassRegister.getRegisterObject("dooms_mk_9_left", Item.class).get();
             ItemStack mk9Stack = new ItemStack(doomsMk9Left);
             PlayerAnimator.playerAnimation(player, AnimName.BUCKLE_OPEN, true);
-            HTool.ToPlayer.playSound(player, SoundName.BUCKLE_OPEN);
-            HTool.ToPlayer.playDelaySound(player, SoundName.BUCKLE_OPEN_WAIT, true, 8);
+            GJ.ToPlayer.playSound(player, SoundName.BUCKLE_OPEN);
+            GJ.ToPlayer.playDelaySound(player, SoundName.BUCKLE_OPEN_WAIT, true, 8);
             new WaitToRun(() -> {
                 player.setItemSlot(EquipmentSlot.MAINHAND, mk9Stack);
                 player.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ClassRegister.getRegisterObject("dooms_mk_9_right", Item.class).get()));

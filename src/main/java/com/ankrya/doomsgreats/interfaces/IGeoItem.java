@@ -1,6 +1,6 @@
 package com.ankrya.doomsgreats.interfaces;
 
-import com.ankrya.doomsgreats.help.ItemHelp;
+import com.ankrya.doomsgreats.help.GJ;
 import com.ankrya.doomsgreats.item.premise.renderer.base.BaseGeoArmorRenderer;
 import com.ankrya.doomsgreats.item.premise.renderer.base.BaseGeoItemRenderer;
 import net.minecraft.client.model.HumanoidModel;
@@ -45,14 +45,14 @@ public interface IGeoItem extends GeoItem {
     }
 
     static void playAnimation(ItemStack itemStack, String animation){
-        ItemHelp.setNbt(itemStack, nbt -> nbt.putString(ANIMATION, animation));
+        GJ.ToItem.setNbt(itemStack, nbt -> nbt.putString(ANIMATION, animation));
     }
 
     /**
      * 预备解决方案
      */
     static void playAnimationAndReset(ItemStack itemStack, String animation){
-        ItemHelp.setNbt(itemStack, nbt -> nbt.putBoolean(ANIMATION_STOP, true));
+        GJ.ToItem.setNbt(itemStack, nbt -> nbt.putBoolean(ANIMATION_STOP, true));
         playAnimation(itemStack, animation);
     }
 
@@ -60,8 +60,8 @@ public interface IGeoItem extends GeoItem {
         AnimationController<IGeoItem> controller = state.getController();
         ItemStack itemStack = state.getData(DataTickets.ITEMSTACK);
 
-        if (itemStack != null && ItemHelp.getNbt(itemStack).getBoolean(ANIMATION_STOP)) {
-            ItemHelp.setNbt(itemStack, nbt -> nbt.putBoolean(ANIMATION_STOP, false));
+        if (itemStack != null && GJ.ToItem.getNbt(itemStack).getBoolean(ANIMATION_STOP)) {
+            GJ.ToItem.setNbt(itemStack, nbt -> nbt.putBoolean(ANIMATION_STOP, false));
             controller.stop();
         }
 
@@ -77,7 +77,7 @@ public interface IGeoItem extends GeoItem {
     }
 
     default String getAnimation(ItemStack stack) {
-        String animation = ItemHelp.getNbt(stack).getString(ANIMATION);
+        String animation = GJ.ToItem.getNbt(stack).getString(ANIMATION);
         return animation.isEmpty() ? getAnimation() : animation;
     }
 

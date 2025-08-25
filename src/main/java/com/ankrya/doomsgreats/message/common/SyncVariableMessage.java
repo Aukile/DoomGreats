@@ -17,9 +17,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
-/*
- * 数据同步的发包
- * 因为需要使用自己的序列号和反序列化器
+/**
+ * 数据同步的发包<br>
+ * 因为需要使用自己的序列号和反序列化器<br>
  * 所以得写个正常的发包awa
  */
 public class SyncVariableMessage implements CustomPacketPayload {

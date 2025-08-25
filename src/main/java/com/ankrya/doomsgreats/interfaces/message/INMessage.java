@@ -24,6 +24,7 @@ public interface INMessage {
 
     void run(IPayloadContext ctx);
 
+    /**自动解析,一行解决*/
     static void autoWriteAll(FriendlyByteBuf buf, Comparable<?>... values){
         if (values.length == 0){
             buf.writeInt(0);
@@ -42,9 +43,7 @@ public interface INMessage {
         for (int type : types) writeFromType(buf, type, valueList.get(types.indexOf(type)));
     }
 
-    /**
-     * 下面都是自动解析的协助方法，请勿调用
-     */
+    /**自动解析的协助方法，请勿调用*/
     static <T> void writeFromType(FriendlyByteBuf buf, int type, T value){
         switch (type){
             case 1: buf.writeInt((int) value); break;
@@ -58,6 +57,7 @@ public interface INMessage {
         }
     }
 
+    /**自动解析的协助方法，请勿调用*/
     static void autoAnalysis(Comparable<?> value, List<Integer> types, List<Comparable<?>>  values){
         Class<?> aClass = value.getClass();
         values.add(value);
