@@ -6,6 +6,7 @@ import com.ankrya.doomsgreats.item.premise.renderer.base.BaseGeoItemRenderer;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
@@ -20,8 +21,10 @@ import software.bernie.geckolib.constant.DataTickets;
 import java.util.function.Consumer;
 
 public interface IGeoItem extends GeoItem {
-    String ANIMATION = "run_animation"; //nbt更改动画使用
-    String ANIMATION_STOP = "animation_stop"; //nbt重置动画使用
+    /**nbt更改动画使用*/
+    String ANIMATION = "run_animation";
+    /**nbt重置动画使用，使用{@link IGeoItem#playAnimationAndReset}即可*/
+    String ANIMATION_STOP = "animation_stop";
 
     @Override
     default void createGeoRenderer(Consumer<GeoRenderProvider> consumer) {

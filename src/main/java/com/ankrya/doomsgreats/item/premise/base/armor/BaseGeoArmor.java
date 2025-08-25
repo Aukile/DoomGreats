@@ -9,9 +9,6 @@ import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 public abstract class BaseGeoArmor extends ArmorItem implements IGeoItem {
-    public static final String ANIMATION = "run_animation"; //nbt更改动画使用
-    public static final String ANIMATION_STOP = "animation_stop";
-
     public String animation = "idle";
     public RenderType renderType = null;
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);

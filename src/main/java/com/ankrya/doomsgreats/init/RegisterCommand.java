@@ -92,7 +92,7 @@ public class RegisterCommand {
                 if (entity instanceof Player player) {
                     ItemStack stack = new ItemStack(ClassRegister.getRegisterObject("buster_qb_9_sword", Item.class).get());
                     ItemHandlerHelper.giveItemToPlayer(player, stack);
-                    GJ.ToItem.setNbt(player.getItemBySlot(EquipmentSlot.CHEST), nbt -> nbt.putBoolean(DoomsGreatsArmor.CLOAK_EFFECT, true));
+                    DoomsGreatsArmor.cloakEffect(player, true);
                 }
                 BaseRiderArmor.equip(entity, slot, DoomsGreatsArmor.getNewArmor(slot));
             }

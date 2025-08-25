@@ -2,10 +2,9 @@ package com.ankrya.doomsgreats.message.ex_message;
 
 import com.ankrya.doomsgreats.interfaces.message.IEXMessage;
 import com.ankrya.doomsgreats.message.EXMessageCreater;
+import com.ankrya.doomsgreats.message.MessageLoader;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,9 +42,13 @@ public class AllPacktForIEX implements IEXMessage {
 
     @Override
     public void run(IPayloadContext ctx) {
-        try (Level level = ctx.player().level()) {
-            PacketDistributor.sendToPlayersInDimension((ServerLevel) level, new EXMessageCreater(message));
-        } catch (Exception ignored) {}
+        ctx.enqueueWork(()->{
+            if (!(message instanceof AllPackt)) {
+                if (!ctx.flow().isServerbound())
+                    MessageLoader.sendToPlayersNearby(new EXMessageCreater(message), (ServerPlayer) ctx.player());
+                else message.run(ctx);
+            }
+        });
     }
 
     @Override

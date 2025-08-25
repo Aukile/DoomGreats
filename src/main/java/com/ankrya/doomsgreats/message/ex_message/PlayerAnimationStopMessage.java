@@ -30,11 +30,13 @@ public class PlayerAnimationStopMessage implements INMessage {
 
     @Override
     public void run(IPayloadContext ctx) {
-        Level level = ctx.player().level();
-        Player player = level.getPlayerByUUID(uuid);
-        if (player instanceof AbstractClientPlayer clientPlayer) {
-            PlayerAnimator.stopAnimation(clientPlayer, layer, fadeTime);
-        }
+        ctx.enqueueWork(() -> {
+            Level level = ctx.player().level();
+            Player player = level.getPlayerByUUID(uuid);
+            if (player instanceof AbstractClientPlayer clientPlayer) {
+                PlayerAnimator.stopAnimation(clientPlayer, layer, fadeTime);
+            }
+        });
     }
 
     public static void stopAnimation(AbstractClientPlayer player, ResourceLocation dataId, int fadeTime){

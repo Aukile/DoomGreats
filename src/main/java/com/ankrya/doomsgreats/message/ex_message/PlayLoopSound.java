@@ -49,12 +49,14 @@ public class PlayLoopSound implements INMessage {
 
     @Override
     public void run(IPayloadContext ctx) {
-        Level level = ctx.player().level();
-        Entity entity = level.getEntity(id);
-        LoopSound loopSound = new LoopSound(entity, sound, getSoundSource(type), loop, range);
-        if (loop && entity instanceof ISoundMap soundMap)
-            soundMap.doomGreats$addLoopSound(sound, loopSound);
-        playLoopSound(Minecraft.getInstance(), loopSound);
+        ctx.enqueueWork(() -> {
+            Level level = ctx.player().level();
+            Entity entity = level.getEntity(id);
+            LoopSound loopSound = new LoopSound(entity, sound, getSoundSource(type), loop, range);
+            if (loop && entity instanceof ISoundMap soundMap)
+                soundMap.doomGreats$addLoopSound(sound, loopSound);
+            playLoopSound(Minecraft.getInstance(), loopSound);
+        });
     }
 
     @OnlyIn(Dist.CLIENT)

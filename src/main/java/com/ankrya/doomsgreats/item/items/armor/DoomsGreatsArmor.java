@@ -5,6 +5,7 @@ import com.ankrya.doomsgreats.help.GJ;
 import com.ankrya.doomsgreats.init.ClassRegister;
 import com.ankrya.doomsgreats.item.premise.base.armor.BaseDriver;
 import com.ankrya.doomsgreats.item.premise.base.armor.BaseRiderArmor;
+import com.ankrya.doomsgreats.item.premise.base.armor.BaseRiderArmorBase;
 import com.ankrya.doomsgreats.item.premise.material.GreatsArmorMaterial;
 import com.ankrya.doomsgreats.item.premise.renderer.DoomGreatsArmorRenderer;
 import net.minecraft.client.model.HumanoidModel;
@@ -17,9 +18,11 @@ import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.client.GeoRenderProvider;
@@ -29,7 +32,13 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class DoomsGreatsArmor extends BaseRiderArmor {
+    /**披风物理模式*/
     public static final String CLOAK_EFFECT = "cloak_effect";
+
+    /**变身时动画*/
+    public static final String HENSHIN = "henshin";
+    /**空闲时动画*/
+    public static final String IDLE = "idle";
     public DoomsGreatsArmor(Properties properties, EquipmentSlot slot) {
         super(GreatsArmorMaterial.DOOMS_GREATS_ARMOR, properties, slot);
     }
@@ -37,6 +46,14 @@ public class DoomsGreatsArmor extends BaseRiderArmor {
     public static ItemStack getNewArmor(EquipmentSlot slot) {
         if (slot == EquipmentSlot.LEGS) return ItemStack.EMPTY;
         return new ItemStack(ClassRegister.getRegisterObject("dooms_greats_" + slot.getName(), Item.class).get());
+    }
+
+    public static void equipOrRemoveAll(LivingEntity entity){
+        boolean equip = isAllEquip(entity);
+        for (EquipmentSlot slot : BaseRiderArmorBase.getSlots()){
+            if (equip) BaseRiderArmor.unequip(entity, slot);
+            else BaseRiderArmor.equip(entity, slot, DoomsGreatsArmor.getNewArmor(slot));
+        }
     }
 
     @Override
@@ -50,6 +67,10 @@ public class DoomsGreatsArmor extends BaseRiderArmor {
                 return renderer;
             }
         });
+    }
+
+    public static void cloakEffect(LivingEntity entity, boolean active){
+        cloakEffect(entity.getItemBySlot(EquipmentSlot.CHEST), active);
     }
 
     public static void cloakEffect(ItemStack stack, boolean active){

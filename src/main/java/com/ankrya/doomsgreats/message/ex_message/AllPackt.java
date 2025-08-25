@@ -1,8 +1,10 @@
 package com.ankrya.doomsgreats.message.ex_message;
 
 import com.ankrya.doomsgreats.interfaces.message.INMessage;
+import com.ankrya.doomsgreats.message.MessageLoader;
 import com.ankrya.doomsgreats.message.NMessageCreater;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -47,8 +49,8 @@ public class AllPackt implements INMessage {
     public void run(IPayloadContext ctx) {
         ctx.enqueueWork(()->{
             if (!(message instanceof AllPackt)) {
-                if (ctx.flow().isServerbound())
-                    ctx.reply(new NMessageCreater(message));
+                if (!ctx.flow().isServerbound())
+                    MessageLoader.sendToPlayersNearby(new NMessageCreater(message), (ServerPlayer) ctx.player());
                 else message.run(ctx);
             }
         });

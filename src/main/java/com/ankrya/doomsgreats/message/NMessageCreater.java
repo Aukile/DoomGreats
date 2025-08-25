@@ -51,7 +51,8 @@ public class NMessageCreater implements CustomPacketPayload{
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
-        return new NMessageCreater(message);
+        NMessageCreater create = new NMessageCreater(message);
+        return create;
     }
 
     // 执行message对象的方法

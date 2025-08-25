@@ -58,10 +58,10 @@ import java.util.function.Predicate;
  * 怕以后多了找不到我做了分类<br>
  * 不好分类的放外面了
  */
-public final class GJ {
+public abstract class GJ {
 
     /**本地相关*/
-    public static abstract class Local {
+    public static abstract class ToLocal {
         public static void setPersonFront(CameraType cameraType) {
             if (Minecraft.getInstance().options.getCameraType() != cameraType) {
                 Minecraft.getInstance().options.setCameraType(cameraType);
@@ -70,7 +70,7 @@ public final class GJ {
     }
 
     /**世界相关*/
-    public static abstract class World {
+    public static abstract class ToWorld {
         public static void playMSound(Level level, double x, double y, double z, String name) {
             SoundEvent soundEvent = BuiltInRegistries.SOUND_EVENT.get(ResourceLocation.parse(name));
             if (soundEvent != null) {
@@ -97,7 +97,7 @@ public final class GJ {
     }
 
     public static List<LivingEntity> rangeFind(Entity entity, double radius) {
-        return World.rangeFind(entity.level(), entity.position(), (int) radius);
+        return ToWorld.rangeFind(entity.level(), entity.position(), (int) radius);
     }
 
     /**玩家相关*/
@@ -151,7 +151,7 @@ public final class GJ {
         }
 
         public static void playExplosionSound(Entity entity) {
-            World.playMSound(entity.level(), entity.getX(), entity.getY() + 1, entity.getZ(), "entity.generic.explode");
+            ToWorld.playMSound(entity.level(), entity.getX(), entity.getY() + 1, entity.getZ(), "entity.generic.explode");
         }
     }
 
@@ -420,5 +420,14 @@ public final class GJ {
                     , ParticleComponent.KeyTrack.startAndEnd(0, 0)
                     , firstRot, false, yAdd);
         }
+    }
+
+    protected final Player player;
+
+    protected GJ(Player player) {
+        this.player = player;
+    }
+
+    public void use() {
     }
 }

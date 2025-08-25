@@ -40,10 +40,12 @@ public class PlayerAnimationMessage implements INMessage {
 
     @Override
     public void run(IPayloadContext ctx) {
-        Player player = ctx.player().level().getPlayerByUUID(uuid);
-        if (ctx.flow().isClientbound() && player instanceof AbstractClientPlayer clientPlayer) {
-            playerAnimation(clientPlayer, layer, animation, showRightArm, showLeftArm, override);
-        }
+        ctx.enqueueWork(() ->{
+            Player player = ctx.player().level().getPlayerByUUID(uuid);
+            if (ctx.flow().isClientbound() && player instanceof AbstractClientPlayer clientPlayer) {
+                playerAnimation(clientPlayer, layer, animation, showRightArm, showLeftArm, override);
+            }
+        });
     }
 
     public static void playerAnimation(AbstractClientPlayer player, ResourceLocation dataId, String animation, boolean showRightArm, boolean showLeftArm, boolean override){

@@ -1,5 +1,6 @@
 package com.ankrya.doomsgreats.item.items.armor;
 
+import com.ankrya.doomsgreats.help.GJ;
 import com.ankrya.doomsgreats.init.ClassRegister;
 import com.ankrya.doomsgreats.item.premise.base.armor.BaseDriver;
 import com.ankrya.doomsgreats.item.premise.material.GreatsArmorMaterial;
@@ -29,6 +30,10 @@ public class DesireDriver extends BaseDriver {
 
     public static ItemStack getNewArmor(){
         return new ItemStack(ClassRegister.getRegisterObject("desire_driver", Item.class).get());
+    }
+
+    public static void setAnimationMode(ItemStack stack, boolean mode){
+        GJ.ToItem.setNbt(stack, nbt -> nbt.putBoolean(DesireDriver.REVOLVE, mode));
     }
 
     @Override
