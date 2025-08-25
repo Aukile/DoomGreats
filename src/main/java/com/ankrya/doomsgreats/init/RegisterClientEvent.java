@@ -1,6 +1,11 @@
 package com.ankrya.doomsgreats.init;
 
 import com.ankrya.doomsgreats.DoomsGreats;
+import com.ankrya.doomsgreats.client.particle.base.AdvancedParticleBase;
+import com.ankrya.doomsgreats.client.particle.base.ParticleRibbon;
+import com.ankrya.doomsgreats.client.particle.base.SpreadBase;
+import com.ankrya.doomsgreats.client.particle.base.advanced.AdvancedParticleData;
+import com.ankrya.doomsgreats.client.particle.base.advanced.RibbonParticleData;
 import com.ankrya.doomsgreats.client.particle.provider.KatanaSlashParticleProvider;
 import com.ankrya.doomsgreats.compat.animation.PlayerAnimator;
 import com.ankrya.doomsgreats.entity.renderer.DoomsEffectRenderer;
@@ -39,7 +44,11 @@ public class RegisterClientEvent {
     }
 
     @SubscribeEvent
+    @SuppressWarnings("unchecked")
     public static void registerParticles(RegisterParticleProvidersEvent event) {
         event.registerSpriteSet(ClassRegister.getRegisterObject("katana_slash", ParticleType.class).get(), KatanaSlashParticleProvider::new);
+        event.registerSpriteSet(AdvancedParticleData.getParticleType(), AdvancedParticleBase.Factory::new);
+        event.registerSpriteSet(RibbonParticleData.getRibbonParticleType(), ParticleRibbon.Factory::new);
+        event.registerSpriteSet(ClassRegister.getRegisterObject("case_spread", ParticleType.class).get(), SpreadBase.CaseSpreadProvider::new);
     }
 }

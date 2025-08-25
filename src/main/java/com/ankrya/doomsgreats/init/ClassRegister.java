@@ -7,6 +7,7 @@ import com.ankrya.doomsgreats.client.sound.SoundName;
 import com.ankrya.doomsgreats.entity.DoomsEffect;
 import com.ankrya.doomsgreats.entity.SpecialEffect;
 import com.ankrya.doomsgreats.init.assist.RegisterAssist;
+import com.ankrya.doomsgreats.item.LogoItem;
 import com.ankrya.doomsgreats.item.items.armor.DesireDriver;
 import com.ankrya.doomsgreats.item.items.armor.DoomsGreatsArmor;
 import com.ankrya.doomsgreats.item.items.props.DoomsBuckleMk3;
@@ -40,7 +41,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public final class ClassRegister {
+public class ClassRegister {
     private static final String modid = DoomsGreats.MODID;
     public static Map<Class<?>,  DeferredRegister<?>> registers = new HashMap<>();
     public static Map<Class<?>, Map<String, Supplier<?>>> registerObjects = new HashMap<>();
@@ -159,15 +160,9 @@ public final class ClassRegister {
         Class<?> particleTypeClass = ParticleType.class;
         registerSource(particleTypeClass);
         register(particleTypeClass, "katana_slash", () -> new SimpleParticleType(false));
-        register(particleTypeClass, "advanced_particle", () -> new ParticleType<AdvancedParticleData>(false) {
-            @Override public @NotNull MapCodec<AdvancedParticleData> codec() { return AdvancedParticleData.codec(this); }
-            @Override public @NotNull StreamCodec<? super RegistryFriendlyByteBuf, AdvancedParticleData> streamCodec() { return AdvancedParticleData.DESERIALIZER; }
-        });
-        register(particleTypeClass, "ribbon_particle", () -> new ParticleType<RibbonParticleData>(false) {
-            @Override public @NotNull MapCodec<RibbonParticleData> codec() { return RibbonParticleData.codecRibbon(this); }
-            @Override public @NotNull StreamCodec<? super RegistryFriendlyByteBuf, RibbonParticleData> streamCodec() { return RibbonParticleData.DESERIALIZER; }
-        });
-
+        register(particleTypeClass, "advanced_particle", AdvancedParticleData::createParticleType);
+        register(particleTypeClass, "ribbon_particle", RibbonParticleData::createRibbonParticleType);
+        register(particleTypeClass, "case_spread", () -> new SimpleParticleType(false));
 
 //        注册实体
         Class<?> entityType = EntityType.class;
@@ -188,7 +183,7 @@ public final class ClassRegister {
         register(item, "dooms_mk_3", () -> new DoomsBuckleMk3(new Item.Properties().stacksTo(1)));
         register(item, "dooms_mk_9_left", () -> new DoomsBuckleMk9(new Item.Properties().stacksTo(1), "dooms_geats_buckle_mk9_left", "dooms_geats_belt"));
         register(item, "dooms_mk_9_right", () -> new DoomsBuckleMk9(new Item.Properties().stacksTo(1), "dooms_geats_buckle_mk9_right", "dooms_geats_belt"));
-        register(item, "logo", () -> new DoomsBuckleMk9(new Item.Properties().stacksTo(1), "dooms_geats_buckle_mk9_right", "dooms_geats_belt"));
+        register(item, "logo", () -> new LogoItem(new Item.Properties().stacksTo(1)));
         for (EquipmentSlot slot : BaseRiderArmorBase.getSlots())
             register(item, "dooms_greats_" + slot.getName(), () -> new DoomsGreatsArmor(new Item.Properties().stacksTo(1).attributes(DoomsGreatsArmor.addAttributes(slot)), slot));
         register(item, "buster_qb_9_sword", GoldenGeatsBusterQB9::new);

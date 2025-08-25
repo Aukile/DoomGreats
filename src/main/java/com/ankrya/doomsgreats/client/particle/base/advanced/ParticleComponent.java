@@ -86,6 +86,18 @@ public abstract class ParticleComponent {
         private final float firstRot;
         private final double yAdd;
 
+        /**
+         *
+         * @param location 基础位置
+         * @param phase 旋转
+         * @param radius 半径
+         * @param axisX 轴X
+         * @param axisY 轴Y
+         * @param axisZ 轴Z
+         * @param firstRot 初始旋转
+         * @param faceCamera 是否朝向摄像机
+         * @param yAdd 竖直偏移
+         */
         public Orbit(Vec3[] location, AnimData phase, AnimData radius, AnimData axisX, AnimData axisY, AnimData axisZ,float firstRot, boolean faceCamera,double yAdd) {
             this.location = location;
             this.phase = phase;
@@ -132,7 +144,7 @@ public abstract class ParticleComponent {
 
             start.cross(up);
             start.normalize();
-            HTool.transform(start, quat);
+            HTool.ToMath.transform(start, quat);
             start.mul(r);
             if (this.location.length > 0 && this.location[0] != null) {
                 start.add((float)this.location[0].x, (float)this.location[0].y, (float)this.location[0].z);

@@ -1,6 +1,7 @@
 package com.ankrya.doomsgreats.client.particle.base.advanced;
 
 import com.ankrya.doomsgreats.client.particle.base.AdvancedParticleBase;
+import com.ankrya.doomsgreats.client.particle.base.ParticleRibbon;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.world.phys.Vec3;
 

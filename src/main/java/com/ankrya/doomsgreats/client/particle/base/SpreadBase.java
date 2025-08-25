@@ -1,14 +1,16 @@
 package com.ankrya.doomsgreats.client.particle.base;
 
 import com.ankrya.doomsgreats.help.HTool;
+import com.ankrya.doomsgreats.init.ClassRegister;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.ParticleRenderType;
-import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.*;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
@@ -16,7 +18,7 @@ import org.joml.Vector3f;
 
 /**
  * 扩散粒子<br>
- * 只能搬师父的过来慢慢看咯~<br>
+ * 不知道怎么研究，只能搬师父的过来慢慢看咯~<br>
  * 但是其实更打算用Photon了<br>
  * @author Aistray
  */
@@ -86,12 +88,12 @@ public class SpreadBase extends TextureSheetParticle {
         }
 
         Vector3f $$10 = new Vector3f(-1.0F, -1.0F, 0.0F);
-        HTool.transform($$10, $$8);
+        HTool.ToMath.transform($$10, $$8);
         Vector3f[] $$11 = new Vector3f[]{new Vector3f(-1.0F, -1.0F, 0.0F), new Vector3f(-1.0F, 1.0F, 0.0F), new Vector3f(1.0F, 1.0F, 0.0F), new Vector3f(1.0F, -1.0F, 0.0F)};
 
         for(int $$13 = 0; $$13 < 4; ++$$13) {
             Vector3f $$14 = $$11[$$13];
-            HTool.transform($$14, $$8);
+            HTool.ToMath.transform($$14, $$8);
             $$14.mul(xSize,ySize,xSize);
             $$14.add($$4, $$5, $$6);
         }
@@ -105,5 +107,22 @@ public class SpreadBase extends TextureSheetParticle {
         pBuffer.addVertex($$11[1].x(), $$11[1].y(), $$11[1].z()).setUv($$16, $$17).setColor(this.rCol, this.gCol, this.bCol, this.alpha).setUv2($$19 & '\uffff', $$19 >> 16 & '\uffff');
         pBuffer.addVertex($$11[2].x(), $$11[2].y(), $$11[2].z()).setUv($$15, $$17).setColor(this.rCol, this.gCol, this.bCol, this.alpha).setUv2($$19 & '\uffff', $$19 >> 16 & '\uffff');
         pBuffer.addVertex($$11[3].x(), $$11[3].y(), $$11[3].z()).setUv($$15, $$18).setColor(this.rCol, this.gCol, this.bCol, this.alpha).setUv2($$19 & '\uffff', $$19 >> 16 & '\uffff');
+    }
+
+    public static class CaseSpreadProvider implements ParticleProvider<SimpleParticleType> {
+        private final SpriteSet spriteSet;
+
+        public CaseSpreadProvider(SpriteSet spriteSet) {
+            this.spriteSet = spriteSet;
+        }
+
+        public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+            return new SpreadBase(worldIn, x, y, z, this.spriteSet,2.5f, Mth.nextInt(RandomSource.create(),222,232), Mth.nextInt(RandomSource.create(),23,33), Mth.nextInt(RandomSource.create(),245,255));
+        }
+
+        @SuppressWarnings("unchecked")
+        public static ParticleType<SimpleParticleType> getCaseSpread(){
+            return (ParticleType<SimpleParticleType>) ClassRegister.getRegisterObject("case_spread", ParticleType.class).get();
+        }
     }
 }

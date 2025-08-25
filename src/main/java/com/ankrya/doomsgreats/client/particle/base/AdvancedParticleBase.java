@@ -2,7 +2,6 @@ package com.ankrya.doomsgreats.client.particle.base;
 
 import com.ankrya.doomsgreats.client.particle.base.advanced.AdvancedParticleData;
 import com.ankrya.doomsgreats.client.particle.base.advanced.ParticleComponent;
-import com.ankrya.doomsgreats.client.particle.base.advanced.ParticleRibbon;
 import com.ankrya.doomsgreats.client.particle.base.advanced.ParticleRotation;
 import com.ankrya.doomsgreats.client.particle.rendertype.CustomParticleRenderType;
 import com.ankrya.doomsgreats.help.HTool;
@@ -22,7 +21,7 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 /**
- * 高级粒子？
+ * 高级粒子？<br>
  * @author Aistray
  */
 public class AdvancedParticleBase extends TextureSheetParticle {
@@ -149,12 +148,13 @@ public class AdvancedParticleBase extends TextureSheetParticle {
             this.zd *= 0.699999988079071;
         }
 
-        this.xd *= (double)this.airDrag;
-        this.yd *= (double)this.airDrag;
-        this.zd *= (double)this.airDrag;
+        this.xd *= this.airDrag;
+        this.yd *= this.airDrag;
+        this.zd *= this.airDrag;
     }
 
     public void render(VertexConsumer buffer, Camera renderInfo, float partialTicks) {
+        System.out.println("++rendering particle");
         this.alpha = this.prevAlpha + (this.alpha - this.prevAlpha) * partialTicks;
         if ((double)this.alpha < 0.01) {
             this.alpha = 0.01F;
@@ -220,7 +220,7 @@ public class AdvancedParticleBase extends TextureSheetParticle {
 
             for(int i = 0; i < 4; ++i) {
                 Vector3f vector3f = avector3f[i];
-                HTool.transform(vector3f, quaternionf);
+                HTool.ToMath.transform(vector3f, quaternionf);
                 vector3f.mul(f4);
                 vector3f.add(f, f1, f2);
             }
@@ -240,6 +240,7 @@ public class AdvancedParticleBase extends TextureSheetParticle {
             }
 
         }
+        System.out.println("--render particle over");
     }
 
     public float getAge() {
@@ -318,6 +319,32 @@ public class AdvancedParticleBase extends TextureSheetParticle {
         spawnParticle(world, particle, x, y, z, motionX, motionY, motionZ, faceCamera, yaw, pitch, roll, faceCameraAngle, scale, r, g, b, a, drag, duration, emissive, canCollide, new ParticleComponent[0]);
     }
 
+    /**
+     * 带拖尾的
+     * @param world 世界
+     * @param particle 粒子
+     * @param x 坐标X
+     * @param y 坐标Y
+     * @param z 坐标Z
+     * @param motionX 粒子X轴运动
+     * @param motionY 粒子Y轴运动
+     * @param motionZ 粒子Z轴运动
+     * @param faceCamera 是否面向摄像机
+     * @param yaw 粒子Y轴旋转
+     * @param pitch 粒子X轴旋转
+     * @param roll 粒子Z轴旋转
+     * @param faceCameraAngle 粒子面向摄像机角度
+     * @param scale 粒子大小
+     * @param r 粒子颜色R
+     * @param g 粒子颜色G
+     * @param b 粒子颜色B
+     * @param a 粒子透明度
+     * @param drag 粒子运动阻力
+     * @param duration 粒子生命时间
+     * @param emissive 粒子是否发光
+     * @param canCollide 粒子是否可碰撞
+     * @param components 粒子组件
+     */
     public static void spawnParticle(Level world, ParticleType<AdvancedParticleData> particle, double x, double y, double z, double motionX, double motionY, double motionZ, boolean faceCamera, double yaw, double pitch, double roll, double faceCameraAngle, double scale, double r, double g, double b, double a, double drag, double duration, boolean emissive, boolean canCollide, ParticleComponent[] components) {
         ParticleRotation rotation = faceCamera ? new ParticleRotation.FaceCamera((float)faceCameraAngle) : new ParticleRotation.EulerAngles((float)yaw, (float)pitch, (float)roll);
         world.addParticle(new AdvancedParticleData(particle, rotation, scale, r, g, b, a, drag, duration, emissive, canCollide, components), x, y, z, motionX, motionY, motionZ);

@@ -1,8 +1,11 @@
 {
   "textures": [
-    "dooms_greats:katana_slash_0",
-    "dooms_greats:katana_slash_1",
-    "dooms_greats:katana_slash_2",
-    "dooms_greats:katana_slash_3"
+    "dooms_greats:gathered_yellow_1",
+    "dooms_greats:gathered_yellow_2",
+    "dooms_greats:gathered_yellow_3",
+    "dooms_greats:gathered_yellow_4",
+    "dooms_greats:gathered_yellow_5",
+    "dooms_greats:gathered_yellow_6",
+    "dooms_greats:gathered_yellow_7"
   ]
 }

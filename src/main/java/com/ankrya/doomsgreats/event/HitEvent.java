@@ -18,7 +18,7 @@ public class HitEvent {
     public static void onHit(InputEvent.InteractionKeyMappingTriggered event) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null){
-            ItemStack driver = HTool.getDriver(player);
+            ItemStack driver = HTool.ToItem.getDriver(player);
             if (driver.getItem() instanceof BaseDriver
                     && ItemHelp.getNbt(driver).getInt(PlayerEvent.GREATS_HIT_COOLING) > 0) {
                 event.setSwingHand(false);

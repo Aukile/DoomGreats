@@ -43,11 +43,11 @@ public class GoldenGeatsBusterQB9 extends BaseGeoSword {
             ItemHelp.setNbt(stack, nbt -> nbt.putInt(QB9_MODE, oldMode == 0 ? 1 : 0));
             if (oldMode == 1) {
                 this.setModel("dooms_geats_qb9");
-                HTool.playSound(player, SoundName.BLADE);
+                HTool.ToPlayer.playSound(player, SoundName.BLADE);
             }
             else {
                 this.setModel("dooms_geats_qb9_gun");
-                HTool.playSound(player, SoundName.GUN);
+                HTool.ToPlayer.playSound(player, SoundName.GUN);
             }
 
         }

@@ -10,9 +10,10 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 public class RibbonParticleData extends AdvancedParticleData {
-    public static final StreamCodec<RegistryFriendlyByteBuf, RibbonParticleData> DESERIALIZER;
+
     private final int length;
 
     public RibbonParticleData(ParticleType<? extends RibbonParticleData> type, AdvancedParticleData data, int length){
@@ -28,19 +29,32 @@ public class RibbonParticleData extends AdvancedParticleData {
         this.length = length;
     }
 
-    public static RibbonParticleData readFromNetwork(RegistryFriendlyByteBuf buffer) {
-        AdvancedParticleData advancedParticleData = AdvancedParticleData.readFromNetwork(buffer);
+    public static ParticleType<RibbonParticleData> createRibbonParticleType() {
+        return new ParticleType<>(false) {
+            @Override
+            public @NotNull StreamCodec<? super RegistryFriendlyByteBuf, RibbonParticleData> streamCodec() {
+                return RibbonParticleData.deserializerRibbon(this);
+            }
 
-        // 读取 RibbonParticleData 特有的字段
+            @Override
+            public @NotNull MapCodec<RibbonParticleData> codec() {
+                return codecRibbon(this);
+            }
+        };
+    }
+
+    private static StreamCodec<RegistryFriendlyByteBuf, RibbonParticleData> deserializerRibbon(ParticleType<RibbonParticleData> type){
+        return StreamCodec.of(RibbonParticleData::writeToNetwork, buf -> RibbonParticleData.readRibbonFromNetwork(buf, type));
+    }
+
+    private static RibbonParticleData readRibbonFromNetwork(RegistryFriendlyByteBuf buffer, ParticleType<RibbonParticleData> type) {
+        AdvancedParticleData advancedParticleData = AdvancedParticleData.readFromNetwork(buffer,null);
+
         int length = buffer.readInt();
-
-        // 获取 ParticleType - 需要根据实际情况提供
-        ParticleType<RibbonParticleData> type = getRibbonParticleType();
-
         return new RibbonParticleData(type, advancedParticleData, length);
     }
 
-    public static void writeToNetwork(FriendlyByteBuf buffer, RibbonParticleData data) {
+    private static void writeToNetwork(FriendlyByteBuf buffer, RibbonParticleData data) {
         AdvancedParticleData.writeToNetwork(buffer, data);
         buffer.writeInt(data.getLength());
     }
@@ -55,7 +69,7 @@ public class RibbonParticleData extends AdvancedParticleData {
         return this.length;
     }
 
-    public static MapCodec<RibbonParticleData> codecRibbon(ParticleType<RibbonParticleData> particleType) {
+    private static MapCodec<RibbonParticleData> codecRibbon(ParticleType<RibbonParticleData> particleType) {
         return RecordCodecBuilder.mapCodec((instance) -> instance.group(
                 Codec.DOUBLE.fieldOf("scale").forGetter(AdvancedParticleData::getScale),
                 Codec.DOUBLE.fieldOf("r").forGetter(AdvancedParticleData::getRed),
@@ -76,11 +90,7 @@ public class RibbonParticleData extends AdvancedParticleData {
     }
 
     @SuppressWarnings("unchecked")
-    private static ParticleType<RibbonParticleData> getRibbonParticleType() {
+    public static ParticleType<RibbonParticleData> getRibbonParticleType() {
         return (ParticleType<RibbonParticleData>) ClassRegister.getRegisterObject("ribbon_particle", ParticleType.class).get();
-    }
-
-    static {
-        DESERIALIZER = StreamCodec.of(RibbonParticleData::writeToNetwork, RibbonParticleData::readFromNetwork);
     }
 }

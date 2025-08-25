@@ -1,6 +1,8 @@
 package com.ankrya.doomsgreats.client.particle.base.advanced;
 
 import com.ankrya.doomsgreats.init.ClassRegister;
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -18,8 +20,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Locale;
 
 public class AdvancedParticleData implements ParticleOptions {
-    public static final StreamCodec<RegistryFriendlyByteBuf, AdvancedParticleData> DESERIALIZER;
-
     private final ParticleType<? extends AdvancedParticleData> type;
     private final float airDrag;
     private final float red;
@@ -50,6 +50,23 @@ public class AdvancedParticleData implements ParticleOptions {
         this.duration = (float)duration;
         this.canCollide = canCollide;
         this.components = components;
+    }
+
+    public static ParticleType<AdvancedParticleData> createParticleType() {
+        return new ParticleType<>(false) {
+            @Override
+            public @NotNull StreamCodec<? super RegistryFriendlyByteBuf, AdvancedParticleData> streamCodec() {
+                return AdvancedParticleData.deserializer(this);
+            }
+
+            @Override
+            public @NotNull MapCodec<AdvancedParticleData> codec() {
+                return AdvancedParticleData.codec(this);
+            }
+        };
+    }
+    private static StreamCodec<RegistryFriendlyByteBuf, AdvancedParticleData> deserializer(ParticleType<AdvancedParticleData> type){
+        return StreamCodec.of(AdvancedParticleData::writeToNetwork, buf -> AdvancedParticleData.readFromNetwork(buf, type));
     }
 
     public static void writeToNetwork(FriendlyByteBuf buffer, AdvancedParticleData data) {
@@ -194,7 +211,7 @@ public class AdvancedParticleData implements ParticleOptions {
         )));
     }
 
-    public static AdvancedParticleData readFromNetwork(RegistryFriendlyByteBuf buffer) {
+    public static AdvancedParticleData readFromNetwork(RegistryFriendlyByteBuf buffer, ParticleType<AdvancedParticleData> type) {
         float airDrag = buffer.readFloat();
         float red = buffer.readFloat();
         float green = buffer.readFloat();
@@ -216,8 +233,6 @@ public class AdvancedParticleData implements ParticleOptions {
             default -> new ParticleRotation.OrientVector(new Vec3(yaw, pitch, roll));
         };
 
-        ParticleType<AdvancedParticleData> type = getParticleType();
-
         return new AdvancedParticleData(
                 type, rotation, scale, red, green, blue, alpha,
                 airDrag, duration, emissive, canCollide
@@ -225,11 +240,7 @@ public class AdvancedParticleData implements ParticleOptions {
     }
 
     @SuppressWarnings("unchecked")
-    private static ParticleType<AdvancedParticleData> getParticleType() {
+    public static ParticleType<AdvancedParticleData> getParticleType() {
         return (ParticleType<AdvancedParticleData>) ClassRegister.getRegisterObject("advanced_particle", ParticleType.class).get();
-    }
-
-    static {
-        DESERIALIZER = StreamCodec.of(AdvancedParticleData::writeToNetwork, AdvancedParticleData::readFromNetwork);
     }
 }

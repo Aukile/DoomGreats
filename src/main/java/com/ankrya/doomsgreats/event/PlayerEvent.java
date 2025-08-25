@@ -31,7 +31,7 @@ public class PlayerEvent {
     public static final String GREATS_HIT_SEGMENT = "greats_hit_segment";
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Pre event) {
-        ItemStack driver = HTool.getDriver(event.getEntity());
+        ItemStack driver = HTool.ToItem.getDriver(event.getEntity());
         int hit = ItemHelp.getNbt(driver).getInt(GREATS_HIT_COOLING);
         if (driver.getItem() instanceof BaseDriver && hit > 0){
             ItemHelp.setNbt(driver, nbt -> nbt.putInt(GREATS_HIT_COOLING, hit - 1));
@@ -40,7 +40,7 @@ public class PlayerEvent {
 
     @SubscribeEvent
     public static void onArmorEquip(RiderArmorEquipEvent.Pre event) {
-        ItemStack driver = HTool.getDriver(event.getEntity());
+        ItemStack driver = HTool.ToItem.getDriver(event.getEntity());
         if (event.canRun() && driver.getItem() instanceof DesireDriver && !ItemHelp.getNbt(driver).getBoolean(DesireDriver.BUCKLE)){
             ItemHelp.setNbt(driver, nbt -> nbt.putBoolean(DesireDriver.BUCKLE, true));
         }
@@ -56,7 +56,7 @@ public class PlayerEvent {
 
     @SubscribeEvent
     public static void onArmorUnequip(RiderArmorRemoveEvent.Pre event) {
-        ItemStack driver = HTool.getDriver(event.getEntity());
+        ItemStack driver = HTool.ToItem.getDriver(event.getEntity());
         if (event.canRun() && driver.getItem() instanceof DesireDriver && ItemHelp.getNbt(driver).getBoolean(DesireDriver.BUCKLE)){
             ItemHelp.setNbt(driver, nbt -> nbt.putBoolean(DesireDriver.BUCKLE, false));
         }
@@ -65,7 +65,7 @@ public class PlayerEvent {
     @SubscribeEvent
     public static void afterArmorUnequip(RiderArmorRemoveEvent event){
         LivingEntity entity = event.getEntity();
-        HTool.fixHealth(entity);
+        HTool.ToEntity.fixHealth(entity);
     }
 
     @SubscribeEvent
@@ -90,7 +90,7 @@ public class PlayerEvent {
         if (time == 3){
             for (Entity target : HTool.rangeFind(entity, 8)) {
                 if (entity != target && HTool.isFront(entity, target, 0)) {
-                    HTool.ExplosionTo(entity, target, world, 50);
+                    HTool.ToParticle.ExplosionTo(entity, target, world, 50);
                     target.setDeltaMovement(new Vec3((entity.getLookAngle().x * 4), (entity.getLookAngle().y * -1), (entity.getLookAngle().z * 4)));
                 }
             }
