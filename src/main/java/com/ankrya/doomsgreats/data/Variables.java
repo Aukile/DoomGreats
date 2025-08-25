@@ -117,7 +117,7 @@ public final class Variables implements INBTSerializable<ListTag> {
     /**
      * 注册同步的数据<br>
      * 能支持的数据类型看{@link VariableSerializer}
-     * @param clazz 类型
+     * @param clazz 类型(检查)
      * @param name 名称
      * @param defaultValue 默认值
      * @param save 是否保存（玩家死亡是否保存/世界维度间是否同步）

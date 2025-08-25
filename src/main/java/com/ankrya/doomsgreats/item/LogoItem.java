@@ -33,12 +33,10 @@ public class LogoItem extends Item {
         if (level instanceof ServerLevel serverLevel){
             GJ.ToParticle.particle(serverLevel, (SimpleParticleType) SpreadBase.CaseSpreadProvider.getCaseSpread(), player.position().add(0, 3, 0), new Vec3(0, 0, 0), 0.5, 1);
         }
-        new WaitToRun(()-> {
-            GJ.AdvancedParticleHelper.addCaseRobbin(level
-                    , AdvancedParticleData.getParticleType(), RibbonParticleData.getRibbonParticleType()
-                    , player.position().add(0, 3, 0), 2, 4, 15, 15
-                    , 40, 0.12f, 1, -3);
-        }, 10);
+        new WaitToRun(()-> GJ.AdvancedParticleHelper.addCaseRobbin(level
+                , AdvancedParticleData.getParticleType(), RibbonParticleData.getRibbonParticleType()
+                , player.position().add(0, 3, 0), 2, 4, 15, 15
+                , 40, 0.12f, 1, -3), 10);
         return use;
     }
 }
