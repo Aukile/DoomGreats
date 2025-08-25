@@ -9,6 +9,7 @@ public abstract class ParticleRotation {
     public void setPrevValues() {
     }
 
+    /**向量定向*/
     public static class OrientVector extends ParticleRotation {
         public Vec3 orientation;
         public Vec3 prevOrientation;
@@ -22,6 +23,7 @@ public abstract class ParticleRotation {
         }
     }
 
+    /**欧拉角*/
     public static class EulerAngles extends ParticleRotation {
         public float yaw;
         public float pitch;
@@ -30,6 +32,11 @@ public abstract class ParticleRotation {
         public float prevPitch;
         public float prevRoll;
 
+        /**
+         * @param yaw y轴旋转角度
+         * @param pitch x轴旋转角度
+         * @param roll z轴旋转角度
+         */
         public EulerAngles(float yaw, float pitch, float roll) {
             this.yaw = this.prevYaw = yaw;
             this.pitch = this.prevPitch = pitch;
@@ -43,10 +50,12 @@ public abstract class ParticleRotation {
         }
     }
 
+    /**面向摄像机*/
     public static class FaceCamera extends ParticleRotation {
         public float faceCameraAngle;
         public float prevFaceCameraAngle;
 
+        /**@param faceCameraAngle 旋转角度*/
         public FaceCamera(float faceCameraAngle) {
             this.faceCameraAngle = faceCameraAngle;
         }

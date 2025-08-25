@@ -217,8 +217,9 @@ public final class HTool {
 
         /**
          * 创建一个带拖尾的粒子<br>
-         * 此方法为创建例
-         *
+         * 此方法为创建例<br>
+         * ps:好可怕，35个参数，写死你<br>
+         * ps:Is never over~
          * @param world           世界
          * @param particle        粒子类型
          * @param ribbon          拖尾粒子类型

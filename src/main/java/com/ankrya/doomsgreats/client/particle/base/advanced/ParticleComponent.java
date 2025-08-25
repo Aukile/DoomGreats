@@ -48,7 +48,7 @@ public abstract class ParticleComponent {
     }
 
     /**
-     * 面向运动方向组件<br>
+     * <strong>面向运动方向组件</strong><br>
      * 使粒子始终面向其运动方向。<br>
      * 根据粒子的运动向量计算旋转角度，让粒子的朝向与其运动方向保持一致。<br>
      * 支持两种旋转方式：<br>
@@ -84,7 +84,7 @@ public abstract class ParticleComponent {
     }
 
     /**
-     * 轨道运动组件<br>
+     * <strong>轨道运动组件</strong><br>
      * 通过四元数计算实现平滑的3D旋转效果。<br>
      * 让粒子围绕指定点做轨道运动。<br>
      * 支持：<br>
@@ -175,7 +175,7 @@ public abstract class ParticleComponent {
     }
 
     /**
-     * 粒子追踪组件<br>
+     * <strong>粒子追踪组件</strong><br>
      * 创建一个吸引点，将粒子吸引到指定位置。<br>
      * 还可以设置吸引距离阈值，当粒子接近目标点到一定程度时自动销毁。<br>
      * 有三种行为模式：<br>
@@ -244,7 +244,7 @@ public abstract class ParticleComponent {
     }
 
     /**
-     * 固定位置组件<br>
+     * <strong>固定位置组件</strong><br>
      * 将粒子固定在指定位置，无论粒子如何更新，都会强制保持在设置的位置上。
      */
     public static class PinLocation extends ParticleComponent {
@@ -275,7 +275,7 @@ public abstract class ParticleComponent {
     }
 
     /**
-     * 属性控制组件<br>
+     * <strong>属性控制组件</strong><br>
      * 动态控制粒子的各种属性。<br>
      * 支持两种控制模式：绝对值和增量值.<br>
      * 支持的属性包括：<br>
@@ -475,8 +475,8 @@ public abstract class ParticleComponent {
     }
 
     /**
-     * <strong>动画数据项目</strong><br>
-     * 振荡器<br>
+     * · 动画数据项目<br>
+     * <strong>振荡器</strong><br>
      * 创建振荡效果，按余弦函数在两个值之间振荡变化。<br>
      * 可控制：<br>
      * - 起始值和结束值<br>
@@ -503,8 +503,8 @@ public abstract class ParticleComponent {
     }
 
     /**
-     * <strong>动画数据项目</strong><br>
-     * 关键帧轨道<br>
+     * · 动画数据项目<br>
+     * <strong>关键帧轨道</strong><br>
      * 基于关键帧的插值动画系统。<br>
      * 支持：<br>
      * - 线性插值<br>

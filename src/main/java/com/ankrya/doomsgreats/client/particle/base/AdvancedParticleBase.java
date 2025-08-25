@@ -21,7 +21,7 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 /**
- * 高级粒子？<br>
+ * 高级粒子~<br>
  * @author Aistray
  */
 public class AdvancedParticleBase extends TextureSheetParticle {
@@ -315,12 +315,13 @@ public class AdvancedParticleBase extends TextureSheetParticle {
         return this.level;
     }
 
+    /**无组件款*/
     public static void spawnParticle(Level world, ParticleType<AdvancedParticleData> particle, double x, double y, double z, double motionX, double motionY, double motionZ, boolean faceCamera, double yaw, double pitch, double roll, double faceCameraAngle, double scale, double r, double g, double b, double a, double drag, double duration, boolean emissive, boolean canCollide) {
         spawnParticle(world, particle, x, y, z, motionX, motionY, motionZ, faceCamera, yaw, pitch, roll, faceCameraAngle, scale, r, g, b, a, drag, duration, emissive, canCollide, new ParticleComponent[0]);
     }
 
     /**
-     * 带拖尾的
+     * 会控制面向摄像机角度的
      * @param world 世界
      * @param particle 粒子
      * @param x 坐标X
@@ -350,6 +351,23 @@ public class AdvancedParticleBase extends TextureSheetParticle {
         world.addParticle(new AdvancedParticleData(particle, rotation, scale, r, g, b, a, drag, duration, emissive, canCollide, components), x, y, z, motionX, motionY, motionZ);
     }
 
+    /**
+     * 基础款
+     * @param motionX 粒子X轴运动
+     * @param motionY 粒子Y轴运动
+     * @param motionZ 粒子Z轴运动
+     * @param rotation 粒子旋转
+     * @param scale 粒子大小
+     * @param r 粒子颜色R
+     * @param g 粒子颜色G
+     * @param b 粒子颜色B
+     * @param a 粒子透明度
+     * @param drag 粒子运动阻力
+     * @param duration 粒子生命时间
+     * @param emissive 粒子是否发光
+     * @param canCollide 粒子是否可碰撞
+     * @param components 粒子组件
+     */
     public static void spawnParticle(Level world, ParticleType<AdvancedParticleData> particle, double x, double y, double z, double motionX, double motionY, double motionZ, ParticleRotation rotation, double scale, double r, double g, double b, double a, double drag, double duration, boolean emissive, boolean canCollide, ParticleComponent[] components) {
         world.addParticle(new AdvancedParticleData(particle, rotation, scale, r, g, b, a, drag, duration, emissive, canCollide, components), x, y, z, motionX, motionY, motionZ);
     }
