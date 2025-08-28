@@ -5,13 +5,15 @@ import com.ankrya.doomsgreats.client.particle.base.advanced.AdvancedParticleData
 import com.ankrya.doomsgreats.client.particle.base.advanced.RibbonParticleData;
 import com.ankrya.doomsgreats.client.sound.SoundName;
 import com.ankrya.doomsgreats.entity.DoomsEffect;
-import com.ankrya.doomsgreats.entity.SpecialEffect;
+import com.ankrya.doomsgreats.entity.SpecialEffectEntity;
+import com.ankrya.doomsgreats.help.GJ;
 import com.ankrya.doomsgreats.init.assist.RegisterAssist;
 import com.ankrya.doomsgreats.item.LogoItem;
 import com.ankrya.doomsgreats.item.items.armor.DesireDriver;
 import com.ankrya.doomsgreats.item.items.armor.DoomsGreatsArmor;
 import com.ankrya.doomsgreats.item.items.props.DoomsBuckleMk3;
 import com.ankrya.doomsgreats.item.items.props.DoomsBuckleMk9;
+import com.ankrya.doomsgreats.item.items.props.RenderTest;
 import com.ankrya.doomsgreats.item.items.weapon.GoldenGeatsBusterQB9;
 import com.ankrya.doomsgreats.item.premise.base.armor.BaseRiderArmor;
 import com.ankrya.doomsgreats.item.premise.base.armor.BaseRiderArmorBase;
@@ -169,7 +171,7 @@ public class ClassRegister {
 //        注册实体
         Class<?> entityType = EntityType.class;
         registerSource(entityType);
-        register(entityType, "henshin_effect", () -> EntityType.Builder.of(SpecialEffect::new, MobCategory.MISC).sized(0.0F, 0.0F).setShouldReceiveVelocityUpdates(true).updateInterval(3).build("effects"));
+        register(entityType, "henshin_effect", () -> EntityType.Builder.of(SpecialEffectEntity::new, MobCategory.MISC).sized(0.0F, 0.0F).setShouldReceiveVelocityUpdates(true).updateInterval(3).build("effects"));
         register(entityType, "dooms_effect", () -> EntityType.Builder.of(DoomsEffect::new, MobCategory.MISC).sized(0.1F, 0.5F).setShouldReceiveVelocityUpdates(true).updateInterval(3).build("dooms_effect"));
 
 //        注册盔甲材质
@@ -186,6 +188,7 @@ public class ClassRegister {
         register(item, "dooms_mk_9_left", () -> new DoomsBuckleMk9(new Item.Properties().stacksTo(1), "dooms_geats_buckle_mk9_left", "dooms_geats_belt"));
         register(item, "dooms_mk_9_right", () -> new DoomsBuckleMk9(new Item.Properties().stacksTo(1), "dooms_geats_buckle_mk9_right", "dooms_geats_belt"));
         register(item, "logo", () -> new LogoItem(new Item.Properties().stacksTo(1)));
+        register(item, "render", RenderTest::new);
         for (EquipmentSlot slot : BaseRiderArmorBase.getSlots())
             register(item, "dooms_greats_" + slot.getName(), () -> new DoomsGreatsArmor(new Item.Properties().stacksTo(1).attributes(DoomsGreatsArmor.addAttributes(slot)), slot));
         register(item, "buster_qb_9_sword", GoldenGeatsBusterQB9::new);
@@ -204,7 +207,7 @@ public class ClassRegister {
 
     private static void soundRegister(String... names){
         for (String name : names)
-              register(SoundEvent.class, name, () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, name)));
+              register(SoundEvent.class, name, () -> SoundEvent.createVariableRangeEvent(GJ.Easy.getResource(name)));
     }
 
     public record Tectonic<T>(String name, T t) {}

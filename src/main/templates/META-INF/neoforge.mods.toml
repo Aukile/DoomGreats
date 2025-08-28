@@ -9,6 +9,8 @@ displayURL = "https://space.bilibili.com/155938791"
 authors = "${mod_authors}"
 description = '''${mod_description}'''
 
+[[accessTransformers]]
+file='src/main/resources/META-INF/accesstransformer.cfg'
 [[mixins]]
 config = "${mod_id}.mixins.json"
 [[dependencies."${mod_id}"]]

@@ -1,6 +1,7 @@
 package com.ankrya.doomsgreats.help.json;
 
 import com.ankrya.doomsgreats.DoomsGreats;
+import com.ankrya.doomsgreats.help.GJ;
 import com.ankrya.doomsgreats.init.ClassRegister;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
@@ -9,7 +10,6 @@ import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.data.loot.EntityLootSubProvider;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
@@ -88,7 +88,7 @@ public class DateGather {
                     Object object = registerObject.get();
                     if (object instanceof Block block) {
                         String blockName = block.getName().getString();
-                        cubeAll(blockName, ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, blockName));
+                        cubeAll(blockName, GJ.Easy.getResource(blockName));
                     }
                 });
             }

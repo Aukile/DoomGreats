@@ -1,7 +1,7 @@
 package com.ankrya.doomsgreats.message.common;
 
-import com.ankrya.doomsgreats.DoomsGreats;
 import com.ankrya.doomsgreats.client.sound.LoopSound;
+import com.ankrya.doomsgreats.help.GJ;
 import com.ankrya.doomsgreats.message.ex_message.PlayLoopSound;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -18,7 +18,7 @@ import static com.ankrya.doomsgreats.message.ex_message.PlayLoopSound.getSoundSo
  * (常用的还是做成正常规格的好一点？
  */
 public class LoopSoundMessage implements CustomPacketPayload {
-    public static final Type<LoopSoundMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "loop_sound_message"));
+    public static final Type<LoopSoundMessage> TYPE = new Type<>(GJ.Easy.getResource("loop_sound_message"));
     public static final StreamCodec<RegistryFriendlyByteBuf, LoopSoundMessage> CODEC = StreamCodec.of(LoopSoundMessage::toBuf, LoopSoundMessage::fromBuf);
 
     final ResourceLocation sound;

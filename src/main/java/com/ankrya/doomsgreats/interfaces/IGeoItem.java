@@ -26,6 +26,7 @@ public interface IGeoItem extends GeoItem {
     /**nbt重置动画使用，使用{@link IGeoItem#playAnimationAndReset}即可*/
     String ANIMATION_STOP = "animation_stop";
 
+
     @Override
     default void createGeoRenderer(Consumer<GeoRenderProvider> consumer) {
         consumer.accept(new GeoRenderProvider() {
@@ -88,7 +89,7 @@ public interface IGeoItem extends GeoItem {
         return "idle";
     }
 
-    default RenderType getRenderType() {
+    default RenderType getRenderType(ResourceLocation texture) {
         return null;
     }
 

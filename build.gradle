@@ -1,3 +1,15 @@
+import java.text.SimpleDateFormat
+import proguard.gradle.ProGuardTask
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.guardsquare:proguard-gradle:7.7.0'
+    }
+}
+
 plugins {
     id 'java-library'
     id 'maven-publish'
@@ -5,8 +17,11 @@ plugins {
     id 'net.neoforged.moddev' version '2.0.103'
 }
 
+SimpleDateFormat FORMAT = new SimpleDateFormat("MMdd-HHmmss")
+FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"))
 
-version = mod_version
+//version = mod_version
+version = FORMAT.format(new Date())
 group = mod_group_id
 
 repositories {
@@ -61,7 +76,7 @@ neoForge {
     }
 
     // 这行是可选的。访问转换器会自动检测
-    accessTransformers = file('src/main/templates/META-INF/accesstransformer.cfg')
+//    accessTransformers = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     // 默认的运行配置。
     // 这些配置可以根据需要进行调整、删除或复制。
@@ -214,3 +229,46 @@ idea {
         downloadJavadoc = true
     }
 }
+
+// 项目是开源的，模组是加密的？
+//jar {
+//    archiveFileName = "${mod_id}-${mod_version}-origin.jar"
+//    finalizedBy 'proguard'
+//}
+//
+//// ProGuard 配置
+//tasks.register('proguard', ProGuardTask) {
+//    onlyIf {enableProguard}
+//
+//    dependsOn(tasks.jar)
+//    configuration 'proguard.pro'
+//
+//    // JDK jmods 库
+//    libraryjars "${System.getProperty('java.home')}/jmods"
+//
+//    // 项目依赖作为库输入
+//    configurations.compileClasspath.files.each { file ->
+//        libraryjars file.absolutePath
+//    }
+//
+//    // 输入输出
+//    def inputJar = tasks.jar.archiveFile.get().asFile
+//    injars(inputJar)
+//    outjars("${project.buildDir}/libs/${mod_id}-${minecraft_version}-${mod_version}-proguard.jar")
+//    doFirst {
+//        copy {
+//            from inputJar
+//            into "${project.buildDir}/libs"
+//            rename { "${mod_id}-${minecraft_version}-${mod_version}-origin.jar" }
+//        }
+//    }
+//    doLast {
+//        def proguardJar = file("${project.buildDir}/libs/${mod_id}-${minecraft_version}-${mod_version}-proguard.jar")
+//        if (proguardJar.exists()) {
+//            println "ProGuard jar generated: ${proguardJar.name}"
+//        } else {
+//            println "Warning: ProGuard jar was not generated"
+//        }
+//    }
+//    inputs.files(tasks.jar.archiveFile)
+//}

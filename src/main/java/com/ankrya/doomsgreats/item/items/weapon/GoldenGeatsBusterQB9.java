@@ -1,8 +1,11 @@
 package com.ankrya.doomsgreats.item.items.weapon;
 
+import com.ankrya.doomsgreats.client.shaber.util.TransformUtils;
 import com.ankrya.doomsgreats.client.sound.SoundName;
 import com.ankrya.doomsgreats.help.GJ;
+import com.ankrya.doomsgreats.interfaces.ICosmic;
 import com.ankrya.doomsgreats.item.premise.base.BaseGeoSword;
+import net.minecraft.client.resources.model.ModelState;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -18,7 +21,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.SimpleTier;
 import org.jetbrains.annotations.NotNull;
 
-public class GoldenGeatsBusterQB9 extends BaseGeoSword {
+public class GoldenGeatsBusterQB9 extends BaseGeoSword implements ICosmic {
     public static final Tier TIER = new SimpleTier(BlockTags.INCORRECT_FOR_GOLD_TOOL, 2000, 6f, 3.6f, 0, Ingredient::of);
     public static final String QB9_MODE = "qb9_mode";
 
@@ -26,6 +29,16 @@ public class GoldenGeatsBusterQB9 extends BaseGeoSword {
     public GoldenGeatsBusterQB9() {
         super(TIER, new Item.Properties().stacksTo(1)
                 .attributes(SwordItem.createAttributes(TIER, 8.4f, -2.4f)));
+    }
+
+    @Override
+    public boolean isFoil(@NotNull ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public boolean hasCustomEntity(@NotNull ItemStack stack) {
+        return true;
     }
 
     @Override
@@ -91,5 +104,10 @@ public class GoldenGeatsBusterQB9 extends BaseGeoSword {
     @Override
     public String getTexture() {
         return "qb_9";
+    }
+
+    @Override
+    public ModelState getModeState() {
+        return TransformUtils.DEFAULT_TOOL;
     }
 }

@@ -15,7 +15,7 @@ public class BaseGeoSwordRenderer extends GeoItemRenderer<BaseGeoSword> {
 
     @Override
     public @Nullable RenderType getRenderType(BaseGeoSword animatable, ResourceLocation texture, @Nullable MultiBufferSource bufferSource, float partialTick) {
-        if (animatable.getRenderType() == null) return super.getRenderType(animatable, texture, bufferSource, partialTick);
-        return animatable.getRenderType();
+        if (animatable.getRenderType(texture) == null) return super.getRenderType(animatable, texture, bufferSource, partialTick);
+        return animatable.getRenderType(texture);
     }
 }

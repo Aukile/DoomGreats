@@ -1,7 +1,7 @@
 package com.ankrya.doomsgreats.message.ex_message;
 
-import com.ankrya.doomsgreats.DoomsGreats;
 import com.ankrya.doomsgreats.compat.animation.PlayerAnimator;
+import com.ankrya.doomsgreats.help.GJ;
 import com.ankrya.doomsgreats.interfaces.message.INMessage;
 import dev.kosmx.playerAnim.api.firstPerson.FirstPersonConfiguration;
 import dev.kosmx.playerAnim.api.firstPerson.FirstPersonMode;
@@ -49,7 +49,7 @@ public class PlayerAnimationMessage implements INMessage {
     }
 
     public static void playerAnimation(AbstractClientPlayer player, ResourceLocation dataId, String animation, boolean showRightArm, boolean showLeftArm, boolean override){
-        PlayerAnimator.playAnimation(player, dataId, Objects.requireNonNull(PlayerAnimationRegistry.getAnimation(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, animation))).playAnimation()
+        PlayerAnimator.playAnimation(player, dataId, Objects.requireNonNull(PlayerAnimationRegistry.getAnimation(GJ.Easy.getResource(animation))).playAnimation()
                 .setFirstPersonMode(FirstPersonMode.THIRD_PERSON_MODEL).setFirstPersonConfiguration(new FirstPersonConfiguration().setShowRightArm(showRightArm).setShowLeftItem(showLeftArm)), override);
     }
 }

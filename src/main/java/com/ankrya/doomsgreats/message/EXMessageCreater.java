@@ -1,6 +1,6 @@
 package com.ankrya.doomsgreats.message;
 
-import com.ankrya.doomsgreats.DoomsGreats;
+import com.ankrya.doomsgreats.help.GJ;
 import com.ankrya.doomsgreats.interfaces.message.IEXMessage;
 import com.ankrya.doomsgreats.message.ex_message.AllPackt;
 import com.google.common.primitives.Primitives;
@@ -8,7 +8,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +19,7 @@ import java.util.Objects;
  * 会自动解析出对应的网络包 <br>
  */
 public class EXMessageCreater implements CustomPacketPayload{
-    public static final Type<EXMessageCreater> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "message_ex_creater"));
+    public static final Type<EXMessageCreater> TYPE = new Type<>(GJ.Easy.getResource("message_ex_creater"));
     public static final StreamCodec<RegistryFriendlyByteBuf, EXMessageCreater> CODEC = StreamCodec.of(EXMessageCreater::toBuf, EXMessageCreater::fromBuf);
     final IEXMessage message;
 

@@ -23,6 +23,8 @@ public class DoomsBuckleMk3 extends BaseGeoItem {
 
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand usedHand) {
+        InteractionResultHolder<ItemStack> use = super.use(level, player, usedHand);
+        ItemStack stack = use.getObject();
         if (usedHand == InteractionHand.MAIN_HAND && player.getItemBySlot(EquipmentSlot.OFFHAND).isEmpty()){
             Item doomsMk9Left = ClassRegister.getRegisterObject("dooms_mk_9_left", Item.class).get();
             ItemStack mk9Stack = new ItemStack(doomsMk9Left);
@@ -30,11 +32,12 @@ public class DoomsBuckleMk3 extends BaseGeoItem {
             GJ.ToPlayer.playSound(player, SoundName.BUCKLE_OPEN);
             GJ.ToPlayer.playDelaySound(player, SoundName.BUCKLE_OPEN_WAIT, true, 8);
             new WaitToRun(() -> {
+                GJ.ToItem.playerRemoveItem(player, stack, 1);
                 player.setItemSlot(EquipmentSlot.MAINHAND, mk9Stack);
                 player.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ClassRegister.getRegisterObject("dooms_mk_9_right", Item.class).get()));
             }, 8);
         }
-        return super.use(level, player, usedHand);
+        return use;
     }
 
     @Override

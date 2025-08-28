@@ -1,25 +1,37 @@
 package com.ankrya.doomsgreats.data;
 
+import com.ankrya.doomsgreats.entity.SpecialEffectEntity;
 import com.ankrya.doomsgreats.interfaces.mod_use.IVariable;
+import com.google.common.primitives.Primitives;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.*;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Set;
 import java.util.UUID;
 
 /**
- * 数据解析器，是的，只支持11个类型 <br>
- * 感觉够用了就是说,反正想加再在这加就是
+ * 数据解析器 <br>
+ * 想加类型在后面加就行
  */
 public final class VariableSerializer {
-    @SuppressWarnings("unchecked")
-    public static <T> IVariable<T> auto(T value){
+    public static <T> IVariable<T> auto(@NotNull T value){
         Class<?> type = value.getClass();
+        return VariableSerializer.auto(type);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> IVariable<T> auto(Class<?> tClass){
+        Class<?> type = Primitives.unwrap(tClass);
         if (type == Boolean.class)
             return (IVariable<T>) BOOLEAN;
         if (type == Byte.class)

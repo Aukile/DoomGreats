@@ -1,6 +1,5 @@
 package com.ankrya.doomsgreats.item.items.armor;
 
-import com.ankrya.doomsgreats.DoomsGreats;
 import com.ankrya.doomsgreats.help.GJ;
 import com.ankrya.doomsgreats.init.ClassRegister;
 import com.ankrya.doomsgreats.item.premise.base.armor.BaseDriver;
@@ -10,7 +9,6 @@ import com.ankrya.doomsgreats.item.premise.material.GreatsArmorMaterial;
 import com.ankrya.doomsgreats.item.premise.renderer.DoomGreatsArmorRenderer;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -18,11 +16,9 @@ import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.client.GeoRenderProvider;
@@ -89,7 +85,7 @@ public class DoomsGreatsArmor extends BaseRiderArmor {
 
     public static ItemAttributeModifiers addAttributes (EquipmentSlot slot){
         ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
-        builder.add(Attributes.MAX_HEALTH, new AttributeModifier(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "dooms_geats_armor_health"), 40, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.bySlot(slot));
+        builder.add(Attributes.MAX_HEALTH, new AttributeModifier(GJ.Easy.getResource("dooms_geats_armor_health"), 40, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.bySlot(slot));
         return builder.build();
     }
 

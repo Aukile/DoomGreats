@@ -60,12 +60,19 @@ import java.util.function.Predicate;
  */
 public abstract class GJ {
 
-    /**本地相关*/
-    public static abstract class ToLocal {
+    /**杂项*/
+    public static abstract class ToOther {
         public static void setPersonFront(CameraType cameraType) {
             if (Minecraft.getInstance().options.getCameraType() != cameraType) {
                 Minecraft.getInstance().options.setCameraType(cameraType);
             }
+        }
+    }
+    
+    /**简化作业*/
+    public static abstract class Easy {
+        public static ResourceLocation getResource(String path){
+            return ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, path);
         }
     }
 
@@ -113,7 +120,7 @@ public abstract class GJ {
         }
 
         private static LoopSoundMessage createLoopSoundMessage(Player player, String name, boolean loop) {
-            return new LoopSoundMessage(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, name), loop, 16, PlayLoopSound.PLAYERS, player.getId());
+            return new LoopSoundMessage(GJ.Easy.getResource(name), loop, 16, PlayLoopSound.PLAYERS, player.getId());
         }
 
         public static void playDelaySound(Player player, String name, boolean loop, int delay) {
@@ -123,7 +130,7 @@ public abstract class GJ {
         }
 
         public static void cancelDelaySound(Player player, String name) {
-            ResourceLocation soundId = ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, name);
+            ResourceLocation soundId = GJ.Easy.getResource(name);
             DelayPlaySound.cancel(player, soundId);
             GJ.ToPlayer.stopSound(player, name);
         }
@@ -132,7 +139,7 @@ public abstract class GJ {
             if (player instanceof ServerPlayer serverPlayer) {
                 MessageLoader.sendToPlayersNearby(
                         new NMessageCreater(new StopLoopSound(player.getId(), PlayLoopSound.PLAYERS
-                                , ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, name))), serverPlayer);
+                                , GJ.Easy.getResource(name))), serverPlayer);
             }
         }
 
@@ -293,12 +300,12 @@ public abstract class GJ {
          * @param yAdd            粒子运动Y轴偏移
          * @param length          粒子拖尾长度
          */
-        public static void addRobbin(Level world, ParticleType<AdvancedParticleData> particle, ParticleType<RibbonParticleData> ribbon, double x, double y, double z, double motionX, double motionY, double motionZ, boolean faceCamera, double yaw, double pitch, double roll, double faceCameraAngle, double scale, double r, double g, double b, double a, double drag, double duration, boolean emissive, boolean canCollide
+        public static void addPlateRobbin(Level world, ParticleType<AdvancedParticleData> particle, ParticleType<RibbonParticleData> ribbon, double x, double y, double z, double motionX, double motionY, double motionZ, boolean faceCamera, double yaw, double pitch, double roll, double faceCameraAngle, double scale, double r, double g, double b, double a, double drag, double duration, boolean emissive, boolean canCollide
                 , float startTime, float finalTime, float rMin, float rMax, float rotStartX, float rotEndX, float rotStartY, float rotEndY, float rotStartZ, float rotEndZ, float firstRot, double yAdd
-                , int length) {
+                , int length, RibbonComponent... components) {
             addRobbin(world, particle, x, y, z, motionX, motionY, motionZ, faceCamera, yaw, pitch, roll, faceCameraAngle, scale, r, g, b, a, drag, duration, emissive, canCollide
                     , creatOrbit(new Vec3(x, y, z), startTime, finalTime, rMin, rMax, rotStartX, rotEndX, rotStartY, rotEndY, rotStartZ, rotEndZ, firstRot, faceCamera, yAdd)
-                    , creatRibbon(ribbon, length, yaw, pitch, roll, scale, r, g, b, a, true, emissive));
+                    , creatRibbon(ribbon, length, yaw, pitch, roll, scale, r, g, b, a, true, emissive, components));
         }
 
         /**

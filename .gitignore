@@ -4,3 +4,6 @@ build
 libs
 run
 run-client2
+dict
+
+proguard.pro

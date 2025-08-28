@@ -117,13 +117,22 @@ public final class Variables implements INBTSerializable<ListTag> {
     /**
      * 注册同步的数据<br>
      * 能支持的数据类型看{@link VariableSerializer}
-     * @param clazz 类型(检查)
+     * @param clazz 类型
      * @param name 名称
      * @param defaultValue 默认值
      * @param save 是否保存（玩家死亡是否保存/世界维度间是否同步）
      */
     public <T> void registerVariable(Class<T> clazz, String name, T defaultValue, boolean save){
-        Data<T> data = new Data<>(defaultValue, name, VariableSerializer.auto(defaultValue), save);
+        syncVariables(name, defaultValue, VariableSerializer.auto(clazz), save);
+    }
+
+    public <T> void registerVariable(String name, @NotNull T defaultValue, boolean save){
+        syncVariables(name, defaultValue, VariableSerializer.auto(defaultValue), save);
+    }
+
+    /**自动化了还要什么手操，我给你收起来*/
+    private <T> void syncVariables(String name, T defaultValue, IVariable<T> type, boolean save){
+        Data<T> data = new Data<>(defaultValue, name, type, save);
         variables.put(name, data);
         variablesDefault.put(name, data);
     }

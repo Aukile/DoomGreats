@@ -1,12 +1,11 @@
 package com.ankrya.doomsgreats.message;
 
-import com.ankrya.doomsgreats.DoomsGreats;
+import com.ankrya.doomsgreats.help.GJ;
 import com.ankrya.doomsgreats.interfaces.message.IFMessage;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * @author 八云紫Ender <br>
  */
 public final class MessageCreater implements CustomPacketPayload {
-    public static final CustomPacketPayload.Type<MessageCreater> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "message_creater"));
+    public static final CustomPacketPayload.Type<MessageCreater> TYPE = new Type<>(GJ.Easy.getResource("message_creater"));
     public static final StreamCodec<RegistryFriendlyByteBuf, MessageCreater> CODEC = StreamCodec.of(MessageCreater::toBuf, MessageCreater::fromBuf);
     final IFMessage message;
 

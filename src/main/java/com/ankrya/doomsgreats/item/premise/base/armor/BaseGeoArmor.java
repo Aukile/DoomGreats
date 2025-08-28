@@ -3,6 +3,7 @@ package com.ankrya.doomsgreats.item.premise.base.armor;
 import com.ankrya.doomsgreats.interfaces.IGeoItem;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -31,7 +32,7 @@ public abstract class BaseGeoArmor extends ArmorItem implements IGeoItem {
     }
 
     @Override
-    public RenderType getRenderType() {
+    public RenderType getRenderType(ResourceLocation texture) {
         return renderType;
     }
 

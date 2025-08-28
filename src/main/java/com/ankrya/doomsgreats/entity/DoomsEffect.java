@@ -5,7 +5,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
-public class DoomsEffect extends SpecialEffect{
+public class DoomsEffect extends SpecialEffectEntity {
     public DoomsEffect(EntityType<?> type, Level level) {
         this(type, level,null);
     }

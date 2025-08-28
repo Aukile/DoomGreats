@@ -1,6 +1,6 @@
 package com.ankrya.doomsgreats.message.common;
 
-import com.ankrya.doomsgreats.DoomsGreats;
+import com.ankrya.doomsgreats.help.GJ;
 import com.ankrya.doomsgreats.message.ex_message.PlayerAnimationMessage;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -18,7 +18,7 @@ import java.util.UUID;
  * 播放动画
  */
 public class PlayAnimation implements CustomPacketPayload {
-    public static final Type<PlayAnimation> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "play_animation_message"));
+    public static final Type<PlayAnimation> TYPE = new Type<>(GJ.Easy.getResource("play_animation_message"));
     public static final StreamCodec<RegistryFriendlyByteBuf, PlayAnimation> CODEC = StreamCodec.of(PlayAnimation::toBuf, PlayAnimation::fromBuf);
 
     final UUID uuid;

@@ -1,6 +1,6 @@
 package com.ankrya.doomsgreats.message;
 
-import com.ankrya.doomsgreats.DoomsGreats;
+import com.ankrya.doomsgreats.help.GJ;
 import com.ankrya.doomsgreats.interfaces.message.INMessage;
 import com.ankrya.doomsgreats.message.ex_message.AllPackt;
 import com.google.common.primitives.Primitives;
@@ -8,7 +8,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,7 +28,7 @@ public class NMessageCreater implements CustomPacketPayload{
     // 构造器缓存，因为有AllPackt的存在，太乱了，再说吧
 //    private static final Map<ClassKey, Constructor<?>> CONSTRUCTOR_CACHE = new ConcurrentHashMap<>();
 
-    public static final Type<NMessageCreater> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "message_new_creater"));
+    public static final Type<NMessageCreater> TYPE = new Type<>(GJ.Easy.getResource("message_new_creater"));
     public static final StreamCodec<RegistryFriendlyByteBuf, NMessageCreater> CODEC = StreamCodec.of(NMessageCreater::toBuf, NMessageCreater::fromBuf);
     final INMessage message;
 

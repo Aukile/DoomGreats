@@ -19,6 +19,7 @@ import software.bernie.geckolib.animatable.client.GeoRenderProvider;
 import java.util.function.Consumer;
 
 public class DesireDriver extends BaseDriver {
+    private static final Holder<SoundEvent> soundEvent = Holder.direct(ClassRegister.getRegisterObject("desire_driver", SoundEvent.class).get());
     public static final String BUCKLE = "buckle";
     public static final String REVOLVE = "revolve_on";
     public static final String IDLE0 = "first"; // 变身前闲置动画名
@@ -38,7 +39,7 @@ public class DesireDriver extends BaseDriver {
 
     @Override
     public @NotNull Holder<SoundEvent> getEquipSound() {
-        return new Holder.Direct<>(ClassRegister.getRegisterObject("desire_driver", SoundEvent.class).get());
+        return soundEvent;
     }
 
     @Override

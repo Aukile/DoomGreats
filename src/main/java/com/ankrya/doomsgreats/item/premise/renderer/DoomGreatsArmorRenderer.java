@@ -1,6 +1,5 @@
 package com.ankrya.doomsgreats.item.premise.renderer;
 
-import com.ankrya.doomsgreats.DoomsGreats;
 import com.ankrya.doomsgreats.help.GJ;
 import com.ankrya.doomsgreats.item.items.armor.DoomsGreatsArmor;
 import com.ankrya.doomsgreats.item.premise.renderer.base.BaseRiderArmorRender;
@@ -17,7 +16,7 @@ import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.cache.object.GeoBone;
 
 public class DoomGreatsArmorRenderer extends BaseRiderArmorRender<DoomsGreatsArmor> {
-    private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "textures/item/dooms_greats.png");
+    private static final ResourceLocation LAYER = GJ.Easy.getResource("textures/item/dooms_greats.png");
 
     public DoomGreatsArmorRenderer() {
         super();

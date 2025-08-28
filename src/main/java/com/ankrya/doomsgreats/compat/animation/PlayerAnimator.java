@@ -1,6 +1,6 @@
 package com.ankrya.doomsgreats.compat.animation;
 
-import com.ankrya.doomsgreats.DoomsGreats;
+import com.ankrya.doomsgreats.help.GJ;
 import com.ankrya.doomsgreats.interfaces.message.INMessage;
 import com.ankrya.doomsgreats.message.*;
 import com.ankrya.doomsgreats.message.ex_message.PlayerAnimationMessage;
@@ -28,8 +28,8 @@ import net.neoforged.neoforge.network.PacketDistributor;
  * {@link PlayerAnimator#RIDE} 播放骑乘动画的层级
  */
 public class PlayerAnimator {
-    public static final ResourceLocation ANIMATION = net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "animation");
-    public static final ResourceLocation RIDE = ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "ride");
+    public static final ResourceLocation ANIMATION = GJ.Easy.getResource("animation");
+    public static final ResourceLocation RIDE = GJ.Easy.getResource("ride");
     private static final String PLAYER_ANIMATION = "playeranimator";
     private static boolean INSTALLED = false;
     public static void init() {

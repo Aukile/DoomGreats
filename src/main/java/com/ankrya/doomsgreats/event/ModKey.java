@@ -33,7 +33,10 @@ public class ModKey {
     public static void onClientTick(ClientTickEvent.Post event) {
         while (HENSHIN.get().consumeClick()) {
             LocalPlayer player = Minecraft.getInstance().player;
-            if (player != null && GJ.ToItem.getDriver(player).getItem() instanceof DesireDriver && GJ.ToItem.getNbt(GJ.ToItem.getDriver(player)).getString(DesireDriver.ANIMATION).equals(DesireDriver.IDLE0)){
+            if (player != null && GJ.ToItem.getDriver(player).getItem() instanceof DesireDriver
+                    && !DoomsGreatsArmor.isAllEquip(player)
+                    && GJ.ToItem.getNbt(GJ.ToItem.getDriver(player))
+                    .getString(DesireDriver.ANIMATION).equals(DesireDriver.IDLE0)){
                 MessageLoader.sendToServer(new NMessageCreater(new AllPackt(new OnetimeMessage(new DoomsHenshin(player)))));
                 System.out.println("--click--");
             }

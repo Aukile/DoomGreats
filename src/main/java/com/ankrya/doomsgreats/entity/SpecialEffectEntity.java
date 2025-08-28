@@ -10,6 +10,8 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.event.EventHooks;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
@@ -19,20 +21,21 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import java.util.Optional;
 import java.util.UUID;
 
-public class SpecialEffect extends Entity implements GeoEntity {
-    public static final EntityDataAccessor<Integer> DEAD_TIME = SynchedEntityData.defineId(SpecialEffect.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Boolean> AUTO_CLEAR = SynchedEntityData.defineId(SpecialEffect.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(SpecialEffect.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(SpecialEffect.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> MODEL = SynchedEntityData.defineId(SpecialEffect.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Optional<UUID>> OWNER_UUID = SynchedEntityData.defineId(SpecialEffect.class, EntityDataSerializers.OPTIONAL_UUID);
+/**为什么你跟不紧，为什么乘骑也奇奇怪怪的，恶啊，我要淘汰你*/
+public class SpecialEffectEntity extends Entity implements GeoEntity {
+    public static final EntityDataAccessor<Integer> DEAD_TIME = SynchedEntityData.defineId(SpecialEffectEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> AUTO_CLEAR = SynchedEntityData.defineId(SpecialEffectEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(SpecialEffectEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(SpecialEffectEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<String> MODEL = SynchedEntityData.defineId(SpecialEffectEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Optional<UUID>> OWNER_UUID = SynchedEntityData.defineId(SpecialEffectEntity.class, EntityDataSerializers.OPTIONAL_UUID);
     public Player owner;
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-    public SpecialEffect(EntityType<?> type, Level level) {
+    public SpecialEffectEntity(EntityType<?> type, Level level) {
         this(type, level, null, null, null, 0);
     }
 
-    public SpecialEffect(EntityType<?> type, Level level, Player owner, String model, String texture, int dead) {
+    public SpecialEffectEntity(EntityType<?> type, Level level, Player owner, String model, String texture, int dead) {
         super(type, level);
         if (dead != 0) this.entityData.set(DEAD_TIME, dead);
         if (model != null)this.entityData.set(MODEL, model);
@@ -43,25 +46,8 @@ public class SpecialEffect extends Entity implements GeoEntity {
         }
     }
 
-    public SpecialEffect(Level level, Player owner, String model, String texture, int dead) {
+    public SpecialEffectEntity(Level level, Player owner, String model, String texture, int dead) {
         this(ClassRegister.getRegisterObject("henshin_effect", EntityType.class).get(), level, owner, model, texture, dead);
-    }
-
-    public void positionSet(Entity entity) {
-        this.positionSet(entity, Entity::setPos);
-    }
-    protected void positionSet(Entity entity, MoveFunction function) {
-        if(this.getOwner() != null) {
-            LivingEntity livingEntity = this.getOwner();
-            double ny = livingEntity.getY() - 0.136;
-
-            entity.setYRot(livingEntity.getYRot());
-            entity.setXRot(livingEntity.getXRot());
-            entity.yRotO = entity.getYRot();
-            entity.xRotO = entity.getXRot();
-
-            function.accept(entity, livingEntity.getX(), ny, livingEntity.getZ());
-        }
     }
 
     @Override
@@ -109,8 +95,17 @@ public class SpecialEffect extends Entity implements GeoEntity {
     }
 
     @Override
+    public void rideTick() {
+        if (!EventHooks.fireEntityTickPre(this).isCanceled()) {
+            this.tick();
+            EventHooks.fireEntityTickPost(this);
+        }
+    }
+
+    @Override
     public void baseTick() {
         super.baseTick();
+        followTick();
         if(getDeadTime() != 999999){
             if(getDeadTime() > 0){
                 setDeadTime(getDeadTime() - 1);
@@ -118,15 +113,23 @@ public class SpecialEffect extends Entity implements GeoEntity {
                 this.discard();
             }
         }
-        LivingEntity owner = getOwner();
-        if (AutoClear() && (owner == null || !owner.isAlive()) )
-            this.discard();
-        else  {
-            this.positionSet(this);
-        }
     }
 
-    private PlayState predicate(AnimationState<SpecialEffect> state) {
+    public void followTick(){
+        LivingEntity owner = getOwner();
+        if (AutoClear() && (owner == null || !owner.isAlive())) this.discard();
+        else positionSet(Entity::setPos);
+    }
+
+    public final void positionSet(Entity.MoveFunction function) {
+        LivingEntity owner = getOwner();
+        Vec3 point = owner.position();
+        Vec3 add = owner.getAttachments().get(EntityAttachment.VEHICLE, 0, owner.getYRot());
+        Vec3 to = point.add(add);
+        function.accept(this, to.x, to.y, to.z);
+    }
+
+    private PlayState predicate(AnimationState<SpecialEffectEntity> state) {
         String animation = this.animationName();
         if (animation.equals("null"))
             state.getController().setAnimation(RawAnimation.begin().then("idle", Animation.LoopType.LOOP));
@@ -204,5 +207,17 @@ public class SpecialEffect extends Entity implements GeoEntity {
         builder = builder.add(Attributes.FOLLOW_RANGE, 16);
         builder = builder.add(Attributes.STEP_HEIGHT, 0.6);
         return builder;
+    }
+
+    public String getModel() {
+        return this.entityData.get(MODEL);
+    }
+
+    public String getTexture() {
+        return this.entityData.get(TEXTURE);
+    }
+
+    public int getDead() {
+        return this.entityData.get(DEAD_TIME);
     }
 }

@@ -1,6 +1,6 @@
 package com.ankrya.doomsgreats.entity.renderer;
 
-import com.ankrya.doomsgreats.entity.SpecialEffect;
+import com.ankrya.doomsgreats.entity.SpecialEffectEntity;
 import com.ankrya.doomsgreats.entity.model.SpecialEffectModel;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -12,38 +12,31 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
-import org.joml.Vector3f;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.model.GeoModel;
-import software.bernie.geckolib.model.data.EntityModelData;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import software.bernie.geckolib.util.Color;
 import software.bernie.geckolib.util.RenderUtil;
 
-import java.util.Collections;
-
-public class SpecialEffectRenderer<T extends SpecialEffect> extends GeoEntityRenderer<T> {
+public class SpecialEffectEntityRenderer<T extends SpecialEffectEntity> extends GeoEntityRenderer<T> {
 
     protected final GeoModel<T> modelProvider;
     protected Matrix4f dispatchedMat = new Matrix4f();
     protected Matrix4f renderEarlyMat = new Matrix4f();
     protected T animatable;
 
-    public SpecialEffectRenderer(EntityRendererProvider.Context renderManager, GeoModel<T> model) {
+    public SpecialEffectEntityRenderer(EntityRendererProvider.Context renderManager, GeoModel<T> model) {
         super(renderManager, model);
         this.modelProvider = model;
     }
 
-    public SpecialEffectRenderer(EntityRendererProvider.Context renderManager){
+    public SpecialEffectEntityRenderer(EntityRendererProvider.Context renderManager){
         this(renderManager, new SpecialEffectModel<>());
     }
 
@@ -70,6 +63,7 @@ public class SpecialEffectRenderer<T extends SpecialEffect> extends GeoEntityRen
         if (renderType != null){
             VertexConsumer buffer = bufferSource.getBuffer(renderType);
             actuallyRender(poseStack, animatable, model, renderType, bufferSource, buffer, false, partialTick, packedLight, OverlayTexture.NO_OVERLAY, renderColor.argbInt());
+            getRenderLayers().forEach(layer -> layer.render(poseStack, animatable, model, renderType, bufferSource, buffer, partialTick, packedLight, getPackedOverlay(animatable, 0.0f)));
         }
         poseStack.popPose();
     }
@@ -100,7 +94,7 @@ public class SpecialEffectRenderer<T extends SpecialEffect> extends GeoEntityRen
         super.preRender(poseStack, animatable, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, colour);
     }
 
-    public static int getPackedOverlay(Entity entity, float uIn) {
+    public static <T extends SpecialEffectEntity> int getPackedOverlay(T entity, float uIn) {
         return OverlayTexture.pack(OverlayTexture.u(uIn), OverlayTexture.v(false));
     }
 

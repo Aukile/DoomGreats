@@ -1,0 +1,11 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "dooms_greats:item/test/layer_0",
+    "layer1": "dooms_greats:item/test/layer_1"
+  },
+  "loader": "dooms_greats:cosmic",
+  "cosmic": {
+    "mask": "dooms_greats:item/test/mask"
+  }
+}

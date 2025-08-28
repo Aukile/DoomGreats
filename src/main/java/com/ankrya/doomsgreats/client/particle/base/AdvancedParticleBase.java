@@ -22,7 +22,9 @@ import org.joml.Vector3f;
 
 /**
  * 高级粒子~<br>
+ * 可加组件<br>
  * @author Aistray
+ * @see ParticleComponent
  */
 public class AdvancedParticleBase extends TextureSheetParticle {
     public boolean doRender;

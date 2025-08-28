@@ -1,6 +1,7 @@
 package com.ankrya.doomsgreats.item.premise.base.armor;
 
 import net.minecraft.core.Holder;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;

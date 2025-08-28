@@ -1,7 +1,7 @@
 package com.ankrya.doomsgreats.message.common;
 
-import com.ankrya.doomsgreats.DoomsGreats;
 import com.ankrya.doomsgreats.data.Variables;
+import com.ankrya.doomsgreats.help.GJ;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -9,7 +9,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
@@ -23,7 +22,7 @@ import java.io.IOException;
  * 所以得写个正常的发包awa
  */
 public class SyncVariableMessage implements CustomPacketPayload {
-    public static final Type<SyncVariableMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "sync_variable_message"));
+    public static final Type<SyncVariableMessage> TYPE = new Type<>(GJ.Easy.getResource("sync_variable_message"));
     public static final StreamCodec<RegistryFriendlyByteBuf, SyncVariableMessage> CODEC = StreamCodec.of(SyncVariableMessage::toBuf, SyncVariableMessage::fromBuf);
 
     final int id;

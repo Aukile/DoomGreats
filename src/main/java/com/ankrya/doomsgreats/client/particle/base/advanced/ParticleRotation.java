@@ -2,6 +2,11 @@ package com.ankrya.doomsgreats.client.particle.base.advanced;
 
 import net.minecraft.world.phys.Vec3;
 
+/**
+ * 拖尾粒子（虽然功能不止）<br>
+ * 也可加组件<br>
+ * @see RibbonComponent
+ */
 public abstract class ParticleRotation {
     public ParticleRotation() {
     }

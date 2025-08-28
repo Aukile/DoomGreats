@@ -1,6 +1,6 @@
 package com.ankrya.doomsgreats.item.premise.layer;
 
-import com.ankrya.doomsgreats.DoomsGreats;
+import com.ankrya.doomsgreats.help.GJ;
 import com.ankrya.doomsgreats.item.items.armor.DoomsGreatsArmor;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -13,7 +13,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class DoomGreatsArmorLight extends GeoRenderLayer<DoomsGreatsArmor> {
-    private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "textures/item/dooms_greats_glowmask.png");
+    private static final ResourceLocation LAYER = GJ.Easy.getResource("textures/item/dooms_greats_glowmask.png");
     public DoomGreatsArmorLight(GeoRenderer<DoomsGreatsArmor> renderer) {
         super(renderer);
     }

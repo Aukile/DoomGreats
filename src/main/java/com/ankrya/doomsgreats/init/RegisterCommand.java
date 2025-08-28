@@ -13,7 +13,6 @@ import com.ankrya.doomsgreats.message.MessageLoader;
 import com.ankrya.doomsgreats.message.common.LoopSoundMessage;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -68,7 +67,7 @@ public class RegisterCommand {
 //            world.addFreshEntity(effect);
             PlayerAnimator.playerAnimation(player, DesireDriver.REVOLVE, true);
 
-            MessageLoader.sendToPlayer(new LoopSoundMessage(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, DesireDriver.REVOLVE), false, 10, 7, entity.getId()), (ServerPlayer) player);
+            MessageLoader.sendToPlayer(new LoopSoundMessage(GJ.Easy.getResource(DesireDriver.REVOLVE), false, 10, 7, entity.getId()), (ServerPlayer) player);
         }
 
         if (!world.isClientSide()){

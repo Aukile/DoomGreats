@@ -1,6 +1,6 @@
 package com.ankrya.doomsgreats.item.premise.material;
 
-import com.ankrya.doomsgreats.DoomsGreats;
+import com.ankrya.doomsgreats.help.GJ;
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -20,9 +20,8 @@ import java.util.List;
 
 @EventBusSubscriber
 public class GreatsArmorMaterial {
-    private static final ResourceLocation DOOMS_GREATS_ARMOR_LOCATION = ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "dooms_greats_armor");
-    private static final ResourceLocation DGP_BLANK_LOCATION = ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "dgp_blank");
-    public static final SoundEvent DGP_BLANK_SOUND = SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(DoomsGreats.MODID, "desire_driver"));
+    private static final ResourceLocation DOOMS_GREATS_ARMOR_LOCATION = GJ.Easy.getResource("dooms_greats_armor");
+    private static final ResourceLocation DGP_BLANK_LOCATION = GJ.Easy.getResource("dgp_blank");
     public static Holder<ArmorMaterial> DGP_BLANK = null;
     public static Holder<ArmorMaterial> DOOMS_GREATS_ARMOR = null;
 
@@ -35,9 +34,6 @@ public class GreatsArmorMaterial {
             registerHelper.register(DGP_BLANK_LOCATION, dgpBlank);
             DOOMS_GREATS_ARMOR = BuiltInRegistries.ARMOR_MATERIAL.wrapAsHolder(doomsGreatsArmor);
             DGP_BLANK = BuiltInRegistries.ARMOR_MATERIAL.wrapAsHolder(dgpBlank);
-        });
-        event.register(Registries.SOUND_EVENT, registerHelper -> {
-            registerHelper.register(DGP_BLANK_LOCATION, DGP_BLANK_SOUND);
         });
     }
     public static net.minecraft.world.item.ArmorMaterial doomsGreatsArmor() {

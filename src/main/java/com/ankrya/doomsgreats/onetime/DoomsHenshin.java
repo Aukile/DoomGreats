@@ -30,6 +30,7 @@ public class DoomsHenshin extends GJ {
 
     public void henshin() {
         ItemStack driver = ToItem.getDriver(player);
+        ToPlayer.stopSound(player, SoundName.BUCKLE_OPEN_WAIT);
         PlayerAnimator.playerAnimation(player, DesireDriver.REVOLVE, true);
         IGeoItem.playAnimationAndReset(driver, DesireDriver.REVOLVE);
         DesireDriver.setAnimationMode(driver, true);
