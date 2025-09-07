@@ -3,10 +3,6 @@
   "textures": {
     "layer0": "dooms_greats:item/qb_9"
   },
-  "loader": "dooms_greats:cosmic",
-  "cosmic": {
-    "mask": "dooms_greats:item/qb_9_cosmic"
-  },
   "overrides": [
     {"predicate": {"dooms_greats:qb9_mode": 1}, "model": "dooms_greats:displaysettings/dooms_geats_qb9_gun.item"}
   ]

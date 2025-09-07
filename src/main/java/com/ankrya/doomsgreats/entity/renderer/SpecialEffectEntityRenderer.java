@@ -21,11 +21,13 @@ import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
+import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 import software.bernie.geckolib.util.Color;
 import software.bernie.geckolib.util.RenderUtil;
 
 public class SpecialEffectEntityRenderer<T extends SpecialEffectEntity> extends GeoEntityRenderer<T> {
-
+    private final GeoRenderLayer<T> glowLayer;
     protected final GeoModel<T> modelProvider;
     protected Matrix4f dispatchedMat = new Matrix4f();
     protected Matrix4f renderEarlyMat = new Matrix4f();
@@ -34,6 +36,8 @@ public class SpecialEffectEntityRenderer<T extends SpecialEffectEntity> extends 
     public SpecialEffectEntityRenderer(EntityRendererProvider.Context renderManager, GeoModel<T> model) {
         super(renderManager, model);
         this.modelProvider = model;
+        this.glowLayer = new AutoGlowingGeoLayer<>(this);
+        this.addRenderLayer(this.glowLayer);
     }
 
     public SpecialEffectEntityRenderer(EntityRendererProvider.Context renderManager){
@@ -60,10 +64,14 @@ public class SpecialEffectEntityRenderer<T extends SpecialEffectEntity> extends 
         poseStack.translate(0, -0.01f, 0);
         Color renderColor = getRenderColor(animatable, partialTick, packedLight);
         RenderType renderType = getRenderType(animatable, textureResource, bufferSource, partialTick);
+
         if (renderType != null){
             VertexConsumer buffer = bufferSource.getBuffer(renderType);
             actuallyRender(poseStack, animatable, model, renderType, bufferSource, buffer, false, partialTick, packedLight, OverlayTexture.NO_OVERLAY, renderColor.argbInt());
-            getRenderLayers().forEach(layer -> layer.render(poseStack, animatable, model, renderType, bufferSource, buffer, partialTick, packedLight, getPackedOverlay(animatable, 0.0f)));
+            getRenderLayers().forEach(layer -> {
+                if (animatable.autoGlow() || (!animatable.autoGlow() && layer != this.glowLayer))
+                    layer.render(poseStack, animatable, model, renderType, bufferSource, buffer, partialTick, packedLight, getPackedOverlay(animatable, 0.0f));
+            });
         }
         poseStack.popPose();
     }

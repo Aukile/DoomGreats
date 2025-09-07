@@ -1,6 +1,6 @@
 package com.ankrya.doomsgreats.item.premise.base.armor;
 
-import com.ankrya.doomsgreats.interfaces.IGeoItem;
+import com.ankrya.doomsgreats.interfaces.geo.IGeoItem;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;

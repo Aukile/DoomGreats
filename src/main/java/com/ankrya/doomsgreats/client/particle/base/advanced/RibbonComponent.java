@@ -4,6 +4,7 @@ import com.ankrya.doomsgreats.client.particle.base.AdvancedParticleBase;
 import com.ankrya.doomsgreats.client.particle.base.ParticleRibbon;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Range;
 
 /**
  *
@@ -40,7 +41,7 @@ public class RibbonComponent extends ParticleComponent {
      * @param emissive 是否发光
      * @param components 组件
      */
-    public RibbonComponent(ParticleType<? extends RibbonParticleData> particle, int length, double yaw, double pitch, double roll, double scale, double r, double g, double b, double a, boolean faceCamera, boolean emissive, ParticleComponent[] components) {
+    public RibbonComponent(ParticleType<? extends RibbonParticleData> particle, @Range(from = 1, to = Integer.MIN_VALUE) int length, double yaw, double pitch, double roll, double scale, double r, double g, double b, double a, boolean faceCamera, boolean emissive, ParticleComponent[] components) {
         this.length = length;
         this.yaw = yaw;
         this.pitch = pitch;

@@ -19,6 +19,7 @@ import net.neoforged.neoforge.client.event.ScreenEvent;
 
 import java.util.Objects;
 
+/**欸嘿~ 单纯研究一下看看*/
 @EventBusSubscriber(modid = DoomsGreats.MODID, value = Dist.CLIENT)
 public class ModShaders {
     private static class RenderStateShardAccess extends RenderStateShard {

@@ -1,84 +1,81 @@
 package com.ankrya.doomsgreats.help.other;
 
-import com.ankrya.doomsgreats.data.ModVariable;
-import com.ankrya.doomsgreats.data.Variables;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.PlayerModel;
-import net.minecraft.client.model.geom.ModelPart;
+import dev.kosmx.playerAnim.api.TransformType;
+import dev.kosmx.playerAnim.core.util.Vec3f;
+import dev.kosmx.playerAnim.impl.IAnimatedPlayer;
+import dev.kosmx.playerAnim.impl.animation.AnimationApplier;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 public class SlashLight {
-    private static Vec3 getExactSwordPosition(AbstractClientPlayer player) {
-        PlayerRenderer playerRenderer = (PlayerRenderer) Minecraft.getInstance()
-                .getEntityRenderDispatcher().getRenderer(player);
-        PlayerModel<AbstractClientPlayer> model = playerRenderer.getModel();
-        PoseStack poseStack = new PoseStack();
-        return calculateWeaponPosition(player, model, poseStack);
+
+    private static Vector3f[] getExactSwordPosition(AbstractClientPlayer player, Vector3f set) {
+        AnimationApplier emote = ((IAnimatedPlayer) player).playerAnimator_getAnimation();
+        String hand = player.getMainArm() == HumanoidArm.LEFT ? "left_arm" : "right_arm";
+        Vector3f bodyPos = create(emote.get3DTransform(hand, TransformType.POSITION, Vec3f.ZERO));
+        Vector3f swordPos = new Vector3f(bodyPos).add(1, 10, -2).add(set);
+        Vector3f bodyRot = create(emote.get3DTransform(hand, TransformType.ROTATION, Vec3f.ZERO));
+        Vector3f swordRot = calculateTransformedRotation(bodyPos, bodyRot, swordPos);
+        return new Vector3f[]{swordPos, swordRot};
     }
 
-    private static Vec3 calculateWeaponPosition(Player player, PlayerModel<AbstractClientPlayer> model, PoseStack poseStack) {
-        poseStack.pushPose();
+    public static Vector3f[] getQB9Position(AbstractClientPlayer player){
+        return getExactSwordPosition(player, new Vector3f(0, 2, 10));
+    }
 
-        try {
-            model.setupAnim((AbstractClientPlayer) player, 0, 0, player.tickCount, 0, 0);
+    private static Vector3f create(Vec3f vec3f){
+        return new Vector3f(vec3f.getX(), vec3f.getY(), vec3f.getZ());
+    }
 
-            HumanoidArm arm = player.getMainArm();
-            boolean rightHanded = arm == HumanoidArm.RIGHT;
-            ModelPart armPart = rightHanded ? model.rightArm : model.leftArm;
-            ModelPart handPart = rightHanded ? model.rightSleeve : model.leftSleeve;
-
-            Vec3 handPos = getModelPartWorldPosition(armPart, handPart, poseStack, player);
-            Vec3 lookVec = player.getLookAngle();
-            float armXRot = armPart.xRot;
-            float armYRot = armPart.yRot;
-            float armZRot = armPart.zRot;
-            Vec3 weaponDir = applyRotation(lookVec, armXRot, armYRot, armZRot);
-
-            double weaponLength = 0.7;
-
-            return handPos.add(weaponDir.scale(weaponLength));
-        } finally {
-            poseStack.popPose();
+    private static Vector3f calculateTransformedRotation(Vector3f originalPosition, Vector3f originalRotation, Vector3f newPosition) {
+        Quaternionf originalRotQuad = eulerToQuaternion(originalRotation);
+        Vector3f displacement = new Vector3f(newPosition).sub(originalPosition);
+        Vector3f rotatedDisplacement = new Vector3f();
+        originalRotQuad.transform(displacement, rotatedDisplacement);
+        Vector3f expectedGlobalPos = new Vector3f(originalPosition).add(rotatedDisplacement);
+        Vector3f actualToExpected = new Vector3f(expectedGlobalPos).sub(newPosition);
+        if (actualToExpected.length() > 1e-6f) {
+            Vector3f direction = actualToExpected.normalize();
+            Quaternionf correctionQuad = new Quaternionf();
+            correctionQuad.rotationTo(new Vector3f(0, 0, 1), direction);
+            Quaternionf newRotQuad = new Quaternionf(originalRotQuad).mul(correctionQuad);
+            return quaternionToEuler(newRotQuad);
         }
+
+        return new Vector3f(originalRotation);
     }
 
-    private static Vec3 getModelPartWorldPosition(ModelPart armPart, ModelPart handPart, PoseStack poseStack, Player player) {
-        float armX = armPart.x;
-        float armY = armPart.y;
-        float armZ = armPart.z;
-
-        float handX = handPart.x;
-        float handY = handPart.y;
-        float handZ = handPart.z;
-
-        Vec3 relativePos = new Vec3(armX + handX, armY + handY, armZ + handZ);
-
-        relativePos = applyRotation(relativePos, armPart.xRot, armPart.yRot, armPart.zRot);
-        relativePos = applyRotation(relativePos, handPart.xRot, handPart.yRot, handPart.zRot);
-
-        return player.position().add(relativePos);
+    /**
+     * 将欧拉角转换为四元数
+     * @param euler 欧拉角（弧度制，顺序为Z-Y-X）
+     * @return 对应的四元数
+     */
+    private static Quaternionf eulerToQuaternion(Vector3f euler) {
+        return new Quaternionf()
+                .rotateZ(euler.z)
+                .rotateY(euler.y)
+                .rotateX(euler.x);
     }
 
-    private static Vec3 applyRotation(Vec3 vector, float xRot, float yRot, float zRot) {
-        Quaternionf rotation = new Quaternionf();
-        rotation.rotationZYX(zRot, yRot, xRot);
+    /**
+     * 将四元数转换为欧拉角
+     * @param quad 四元数
+     * @return 欧拉角（弧度制，顺序为Z-Y-X）
+     */
+    private static Vector3f quaternionToEuler(Quaternionf quad) {
+        // 提取四元数分量
+        float x = quad.x;
+        float y = quad.y;
+        float z = quad.z;
+        float w = quad.w;
 
-        Vector3f vec = new Vector3f((float)vector.x, (float)vector.y, (float)vector.z);
-        vec.rotate(rotation);
+        // 计算欧拉角
+        float roll = (float) Math.atan2(2.0f * (w * x + y * z), 1.0f - 2.0f * (x * x + y * y));
+        float pitch = (float) Math.asin(2.0f * (w * y - z * x));
+        float yaw = (float) Math.atan2(2.0f * (w * z + x * y), 1.0f - 2.0f * (y * y + z * z));
 
-        return new Vec3(vec.x(), vec.y(), vec.z());
-    }
-
-    public static Vec3 getSwordPosition(AbstractClientPlayer player) {
-        Vec3 swordPos = getExactSwordPosition(player);
-        Variables.setVariable(player, ModVariable.WEAPON_POSITIONS, swordPos);
-        return Variables.getVariable(player, ModVariable.WEAPON_POSITIONS);
+        return new Vector3f(roll, pitch, yaw);
     }
 }

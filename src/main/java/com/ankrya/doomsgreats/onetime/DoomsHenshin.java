@@ -6,7 +6,7 @@ import com.ankrya.doomsgreats.entity.DoomsEffect;
 import com.ankrya.doomsgreats.help.GJ;
 import com.ankrya.doomsgreats.help.runnable.WaitToRun;
 import com.ankrya.doomsgreats.init.ClassRegister;
-import com.ankrya.doomsgreats.interfaces.IGeoItem;
+import com.ankrya.doomsgreats.interfaces.geo.IGeoItem;
 import com.ankrya.doomsgreats.item.items.armor.DesireDriver;
 import com.ankrya.doomsgreats.item.items.armor.DoomsGreatsArmor;
 import net.minecraft.world.entity.EquipmentSlot;

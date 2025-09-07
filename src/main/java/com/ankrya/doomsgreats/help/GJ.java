@@ -17,6 +17,7 @@ import com.ankrya.doomsgreats.message.ex_message.StopLoopSound;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleOptions;
@@ -39,9 +40,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Range;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -49,6 +52,7 @@ import org.joml.Vector4f;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -148,6 +152,18 @@ public abstract class GJ {
                 return player.getInventory().contains(stack -> !stack.isEmpty() && ItemStack.isSameItem(stack, itemstack));
             return false;
         }
+
+        public static GameType getEntityGameType(Entity entity) {
+            if (entity instanceof ServerPlayer serverPlayer) {
+                return serverPlayer.gameMode.getGameModeForPlayer();
+            } else if (entity instanceof Player player && player.level().isClientSide()) {
+                PlayerInfo playerInfo = Objects.requireNonNull(Minecraft.getInstance().getConnection()).getPlayerInfo(player.getGameProfile().getId());
+                if (playerInfo != null)
+                    return playerInfo.getGameMode();
+            }
+            return null;
+        }
+
     }
 
     /**实体相关*/
@@ -253,7 +269,14 @@ public abstract class GJ {
      */
     public static abstract class AdvancedParticleHelper {
 
-        /**全类型*/
+        /**
+         * 全类型
+         * @param drag 粒子的阻力
+         * @param duration 粒子的持续时间
+         * @param emissive 粒子是否是发光的
+         * @param canCollide 粒子是否可以与方块发生碰撞
+         * @param components 粒子组件
+         */
         public static void addRobbin(Level world, ParticleType<AdvancedParticleData> particle, double x, double y, double z, double motionX, double motionY, double motionZ, boolean faceCamera, double yaw, double pitch, double roll, double faceCameraAngle, double scale, double r, double g, double b, double a, double drag, double duration, boolean emissive, boolean canCollide, ParticleComponent... components) {
             AdvancedParticleBase.spawnParticle(world, particle, x, y, z, motionX, motionY, motionZ, faceCamera, yaw, pitch, roll, faceCameraAngle, scale, r, g, b, a, drag, duration, emissive, canCollide, components);
         }
@@ -298,23 +321,18 @@ public abstract class GJ {
          * @param rotEndZ         粒子运动旋转Z结束
          * @param firstRot        粒子运动旋转X开始
          * @param yAdd            粒子运动Y轴偏移
-         * @param length          粒子拖尾长度
+         * @param length          粒子拖尾长度（>0）
          */
         public static void addPlateRobbin(Level world, ParticleType<AdvancedParticleData> particle, ParticleType<RibbonParticleData> ribbon, double x, double y, double z, double motionX, double motionY, double motionZ, boolean faceCamera, double yaw, double pitch, double roll, double faceCameraAngle, double scale, double r, double g, double b, double a, double drag, double duration, boolean emissive, boolean canCollide
                 , float startTime, float finalTime, float rMin, float rMax, float rotStartX, float rotEndX, float rotStartY, float rotEndY, float rotStartZ, float rotEndZ, float firstRot, double yAdd
-                , int length, RibbonComponent... components) {
+                , float ribbonScale, int length, RibbonComponent... components) {
             addRobbin(world, particle, x, y, z, motionX, motionY, motionZ, faceCamera, yaw, pitch, roll, faceCameraAngle, scale, r, g, b, a, drag, duration, emissive, canCollide
                     , creatOrbit(new Vec3(x, y, z), startTime, finalTime, rMin, rMax, rotStartX, rotEndX, rotStartY, rotEndY, rotStartZ, rotEndZ, firstRot, faceCamera, yAdd)
-                    , creatRibbon(ribbon, length, yaw, pitch, roll, scale, r, g, b, a, true, emissive, components));
+                    , creatRibbon(ribbon, length, yaw, pitch, roll, ribbonScale, r, g, b, a, true, emissive, components));
         }
-
-        /**
-         * 演示使用
-         */
+        /**演示使用*/
         @Deprecated
-        public static void addCaseRobbin(Level level, ParticleType<AdvancedParticleData> particle, ParticleType<? extends
-                                             RibbonParticleData> ribbon, Vec3 location, float finalTime, float rMax, float rotStartX, float rotEndX,
-                                     int ribbonLength, float ribbonScale, float firstRot, double yAdd) {
+        public static void addCaseRobbin(Level level, ParticleType<AdvancedParticleData> particle, ParticleType<? extends RibbonParticleData> ribbon, Vec3 location, float finalTime, float rMax, float rotStartX, float rotEndX, int ribbonLength, float ribbonScale, float firstRot, double yAdd) {
             AdvancedParticleBase.spawnParticle(level, particle, location.x, location.y, location.z, 0, 0, 0, true, 0.0, 0.0, 0.0, 0.0, 1, (double) 245 / 255, (double) 205 / 255, 1, 1, 1, 45, true, true,
                     new ParticleComponent[]{
                             creatOrbit(location, finalTime, rMax, rotStartX, rotEndX, firstRot, yAdd),
@@ -339,7 +357,7 @@ public abstract class GJ {
          * @return 拖尾粒子的创建
          */
         public static RibbonComponent creatRibbon(ParticleType<? extends RibbonParticleData> particle, int length, double yaw, double pitch, double roll, double scale, double r, double g, double b, double a, boolean faceCamera, boolean emissive, ParticleComponent... components) {
-            return new RibbonComponent(particle, length, yaw, pitch, roll, scale, r / 255, g / 255, b / 255, a, faceCamera, emissive, components);
+            return new RibbonComponent(particle, length > 0 ? length : 1, yaw, pitch, roll, scale, r / 255, g / 255, b / 255, a, faceCamera, emissive, components);
         }
 
         /**
@@ -366,6 +384,7 @@ public abstract class GJ {
         }
 
         //使用例
+        @Deprecated
         private static RibbonComponent creatRibbon(ParticleType<? extends RibbonParticleData> particle, int length, float scale) {
             return creatRibbon(particle, length, 0.0, 0.0, 0.0, scale, (double) 236, (double) 204, 255, 1, true, true);
         }
@@ -390,7 +409,7 @@ public abstract class GJ {
         public static ParticleComponent creatOrbit(Vec3 location, float startTime, float finalTime, float rMin, float rMax, float rotStartX, float rotEndX, float rotStartY, float rotEndY, float rotStartZ, float rotEndZ, float firstRot, boolean faceCamera, double yAdd) {
             return creatOrbit(location
                     , ParticleComponent.KeyTrack.startAndEnd(startTime, finalTime)
-                    , ParticleComponent.KeyTrack.startAndEnd(rMin, rMax)
+                    , new ParticleComponent.KeyTrack(new float[]{rMin, (rMax - rMin)/2 + rMin, rMax}, new float[]{0.0F, 0.5f, 1.0F})
                     , ParticleComponent.KeyTrack.startAndEnd(rotStartX, rotEndX)
                     , ParticleComponent.KeyTrack.startAndEnd(rotStartY, rotEndY)
                     , ParticleComponent.KeyTrack.startAndEnd(rotStartZ, rotEndZ)
@@ -417,6 +436,7 @@ public abstract class GJ {
         }
 
         //使用例
+        @Deprecated
         private static ParticleComponent creatOrbit(Vec3 location, float finalTime, float rMiddon, float rotStartX,
                                                     float rotEndX, float firstRot, double yAdd) {
             return creatOrbit(location

@@ -32,12 +32,9 @@ public class CosmicModelLoader implements IGeometryLoader<CosmicModelLoader.Cosm
             List<String> maskTexture = new ArrayList<>();
             if (cosmicObj.has("mask") && cosmicObj.get("mask").isJsonArray()) {
                 JsonArray masks = cosmicObj.getAsJsonArray("mask");
-                for (int i = 0; i < masks.size(); i++) {
+                for (int i = 0; i < masks.size(); i++)
                     maskTexture.add(masks.get(i).getAsString());
-                }
-            } else {
-                maskTexture.add(GsonHelper.getAsString(cosmicObj, "mask"));
-            }
+            } else maskTexture.add(GsonHelper.getAsString(cosmicObj, "mask"));
             JsonObject clean = modelContents.deepCopy();
             clean.remove("cosmic");
             clean.remove("loader");

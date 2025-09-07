@@ -4,7 +4,7 @@ import com.ankrya.doomsgreats.client.shaber.ModShaders;
 import com.ankrya.doomsgreats.client.shaber.model.base.PerspectiveModelState;
 import com.ankrya.doomsgreats.client.shaber.util.TransformUtils;
 import com.ankrya.doomsgreats.help.GJ;
-import com.ankrya.doomsgreats.interfaces.ICosmic;
+import com.ankrya.doomsgreats.interfaces.ICCosmic;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -58,7 +58,7 @@ public class CosmicBakeModel implements BakedModel {
     }
 
     public void renderItem(ItemStack stack, ItemDisplayContext transformType, PoseStack pStack, MultiBufferSource buffers, int packedLight, int packedOverlay) {
-        if (stack.getItem() instanceof ICosmic cosmic) this.parentState = cosmic.getModeState();
+        if (stack.getItem() instanceof ICCosmic cosmic) this.parentState = cosmic.getModeState();
         BakedModel model = this.wrapped.getOverrides().resolve(this.wrapped, stack, this.world, this.entity, 0);
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
         assert model != null;

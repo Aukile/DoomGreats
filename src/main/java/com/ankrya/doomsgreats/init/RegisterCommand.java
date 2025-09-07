@@ -6,7 +6,7 @@ import com.ankrya.doomsgreats.help.GJ;
 import com.ankrya.doomsgreats.help.runnable.WaitToRun;
 import com.ankrya.doomsgreats.item.items.armor.DesireDriver;
 import com.ankrya.doomsgreats.item.items.armor.DoomsGreatsArmor;
-import com.ankrya.doomsgreats.interfaces.IGeoItem;
+import com.ankrya.doomsgreats.interfaces.geo.IGeoItem;
 import com.ankrya.doomsgreats.item.premise.base.armor.BaseRiderArmor;
 import com.ankrya.doomsgreats.item.premise.base.armor.BaseRiderArmorBase;
 import com.ankrya.doomsgreats.message.MessageLoader;

@@ -71,7 +71,6 @@ public class ClassRegister {
         return register;
     }
 
-    @ApiStatus.Internal
     public static <T> DeferredRegister<T> registerSource(Class<T> type){
         return registerSource(type, RegisterAssist.getRegisterName(type));
     }

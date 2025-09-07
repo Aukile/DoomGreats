@@ -206,7 +206,7 @@ public abstract class ParticleComponent {
          * @param location 吸引点
          * @param strength 吸引力
          * @param killDist 吸引距离阈值
-         * @param behavior 吸引行为
+         * @param behavior 吸引行为{@link EnumAttractorBehavior}
          */
         public Attractor(Vec3[] location, float strength, float killDist, EnumAttractorBehavior behavior) {
             this.location = location;

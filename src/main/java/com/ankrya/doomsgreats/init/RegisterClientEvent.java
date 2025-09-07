@@ -10,13 +10,11 @@ import com.ankrya.doomsgreats.client.particle.provider.KatanaSlashParticleProvid
 import com.ankrya.doomsgreats.client.shaber.ModShaders;
 import com.ankrya.doomsgreats.client.shaber.model.base.CosmicModelLoader;
 import com.ankrya.doomsgreats.compat.animation.PlayerAnimator;
-import com.ankrya.doomsgreats.entity.renderer.DoomsEffectEntityRenderer;
 import com.ankrya.doomsgreats.entity.renderer.SpecialEffectEntityRenderer;
 import com.ankrya.doomsgreats.help.GJ;
 import com.ankrya.doomsgreats.item.items.weapon.GoldenGeatsBusterQB9;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.neoforged.api.distmarker.Dist;
@@ -45,7 +43,7 @@ public class RegisterClientEvent {
     @SuppressWarnings("unchecked")
     public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ClassRegister.getRegisterObject("henshin_effect", EntityType.class).get(), context -> new SpecialEffectEntityRenderer<>(context));
-        event.registerEntityRenderer(ClassRegister.getRegisterObject("dooms_effect", EntityType.class).get(), DoomsEffectEntityRenderer::new);
+        event.registerEntityRenderer(ClassRegister.getRegisterObject("dooms_effect", EntityType.class).get(), context -> new SpecialEffectEntityRenderer<>(context));
     }
 
     @SubscribeEvent

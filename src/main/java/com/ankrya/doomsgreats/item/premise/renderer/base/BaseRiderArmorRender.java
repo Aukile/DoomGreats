@@ -4,7 +4,6 @@ import com.ankrya.doomsgreats.item.premise.base.armor.BaseRiderArmorBase;
 import net.minecraft.world.entity.EquipmentSlot;
 
 public class BaseRiderArmorRender<T extends BaseRiderArmorBase> extends BaseGeoArmorRenderer<T>{
-
     @Override
     protected void applyBoneVisibilityBySlot(EquipmentSlot currentSlot) {
         super.applyBoneVisibilityBySlot(currentSlot);

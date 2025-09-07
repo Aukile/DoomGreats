@@ -1,6 +1,6 @@
 package com.ankrya.doomsgreats.item.premise.base;
 
-import com.ankrya.doomsgreats.interfaces.IGeoItem;
+import com.ankrya.doomsgreats.interfaces.geo.IGeoItem;
 import net.minecraft.world.item.Item;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;

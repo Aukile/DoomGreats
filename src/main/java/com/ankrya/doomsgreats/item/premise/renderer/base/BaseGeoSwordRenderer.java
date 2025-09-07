@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
+import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class BaseGeoSwordRenderer extends GeoItemRenderer<BaseGeoSword> {
     public BaseGeoSwordRenderer() {

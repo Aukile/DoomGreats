@@ -26,6 +26,7 @@ public class LogoItem extends Item {
     }
 
     @Override
+    @Deprecated
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
         InteractionResultHolder<ItemStack> use = super.use(level, player, usedHand);
 

@@ -1,7 +1,7 @@
 package com.ankrya.doomsgreats.item.premise.model.base;
 
 import com.ankrya.doomsgreats.help.GJ;
-import com.ankrya.doomsgreats.interfaces.IGeoItem;
+import com.ankrya.doomsgreats.interfaces.geo.IGeoItem;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import software.bernie.geckolib.model.GeoModel;

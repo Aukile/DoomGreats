@@ -17,6 +17,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
 
@@ -139,7 +140,7 @@ public class ParticleRibbon extends AdvancedParticleBase {
                         offsetDir = moveDir2.cross(new Vec3(0.0, 1.0, 0.0)).normalize();
                     }
 
-                    offsetDir = offsetDir.scale((double)prevScale);
+                    offsetDir = offsetDir.scale(prevScale);
                 }
 
                 Vec3[] aVector3d2 = new Vec3[]{offsetDir.scale(-1.0), offsetDir, null, null};
@@ -151,7 +152,7 @@ public class ParticleRibbon extends AdvancedParticleBase {
                     offsetDir = moveDir.cross(new Vec3(0.0, 1.0, 0.0)).normalize();
                 }
 
-                offsetDir = offsetDir.scale((double)scale);
+                offsetDir = offsetDir.scale(scale);
                 aVector3d2[2] = offsetDir;
                 aVector3d2[3] = offsetDir.scale(-1.0);
                 Vector4f[] vertices2 = new Vector4f[]{new Vector4f((float)aVector3d2[0].x, (float)aVector3d2[0].y, (float)aVector3d2[0].z, 1.0F), new Vector4f((float)aVector3d2[1].x, (float)aVector3d2[1].y, (float)aVector3d2[1].z, 1.0F), new Vector4f((float)aVector3d2[2].x, (float)aVector3d2[2].y, (float)aVector3d2[2].z, 1.0F), new Vector4f((float)aVector3d2[3].x, (float)aVector3d2[3].y, (float)aVector3d2[3].z, 1.0F)};
@@ -238,7 +239,7 @@ public class ParticleRibbon extends AdvancedParticleBase {
 
     public static void spawnRibbon(Level world, ParticleType<? extends RibbonParticleData> particle, int length, double x, double y, double z, double motionX, double motionY, double motionZ, boolean faceCamera, double yaw, double pitch, double roll, double scale, double r, double g, double b, double a, double drag, double duration, boolean emissive, ParticleComponent[] components) {
         ParticleRotation rotation = faceCamera ? new ParticleRotation.FaceCamera(0.0F) : new ParticleRotation.EulerAngles((float)yaw, (float)pitch, (float)roll);
-        world.addParticle(new RibbonParticleData(particle, (ParticleRotation)rotation, scale, r, g, b, a, drag, duration, emissive, length, components), x, y, z, motionX, motionY, motionZ);
+        world.addParticle(new RibbonParticleData(particle, rotation, scale, r, g, b, a, drag, duration, emissive, length, components), x, y, z, motionX, motionY, motionZ);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -249,7 +250,8 @@ public class ParticleRibbon extends AdvancedParticleBase {
             this.spriteSet = spriteSet;
         }
 
-        public Particle createParticle(RibbonParticleData typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+        @Override
+        public Particle createParticle(RibbonParticleData typeIn, @NotNull ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
             ParticleRibbon particle = new ParticleRibbon(worldIn, x, y, z, xSpeed, ySpeed, zSpeed, typeIn.getRotation(), typeIn.getScale(), typeIn.getRed(), typeIn.getGreen(), typeIn.getBlue(), typeIn.getAlpha(), typeIn.getAirDrag(), typeIn.getDuration(), typeIn.isEmissive(), typeIn.getLength(), typeIn.getComponents());
             particle.setSpriteFromAge(this.spriteSet);
             return particle;

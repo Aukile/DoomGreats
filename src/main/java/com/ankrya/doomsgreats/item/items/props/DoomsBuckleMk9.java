@@ -5,7 +5,7 @@ import com.ankrya.doomsgreats.compat.animation.AnimName;
 import com.ankrya.doomsgreats.compat.animation.PlayerAnimator;
 import com.ankrya.doomsgreats.help.GJ;
 import com.ankrya.doomsgreats.help.runnable.WaitToRun;
-import com.ankrya.doomsgreats.interfaces.IGeoItem;
+import com.ankrya.doomsgreats.interfaces.geo.IGeoItem;
 import com.ankrya.doomsgreats.item.items.armor.DesireDriver;
 import com.ankrya.doomsgreats.item.premise.base.EasyGeoItem;
 import net.minecraft.world.InteractionHand;

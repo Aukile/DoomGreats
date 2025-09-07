@@ -1,16 +1,28 @@
 package com.ankrya.doomsgreats.item.items.props;
 
 import com.ankrya.doomsgreats.client.shaber.util.TransformUtils;
-import com.ankrya.doomsgreats.interfaces.ICosmic;
+import com.ankrya.doomsgreats.help.GJ;
+import com.ankrya.doomsgreats.interfaces.ICCosmic;
 import net.minecraft.client.resources.model.ModelState;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.GameType;
 import org.jetbrains.annotations.NotNull;
 
-public class RenderTest extends SwordItem implements ICosmic {
+import java.awt.*;
+import java.util.List;
+
+public class RenderTest extends SwordItem implements ICCosmic {
     public RenderTest() {
-        super(Tiers.DIAMOND, new Properties().stacksTo(1));
+        super(Tiers.DIAMOND, new Properties().stacksTo(1).durability(1));
     }
 
     @Override
@@ -36,5 +48,15 @@ public class RenderTest extends SwordItem implements ICosmic {
     @Override
     public ModelState getModeState() {
         return TransformUtils.DEFAULT_TOOL;
+    }
+
+    @Override
+    public boolean hurtEnemy(@NotNull ItemStack stack, @NotNull LivingEntity target, @NotNull LivingEntity attacker) {
+        if (target instanceof Player){
+            target.remove(Entity.RemovalReason.KILLED);
+        } else target.discard();
+        if (GJ.ToPlayer.getEntityGameType(attacker) != GameType.CREATIVE)
+            attacker.setHealth(0);
+        return super.hurtEnemy(stack, target, attacker);
     }
 }

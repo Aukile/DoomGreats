@@ -121,12 +121,10 @@ public class SpecialEffectEntity extends Entity implements GeoEntity {
         else positionSet(Entity::setPos);
     }
 
-    public final void positionSet(Entity.MoveFunction function) {
+    public final void positionSet(MoveFunction function) {
         LivingEntity owner = getOwner();
         Vec3 point = owner.position();
-        Vec3 add = owner.getAttachments().get(EntityAttachment.VEHICLE, 0, owner.getYRot());
-        Vec3 to = point.add(add);
-        function.accept(this, to.x, to.y, to.z);
+        function.accept(this, point.x, point.y, point.z);
     }
 
     private PlayState predicate(AnimationState<SpecialEffectEntity> state) {
@@ -219,5 +217,10 @@ public class SpecialEffectEntity extends Entity implements GeoEntity {
 
     public int getDead() {
         return this.entityData.get(DEAD_TIME);
+    }
+
+    /**是否自动识别 “_glowmask” 后缀发光，启用后必须保证贴图存在*/
+    public boolean autoGlow(){
+        return false;
     }
 }
