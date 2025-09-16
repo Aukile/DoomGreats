@@ -2,6 +2,7 @@ package com.ankrya.doomsgreats.message.common;
 
 import com.ankrya.doomsgreats.client.sound.LoopSound;
 import com.ankrya.doomsgreats.help.GJ;
+import com.ankrya.doomsgreats.message.MessageLoader;
 import com.ankrya.doomsgreats.message.ex_message.PlayLoopSound;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -61,6 +62,10 @@ public class LoopSoundMessage implements CustomPacketPayload {
         ctx.enqueueWork(() -> {
             PlayLoopSound.playLoopSound(Minecraft.getInstance(), new LoopSound(ctx.player().level().getEntity(id), sound, getSoundSource(type), loop, range));
         });
+    }
+
+    public static void handleServer(LoopSoundMessage message, IPayloadContext ctx) {
+        ctx.enqueueWork(() -> MessageLoader.sendToAllTracking(message, ctx.player()));
     }
 
     public ResourceLocation getSound() {

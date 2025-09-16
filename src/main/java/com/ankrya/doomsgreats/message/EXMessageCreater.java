@@ -58,6 +58,12 @@ public class EXMessageCreater implements CustomPacketPayload{
         });
     }
 
+    public static void serverRun(final EXMessageCreater create, final IPayloadContext ctx) {
+        ctx.enqueueWork(() -> {
+            MessageLoader.sendToAllTracking(create, ctx.player());
+        });
+    }
+
     @Override
     public @NotNull CustomPacketPayload.Type<EXMessageCreater> type() {
         return TYPE;

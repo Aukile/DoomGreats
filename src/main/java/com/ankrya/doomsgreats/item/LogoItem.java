@@ -3,6 +3,8 @@ package com.ankrya.doomsgreats.item;
 import com.ankrya.doomsgreats.client.particle.base.SpreadBase;
 import com.ankrya.doomsgreats.client.particle.base.advanced.AdvancedParticleData;
 import com.ankrya.doomsgreats.client.particle.base.advanced.RibbonParticleData;
+import com.ankrya.doomsgreats.compat.animation.AnimName;
+import com.ankrya.doomsgreats.compat.animation.PlayerAnimator;
 import com.ankrya.doomsgreats.help.GJ;
 import com.ankrya.doomsgreats.help.runnable.WaitToRun;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -38,6 +40,9 @@ public class LogoItem extends Item {
                 , AdvancedParticleData.getParticleType(), RibbonParticleData.getRibbonParticleType()
                 , player.position().add(0, 3, 0), 2, 4, 15, 15
                 , 40, 0.12f, 1, -3), 10);
+        if (level.isClientSide()){
+            PlayerAnimator.playerAnimation(player, AnimName.BUCKLE_OPEN, true);
+        }
         return use;
     }
 }

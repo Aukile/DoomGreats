@@ -14,6 +14,7 @@ import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationFactory;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -79,8 +80,8 @@ public class PlayerAnimator {
 
     public static void playerAnimation(Player player, ResourceLocation dataId, String animation, boolean showRightArm, boolean showLeftArm, boolean override){
         INMessage animationMessage = new PlayerAnimationMessage(player.getUUID(), dataId, animation, showRightArm, showLeftArm, override);
-        if (player.level() instanceof ServerLevel serverLevel)
-            PacketDistributor.sendToPlayersInDimension(serverLevel, new NMessageCreater(animationMessage));
+        if (player instanceof ServerPlayer serverPlayer)
+            MessageLoader.sendToPlayer(new NMessageCreater(animationMessage), serverPlayer);
         else MessageLoader.sendToServer(new NMessageCreater(animationMessage));
     }
 
